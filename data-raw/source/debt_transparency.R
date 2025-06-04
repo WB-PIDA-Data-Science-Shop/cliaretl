@@ -9,12 +9,7 @@ library(tidyr)
 library(purrr)
 library(countrycode)
 library(janitor)
-library(haven)
 library(here)
-
-debt_test <- read_dta(
-  here("data-raw", "input", "debt_transparency", "debt_transparency_2021-2022.dta")
-)
 
 debt_transparency_input <- list.files(
   here("data-raw", "input", "debt_transparency"),
@@ -82,25 +77,13 @@ debt_transparency <- debt_transparency %>%
 debt_transparency <- debt_transparency %>%
   select(country_code, year, everything())
 
-debt_transparency_clean <- debt_transparency %>%
+debt_transparency <- debt_transparency %>%
   mutate(
-    debt_transp_index = rowMeans(across(starts_with("debt_transp")), na.rm = TRUE) |>
+    debt_transp_index = rowMeans(
+      across(starts_with("debt_transp")),
+      na.rm = TRUE
+    ) |>
       round(2)
   )
 
-# identify inconsistencies in the data
-# in this case, we identify inconsistencies in 22/143 cases
-debt_test |>
-  mutate(
-    debt_transp_index = round(debt_transp_index, 2)
-  ) |>
-  inner_join(
-    debt_transparency_clean,
-    by = c("country_code", "year")
-  ) |>
-  select(starts_with("debt_transp_index")) |>
-  filter(
-    debt_transp_index.x != debt_transp_index.y
-  )
-
-usethis::use_data(debt_transparency_clean, overwrite = TRUE)
+usethis::use_data(debt_transparency, overwrite = TRUE)
