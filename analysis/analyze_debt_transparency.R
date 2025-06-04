@@ -1,10 +1,15 @@
+# set-up ------------------------------------------------------------------
 library(haven)
+library(dplyr)
+library(here)
 library(ggplot2)
 
+# read-in data ------------------------------------------------------------
 debt_test <- read_dta(
   here("data-raw", "input", "debt_transparency", "debt_transparency_2021-2022.dta")
 )
 
+# visualize ---------------------------------------------------------------
 # identify inconsistencies in the data
 # in this case, we identify inconsistencies in 22/148 cases
 debt_test |>
@@ -12,7 +17,7 @@ debt_test |>
     debt_transp_index = round(debt_transp_index, 2)
   ) |>
   inner_join(
-    debt_transparency_clean,
+    debt_transparency,
     by = c("country_code", "year")
   ) |>
   select(starts_with("debt_transp_index")) |>
@@ -25,7 +30,7 @@ debt_test |>
     debt_transp_index = round(debt_transp_index, 2)
   ) |>
   inner_join(
-    debt_transparency_clean,
+    debt_transparency,
     by = c("country_code", "year")
   ) |>
   ggplot(aes(
