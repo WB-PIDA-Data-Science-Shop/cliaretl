@@ -11,3 +11,6 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/WB-PIDA-Data-Science-Shop/getlcliar
 BugReports: https://github.com/WB-PIDA-Data-Science-Shop/getlcliar/issues
+Depends: 
+    R (>= 3.5)
+RoxygenNote: 7.3.2
