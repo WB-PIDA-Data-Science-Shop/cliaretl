@@ -1,4 +1,4 @@
-# getlcliar
+# cliaretl
 
 *This project is currently under construction and undergoing active development.*
 
@@ -14,3 +14,6 @@ The goal if  this package is to be the central data pipeline responsible for sou
 
 -   Data Quality Testing: Implements a modular testing approach to verify data quality at various stages of the ETL pipeline, ensuring data integrity and reliability before it reaches the dashboard.
 
+## Access to the data
+
+The complete list of data sources and to-dos is available [here](https://worldbankgroup-my.sharepoint.com/:x:/g/personal/earias1_worldbank_org/EUmJLnSAxFlOpirD9fjkVCUBDCuC9kKU58yzYpIWjdDosw?CID=af6fb8a3-cb6e-1db1-27d4-7b6958825f9d).
