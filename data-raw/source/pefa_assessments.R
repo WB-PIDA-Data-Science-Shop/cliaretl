@@ -6,6 +6,7 @@
 library(janitor)
 library(dplyr)
 library(countrycode)
+library(readxl)
 
 
 #### read in the data
@@ -20,6 +21,8 @@ origpefa_tbl <-
   read.csv("data-raw/input/pefa_assessments/assessments_1730149268.csv") |>
   as_tibble() |>
   clean_names()
+
+dbvar_dt <- read_excel("data-raw/input/cliar/db_variables.xlsx")
 
 
 #### PEFA manual update - Defining values, update for 2024
@@ -56,10 +59,27 @@ pefaclean_tbl %>%
   )) %>%
   filter(country != "Bosnia and Herzegovina - District Brčko")
 
-#### drop the subnational data
+#### prepare the country list from the previous pefa dataset and the worldbank
+#### country list
+country_list <- unique(c(origpefa_tbl$country,
+                         wb_country_list$country_name))
+
+#### select the set of variables from the db_variables list
+pefa_vars <- intersect(colnames(pefaclean_tbl), dbvar_dt$variable)
+
+
+#### save the data
 pefaclean_tbl <-
   pefaclean_tbl |>
-  dplyr::filter()
+  dplyr::filter(country %in% country_list) |>
+  dplyr::select(country, year, all_of(pefa_vars))
+
+pefa_assessments <- pefaclean_tbl
+
+
+### write the pefa assessments data to rda
+usethis::use_data(pefa_assessments)
+
 
 
 
