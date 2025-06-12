@@ -18,3 +18,25 @@
 #'}
 #' @source https://www.worldbank.org/en/topic/debt/brief/debt-transparency-report/
 "debt_transparency"
+
+#' @title World Bank Country and Lending Groups
+#' @description A dataset containing the World Bank's standard country codes, country names, and their respective groups and group codes. This dataset is used to identify countries and their classifications in various World Bank reports and analyses.
+#' @format A data frame with 762 rows and 4 variables:
+#' \describe{
+#'   \item{\code{country_code}}{character World Bank country code}
+#'   \item{\code{country_name}}{character World Bank country name}
+#'   \item{\code{group}}{character Country group}
+#'   \item{\code{group_code}}{character Country group code}
+#'}
+#' @source https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755
+"wb_country_list"
+
+#' @title World Bank Country Group
+#' @description DATASET_DESCRIPTION
+#' @format A data frame with 18 rows and 2 variables:
+#' \describe{
+#'   \item{\code{group_name}}{character Group name}
+#'   \item{\code{group_category}}{character Group category (e.g., Economic, Region)}
+#'}
+#' @source https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755
+"wb_country_groups"
