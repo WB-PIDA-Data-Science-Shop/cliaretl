@@ -43,13 +43,11 @@
 
 
 #' @title PEFA Assessment Dataset (2016 Framework Indicators)
-#'
-#' @description This dataset contains indicators from the PEFA (Public Expenditure and Financial Accountability) assessments conducted using the 2016 PEFA framework. It provides scores on various dimensions of public financial management across countries and time periods. The indicators cover budget credibility, transparency, asset and debt management, internal controls, auditing, and more.
-#'
-#' The data are sourced from the PEFA bulk download page: \url{https://www.pefa.org/assessments/batch-downloads}.
-#'
+#' @description This dataset contains indicators from the PEFA (Public Expenditure and Financial Accountability) assessments conducted using the 2016 PEFA framework. It provides scores on various dimensions of public financial management across countries and time periods. The indicators cover budget credibility, transparency, asset and debt management, internal controls, auditing, and more. The data are sourced from the PEFA bulk download page: \url{https://www.pefa.org/assessments/batch-downloads}.
 #' @format A data frame with one row per PEFA assessment and the following variables:
 #' \describe{
+#'   \item{country}{The Country Name}
+#'   \item{year}{Year}
 #'   \item{wb_pefa_pi_2016_05}{Budget Documentation — Quality and comprehensiveness of budget documentation provided to the legislature.}
 #'   \item{wb_pefa_pi_2016_07}{Transfers to subnational governments — Transparency and timeliness of transfers from central to subnational levels.}
 #'   \item{wb_pefa_pi_2016_08}{Performance information for service delivery — Availability and quality of performance information for service delivery sectors.}
@@ -84,4 +82,30 @@
 
 
 
+#' Central Bank Independence Index (Romelli Update of Cukierman et al.)
+#'
+#' This dataset provides an annual panel of central bank independence (CBI) scores for countries,
+#' based on the unweighted index developed by Cukierman et al. (1992) and recomputed by Romelli using
+#' updated legal and institutional data.
+#'
+#' The index ranges from 0 to 1, where 0 represents the lowest level of independence and 1 the highest.
+#' It measures de jure independence, focusing on aspects such as governor appointment, monetary policy formulation,
+#' central bank objectives, and limitations on lending to the government.
+#'
+#' @format A tibble with 8,128 rows and 3 variables:
+#' \describe{
+#'   \item{country_code}{A 3-letter ISO country code (e.g., "USA", "FRA", "ARG").}
+#'   \item{year}{The calendar year (numeric).}
+#'   \item{romelli_cbi_central_bank_independence}{Cukierman central bank independence index (scaled 0 to 1).}
+#' }
+#'
+#' @source Romelli, Davide (2022). \emph{The Political Economy of Reforms in Central Bank Design:
+#' Evidence from a New Dataset}. Review of International Organizations.
+#' \url{https://cbidata.org/}
+#'
+#' @references Cukierman, A., Webb, S. B., & Neyapti, B. (1992). \emph{Measuring the Independence of Central Banks
+#' and Its Effect on Policy Outcomes}. The World Bank Economic Review, 6(3), 353–398.
+#'
+#'
+"romelli"
 
