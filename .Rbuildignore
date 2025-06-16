@@ -2,9 +2,6 @@
 ^renv\.lock$
 ^.*\.Rproj$
 ^\.Rproj\.user$
-<<<<<<< HEAD
-=======
 ^data-raw$
 ^analysis$
 ^LICENSE\.md$
->>>>>>> main
