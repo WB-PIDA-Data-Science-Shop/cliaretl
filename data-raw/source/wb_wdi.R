@@ -23,14 +23,14 @@ end_year <- 2023
 
 
 # For problematic indicator: # "EN.ATM.CO2E.PP.GD.KD", it's recommended to:
-# 1. Double-check the exact indicator code on the World Bank DataBank.
-# 2. Search for alternative indicators if the desired one is deprecated.
-# 3. Consider removing indicators that consistently fail to download.
+# replace it for the "EN.GHG.CO2.RT.GDP.PP.KD", Carbon intensity of GDP (kg CO2e per 2021 PPP $ of GDP)
+# Implement it also in the compiled indicators
 
 wdi_indicators_list <- c(
   # Macroeconomic Indicators
   "GC.DOD.TOTL.GD.ZS",        # Central government debt, total (% of GDP)
-# "EN.ATM.CO2E.PP.GD.KD",     # CO2 emissions (kg per 2021 PPP $ of GDP) [Issue]
+  # "EN.ATM.CO2E.PP.GD.KD",   # CO2 emissions (kg per 2021 PPP $ of GDP) [Dropped]
+  "EN.GHG.CO2.RT.GDP.PP.KD",  # Carbon intensity of GDP (kg CO2e per 2021 PPP $ of GDP) [Replaced]
   "BN.CAB.XOKA.GD.ZS",        # Current account balance (% of GDP)
   "GC.XPN.TOTL.GD.ZS",        # Expense (% of GDP)
   "NE.EXP.GNFS.ZS",           # Exports of goods and services (% of GDP)

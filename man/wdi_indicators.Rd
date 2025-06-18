@@ -5,12 +5,13 @@
 \alias{wdi_indicators}
 \title{World Development Indicators (WDI) Dataset}
 \format{
-A data frame with 7,310 rows and 128 variables:
+A data frame with 7,310 rows and 129 variables:
 \describe{
   \item{\code{country_name}}{character The official name of the country or region.}
   \item{\code{country_code}}{character The 3-letter ISO code for the country or region.}
   \item{\code{year}}{integer The year of the observation.}
   \item{\code{wdi_gcdodtotlgdzs}}{double Government Consumption, Domestic Defense, Total (percentage of GDP).}
+  \item{\code{wdi_enghgco2rtgdpppkd}}{double Carbon intensity of GDP (kg CO2e per 2021 PPP USD of GDP)}
   \item{\code{wdi_bncabxokagdzs}}{double Current Account Balance (percentage of GDP).}
   \item{\code{wdi_gcxpntotlgdzs}}{double General government expenditure (percentage of GDP).}
   \item{\code{wdi_neexpgnfszs}}{double Exports of goods and services (percentage of GDP).}
