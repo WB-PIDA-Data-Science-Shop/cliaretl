@@ -71,14 +71,15 @@ pefa_vars <- intersect(colnames(pefaclean_tbl), dbvar_dt$variable)
 #### save the data
 pefaclean_tbl <-
   pefaclean_tbl |>
-  dplyr::filter(country %in% country_list) |>
-  dplyr::select(country, year, all_of(pefa_vars))
+  rename(country_name = "country") |>
+  dplyr::filter(country_name %in% country_list) |>
+  dplyr::select(country_name, year, all_of(pefa_vars))
 
 pefa_assessments <- pefaclean_tbl
 
 
 ### write the pefa assessments data to rda
-usethis::use_data(pefa_assessments)
+usethis::use_data(pefa_assessments, overwrite = TRUE)
 
 
 
