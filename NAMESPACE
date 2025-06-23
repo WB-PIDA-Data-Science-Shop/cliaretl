@@ -2,5 +2,5 @@
 
 export(add_plmetadata)
 export(collect_metadata)
-import(purrr)
-import(tibble)
+importFrom(purrr,map_dfr)
+importFrom(tibble,tibble)

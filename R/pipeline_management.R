@@ -12,14 +12,16 @@
 #'
 #' @return The input `data.frame` with additional attributes:
 #' \describe{
-#'   \item{`source_url`}{The URL or source location of the dataset.}
+#'   \item{`source`}{The URL or source location of the dataset.}
 #'   \item{`other info`}{Any user-supplied contextual information.}
 #'   \item{`download_date`}{The date when the data was processed or downloaded.}
 #' }
 #'
 #' @examples
 #' df <- data.frame(x = 1:5)
-#' df_meta <- add_plmetadata(df, source = "https://example.com/data.csv", other_info = "Mock dataset for demo")
+#' df_meta <- add_plmetadata(df,
+#'                           source = "https://example.com/data.csv",
+#'                           other_info = "Mock dataset for demo")
 #' attributes(df_meta)
 #'
 #' @export
@@ -41,7 +43,8 @@ add_plmetadata <- function(df,
 #'
 #' @return A data frame with metadata for each dataset in the package.
 #'
-#' @import purrr tibble
+#' @importFrom purrr map_dfr
+#' @importFrom tibble tibble
 #' @export
 collect_metadata <- function(data_path = "data") {
 
