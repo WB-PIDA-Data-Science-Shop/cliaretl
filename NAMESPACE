@@ -2,7 +2,6 @@
 
 export(add_plmetadata)
 export(collect_metadata)
-export(flag_conflicting_indicators_table)
 export(flag_mismatched_indicators)
 export(flag_missing_indicators)
 importFrom(purrr,map_dfr)
