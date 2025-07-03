@@ -5,3 +5,5 @@
 ^data-raw$
 ^analysis$
 ^LICENSE\.md$
+^\.github$
+^README\.Rmd$
