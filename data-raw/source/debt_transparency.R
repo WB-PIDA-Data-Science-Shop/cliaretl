@@ -78,7 +78,9 @@ debt_transparency <- debt_transparency %>%
   select(country_code, year, everything())
 
 debt_transparency <- debt_transparency %>%
-  mutate(
+  transmute(
+    country_code,
+    year,
     debt_transp_index = rowMeans(
       across(starts_with("debt_transp")),
       na.rm = TRUE
