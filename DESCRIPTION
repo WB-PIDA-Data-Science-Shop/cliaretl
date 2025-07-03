@@ -1,4 +1,4 @@
-Package: getlcliar
+Package: cliaretl
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
@@ -6,11 +6,18 @@ Author: Who wrote it
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/WB-PIDA-Data-Science-Shop/getlcliar
-BugReports: https://github.com/WB-PIDA-Data-Science-Shop/getlcliar/issues
+URL: https://github.com/WB-PIDA-Data-Science-Shop/cliaretl
+BugReports: https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/issues
 Depends: 
     R (>= 3.5)
 RoxygenNote: 7.3.2
+Imports: 
+    purrr,
+    tibble
+Suggests: 
+    dplyr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
