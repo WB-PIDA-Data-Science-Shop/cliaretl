@@ -5,7 +5,6 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml)
-[![R-CMD-check](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of cliaretl is to be the central data pipeline responsible for
@@ -41,5 +40,5 @@ able to install the development version of cliaretl from
 
 ## Access to the data
 
-The complete list of raw data sources and to-dos is available \[here\]
-(<https://worldbankgroup-my.sharepoint.com/:x:/g/personal/earias1_worldbank_org/EUmJLnSAxFlOpirD9fjkVCUBDCuC9kKU58yzYpIWjdDosw?CID=af6fb8a3-cb6e-1db1-27d4-7b6958825f9d>)
+The complete list of raw data sources and to-dos is available
+[here](https://worldbankgroup-my.sharepoint.com/:x:/g/personal/earias1_worldbank_org/EUmJLnSAxFlOpirD9fjkVCUBDCuC9kKU58yzYpIWjdDosw?CID=af6fb8a3-cb6e-1db1-27d4-7b6958825f9d)

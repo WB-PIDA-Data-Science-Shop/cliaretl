@@ -19,7 +19,6 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml)
-[![R-CMD-check](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
   
 The goal of cliaretl is to be the central data pipeline responsible for sourcing, processing and delivering the data to the CLIAR dashboard. Its primary function is to execute a robust Extract, Transform and Load (ETL) process, ensuring the dashboard always has access to accurate and harmonized data. It provides the following features:
@@ -44,7 +43,7 @@ The package is still very early in development. However, you will be able to ins
 
 ## Access to the data
 
-The complete list of raw data sources and to-dos is available [here] (https://worldbankgroup-my.sharepoint.com/:x:/g/personal/earias1_worldbank_org/EUmJLnSAxFlOpirD9fjkVCUBDCuC9kKU58yzYpIWjdDosw?CID=af6fb8a3-cb6e-1db1-27d4-7b6958825f9d)
+The complete list of raw data sources and to-dos is available [here](https://worldbankgroup-my.sharepoint.com/:x:/g/personal/earias1_worldbank_org/EUmJLnSAxFlOpirD9fjkVCUBDCuC9kKU58yzYpIWjdDosw?CID=af6fb8a3-cb6e-1db1-27d4-7b6958825f9d)
 
 
 
