@@ -4,7 +4,7 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/r.yml/badge.svg)](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of cliaretl is to be the central data pipeline responsible for
