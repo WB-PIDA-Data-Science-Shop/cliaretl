@@ -4,7 +4,6 @@
 #' \describe{
 #'   \item{\code{country_code}}{character World Bank country code}
 #'   \item{\code{year}}{integer Year}
-#'   \item{\code{country}}{character Country name}
 #'   \item{\code{debt_transp_index}}{double Row average of all debt transparency indicators}
 #'}
 #' @source https://www.worldbank.org/en/topic/debt/brief/debt-transparency-report/
