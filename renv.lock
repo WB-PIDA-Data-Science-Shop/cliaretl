@@ -1222,11 +1222,8 @@
       "NeedsCompilation": "yes",
       "Author": "Winston Chang [aut, cre], Posit Software, PBC [cph, fnd], Tessil [cph] (hopscotch_map library)",
       "Maintainer": "Winston Chang <winston@posit.co>",
-<<<<<<< HEAD
       "Repository": "RSPM"
-=======
       "Repository": "CRAN"
->>>>>>> main
     },
     "fontawesome": {
       "Package": "fontawesome",
