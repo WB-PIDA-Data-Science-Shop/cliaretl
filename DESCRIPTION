@@ -14,3 +14,10 @@ BugReports: https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/issues
 Depends: 
     R (>= 3.5)
 RoxygenNote: 7.3.2
+Imports: 
+    purrr,
+    tibble
+Suggests: 
+    dplyr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
