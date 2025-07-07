@@ -16,7 +16,8 @@ Depends:
 RoxygenNote: 7.3.2
 Imports: 
     purrr,
-    tibble
+    tibble,
+    rlang
 Suggests: 
     dplyr,
     testthat (>= 3.0.0)
