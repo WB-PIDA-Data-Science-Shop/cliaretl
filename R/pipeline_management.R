@@ -44,6 +44,7 @@ add_plmetadata <- function(df,
 #' @return A data frame with metadata for each dataset in the package.
 #'
 #' @importFrom purrr map_dfr
+#' @importFrom rlang %||%
 #' @importFrom tibble tibble
 #' @export
 collect_metadata <- function(data_path = "data") {
