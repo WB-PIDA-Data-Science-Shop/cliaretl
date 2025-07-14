@@ -70,6 +70,8 @@ heritage_df <-
 
 heritage <- heritage_df
 
+rm(heritage_df) ## drop the heritage_df
+
 usethis::use_data(heritage, overwrite = TRUE)
 
 
