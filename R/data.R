@@ -302,3 +302,53 @@
 #' }
 #' @source Varieties of Democracy (V‑Dem) Institute. 2025. V‑Dem v15 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
 "vdem_data"
+
+
+#' Heritage Index of Economic Freedom Data
+#'
+#' A dataset containing country-level scores from the Heritage Foundation's Index of Economic Freedom, focused on freedom indicators relevant to business, finance, and investment sectors.
+#'
+#' @format A tibble with 2,381 rows and 5 variables:
+#' \describe{
+#'   \item{country_code}{A three-letter ISO 3166-1 alpha-3 country code identifying the country.}
+#'   \item{year}{The year of the score, adjusted so that a given year's value reflects the conditions of the previous year.}
+#'   \item{heritage_business_freedom}{Score measuring the extent to which the regulatory and infrastructure environments constrain the efficient operation of businesses.
+#'   A higher score indicates fewer regulatory barriers and more ease in starting, operating, and closing a business.}
+#'   \item{heritage_financial_freedom}{Score reflecting banking efficiency and independence from government control or interference in the financial sector.
+#'   State ownership of banks and other financial institutions typically reduces competition and lowers credit access.}
+#'   \item{heritage_investment_freedom}{Score based on the degree of regulatory restrictions on investment activities.
+#'   Deductions are made from a baseline score of 100 for various restrictions; countries with extremely high levels of restriction may receive a score of 0.}
+#' }
+#'
+#' @details
+#' The business freedom component measures the extent to which the regulatory and infrastructure environments constrain the efficient operation of businesses. The quantitative score is derived from an array of factors that affect the ease of starting, operating, and closing a business.
+#'
+#' Financial freedom is both an indicator of banking efficiency and a measure of independence from government control and interference in the financial sector. State ownership of banks and other financial institutions such as insurers and capital markets reduces competition and generally lowers access to credit.
+#'
+#' The investment freedom score reflects the degree of regulatory restrictions imposed on investment. Deductions are applied from the ideal score of 100 for each type of restriction. Countries with very high levels of restriction may receive a score of zero.
+#'
+#' @source Heritage Foundation, Index of Economic Freedom. See: \url{https://www.heritage.org/index/}
+"heritage"
+
+
+#' Global Financial Development Database (GFDB) Indicators
+#'
+#' A dataset containing selected indicators from the World Bank's Global Financial Development Database (GFDB), covering financial sector performance across countries and years. This data focuses on domestic credit provision and concentration of banking assets.
+#'
+#' @format A tibble with 6,848 rows and 4 variables:
+#' \describe{
+#'   \item{iso3}{A three-letter ISO 3166-1 alpha-3 country code.}
+#'   \item{year}{The calendar year of the observation.}
+#'   \item{wb_gfdb_ai_01}{Assets of the three largest commercial banks as a share of total commercial banking assets.
+#'   Total assets include earning assets, cash, due from banks, foreclosed real estate, fixed assets, goodwill, intangibles, tax assets, and other financial assets. A higher value indicates greater banking sector concentration.}
+#'   \item{wb_gfdb_di_01}{Domestic credit to the private sector by domestic money banks, as a share of GDP.
+#'   Domestic money banks include commercial banks and other financial institutions that accept transferable deposits. This is a measure of financial resources extended to the private sector.}
+#' }
+#'
+#' @details
+#' \strong{wb_gfdb_di_01:} The financial resources provided to the private sector by domestic money banks as a share of GDP. Domestic money banks comprise commercial banks and other financial institutions that accept transferable deposits, such as demand deposits.
+#'
+#' \strong{wb_gfdb_ai_01:} Assets of the three largest commercial banks as a share of total commercial banking assets. Total assets include total earning assets, cash and due from banks, foreclosed real estate, fixed assets, goodwill, other intangibles, current tax assets, deferred tax assets, discontinued operations, and other assets.
+#'
+#' @source World Bank, Global Financial Development Database. See: \url{https://www.worldbank.org/en/publication/gfdr/data/global-financial-development-database}
+"gfdb"
