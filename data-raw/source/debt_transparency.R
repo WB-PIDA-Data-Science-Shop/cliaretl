@@ -84,6 +84,13 @@ debt_transparency <- debt_transparency %>%
       na.rm = TRUE
     ) |>
       round(2)
-  )
+  ) |>
+  clean_names() |>
+  rename_with(
+    # add prefixes with cliar conventions
+    ~ paste0("wb_", .),
+    .cols = starts_with("debt")
+  ) |>
+  select(-country)
 
 usethis::use_data(debt_transparency, overwrite = TRUE)

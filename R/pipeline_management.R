@@ -2,6 +2,8 @@
 ############### SOME FUNCTIONS FOR DATA PIPELINE MANAGEMENT ####################
 ################################################################################
 
+utils::globalVariables("variable")
+
 #' Add Metadata Attributes to a Dataset
 #'
 #' Adds metadata to a `data.frame`, such as the source URL, download date, and any additional information.
