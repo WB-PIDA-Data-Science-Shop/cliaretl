@@ -7,7 +7,6 @@
 \format{
 A data frame with 7,310 rows and 129 variables:
 \describe{
-  \item{\code{country_name}}{character The official name of the country or region.}
   \item{\code{country_code}}{character The 3-letter ISO code for the country or region.}
   \item{\code{year}}{integer The year of the observation.}
   \item{\code{wdi_gcdodtotlgdzs}}{double Government Consumption, Domestic Defense, Total (percentage of GDP).}
@@ -55,10 +54,8 @@ A data frame with 7,310 rows and 129 variables:
   \item{\code{wdi_nygnppcapppkd}}{double GNI per capita, PPP (constant 2017 international USD).}
   \item{\code{wdi_nygnpmktpppkd}}{double GNI, PPP (constant 2017 international USD).}
   \item{\code{wdi_dtodaodatgnzs}}{double Net ODA received (percentage of GNI).}
-  \item{\code{wdi_dcodatotlgnzs}}{double Net official development assistance and official aid received (percentage of GNI).}
   \item{\code{wdi_dttdsdppggnzs}}{double Debt service on external debt (percentage of exports of goods, services and primary income).}
   \item{\code{wdi_dttdsdectgnzs}}{double Debt service on external debt (percentage of GNI).}
-  \item{\code{wdi_dtdodpvlxgnzs}}{double Present value of external debt (percentage of GNI).}
   \item{\code{wdi_dtdoddstczs}}{double External debt stocks (percentage of GDP).}
   \item{\code{wdi_dtdoddstcirzs}}{double External debt stocks, total (percentage of exports of goods, services and primary income).}
   \item{\code{wdi_dttdsdectexzs}}{double Total debt service (percentage of exports of goods, services and primary income).}
@@ -95,12 +92,9 @@ A data frame with 7,310 rows and 129 variables:
   \item{\code{wdi_sesectcaqupzs}}{double Teachers in secondary education, upper secondary (percentage of total teachers).}
   \item{\code{wdi_seprmtenr}}{double Primary education, teachers (number).}
   \item{\code{wdi_shstabrtczs}}{double Stunting prevalence, children (percentage).}
-  \item{\code{wdi_shmedcmhwp3}}{double Community health workers (per 1,000 people).}
   \item{\code{wdi_shxpdchexgdzs}}{double Current health expenditure (percentage of GDP).}
   \item{\code{wdi_shxpdoopcchzs}}{double Out-of-pocket health expenditure (percentage of current health expenditure).}
   \item{\code{wdi_shxpdoopcppcd}}{double Out-of-pocket health expenditure per capita (current USD).}
-  \item{\code{wdi_sipovmdim}}{double Multidimensional poverty headcount ratio (percentage of total population).}
-  \item{\code{wdi_sipovmdimxq}}{double Multidimensional poverty index.}
   \item{\code{wdi_sipovgaps}}{double Poverty gap at national poverty line (percentage of poverty line).}
   \item{\code{wdi_sipovlmicgp}}{double Poverty gap at USD2.15 a day (2017 PPP) (percentage of poverty line).}
   \item{\code{wdi_sipovumicgp}}{double Poverty gap at USD3.65 a day (2017 PPP) (percentage of poverty line).}
