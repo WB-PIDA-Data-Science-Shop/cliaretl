@@ -27,6 +27,33 @@ db_variables <-  read_xlsx(
 )
 
 
+# dictionary-recoding -----------------------------------------------------
+
+# 1. WDI
+# Documenting variable changes in our dictionary
+# Backup original variable names (optional)
+db_variables$variable_old <- db_variables$variable
+
+# Named vector of changes: new name = old name
+rename_vector <- c(
+  "wdi_enghgco2rtgdpppkd" = "wdi_enatmco2eppgdkd"
+)
+
+# Apply the renaming in the `variable` column
+idx <- match(db_variables$variable, rename_vector)
+db_variables$variable[!is.na(idx)] <- names(rename_vector)[na.omit(idx)]
+
+
+# 2. VDEM
+# Problematic indicators that changed their name:
+# vdem_core_v2lgfemleg       Lower chamber female legislators (v2lgqugen) extra
+# vdem_core_v2caassemb       Freedom of peaceful assembly
+# vdem_core_v2peasjgen       Access to state jobs by gender
+
+# https://www.v-dem.net/documents/55/codebook.pdf
+
+
+
 # conflicting indicators analysis ---------------------------------------------
 
 # 1. Mismatching Indicators
@@ -49,7 +76,8 @@ dataframes <- list(
 all_mismatched_vars <- map_dfr( #From list to data frame
   names(dataframes),
   function(name) {
-    mismatched_df <- flag_mismatched_indicators(dataframes[[name]], db_variables)[[1]]
+    mismatched_df <- flag_mismatched_indicators(dataframes[[name]],
+                                                db_variables)[[1]]
     mismatched_df|> mutate(source = name)
   }
 )
@@ -70,11 +98,16 @@ db_var_meta_source <- db_variables|>
   distinct(variable, source)
 
 # Then call the function to each of the data frames
-wdi_missing_df <- flag_missing_indicators(db_variables, wdi_indicators, source_type = "WDI")
+wdi_missing_df <- flag_missing_indicators(
+  db_variables, wdi_indicators, source_type = "WDI")
 
-vdem_missing_df <- flag_missing_indicators(db_variables, vdem_data, source_type = "V-Dem, Variety of Democracy database")
+vdem_missing_df <- flag_missing_indicators(db_variables,
+                                           vdem_data,
+                                           source_type = "V-Dem, Variety of Democracy database")
 
-pefa_missing_df <- flag_missing_indicators(db_variables, pefa_assessments, source_type = "Public Expenditure Financial Accountability")
+pefa_missing_df <- flag_missing_indicators(db_variables,
+                                           pefa_assessments,
+                                           source_type = "Public Expenditure Financial Accountability")
 
 
 # Combine them into a single dataframe
@@ -84,7 +117,8 @@ all_missing_vars <- bind_rows(wdi_missing_df, vdem_missing_df, pefa_missing_df)
 # test draft --------------------------------------------------------------
 
 if (nrow(all_mismatched_vars) > 0) {
-  message("⚠️ Issue detected: There are mismatched indicators between extracted data and the dictionary.")
+  message("⚠️ Issue detected:
+There are mismatched indicators between extracted data and the dictionary.")
   print(all_mismatched_vars)
 } else {
   message("✅ All extracted indicators match the dictionary definitions.")
@@ -92,9 +126,9 @@ if (nrow(all_mismatched_vars) > 0) {
 
 
 if (nrow(all_missing_vars) > 0) {
-  message("⚠️ Issue detected: There are missing indicators not found in the extracted data.")
+  message("⚠️ Issue detected:
+There are missing indicators not found in the extracted data.")
   print(all_missing_vars)
 } else {
   message("✅ All expected indicators are present in the extracted data.")
 }
-
