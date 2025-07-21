@@ -352,3 +352,47 @@
 #'
 #' @source World Bank, Global Financial Development Database. See: \url{https://www.worldbank.org/en/publication/gfdr/data/global-financial-development-database}
 "gfdb"
+
+
+#' OECD PMR Dataset - 2018 Edition
+#'
+#' This dataset contains a selection of indicators from the 2018 OECD Product Market Regulation (PMR)
+#' database for 49 countries. These indicators measure various aspects of government involvement in
+#' business, market openness, and regulatory quality.
+#'
+#' @format A tibble with 49 rows and 10 variables:
+#' \describe{
+#'   \item{country_code}{Three-letter ISO country code.}
+#'   \item{year}{Year of observation (2018).}
+#'   \item{oecd_pmr_2018_1_1}{Government ownership in business sectors.}
+#'   \item{oecd_pmr_2018_1_2}{Government stake in the largest network firms.}
+#'   \item{oecd_pmr_2018_1_3}{Government special rights in private firms.}
+#'   \item{oecd_pmr_2018_1_4}{Stakeholder engagement in regulatory processes.}
+#'   \item{oecd_pmr_2018_2_1}{Tariff regulation and competition-limiting rules.}
+#'   \item{oecd_pmr_2018_2_2}{Autonomy and transparency of state-owned enterprises.}
+#'   \item{oecd_pmr_2018_3_3}{Administrative simplification and communication.}
+#'   \item{oecd_pmr_2018_6}{FDI restrictiveness and trade barriers.}
+#' }
+#'
+#' @description
+#' This dataset provides numeric scores for eight OECD PMR indicators, which assess the extent of
+#' product market regulation across key domains. Higher scores generally indicate more restrictive
+#' or interventionist policy environments.
+#'
+#' @details
+#' \itemize{
+#'   \item \strong{oecd_pmr_2018_1_1:} Measures whether the government controls at least one firm in a number of business sectors, with a higher weight given to key network sectors.
+#'   \item \strong{oecd_pmr_2018_1_2:} Measures the size of the government’s stake in the largest firm in key network sectors.
+#'   \item \strong{oecd_pmr_2018_1_3:} Measures the existence of special voting rights by the government in privately owned firms and constraints on the sale of government stakes.
+#'   \item \strong{oecd_pmr_2018_1_4:} Captures how policymakers interact with stakeholders when shaping business regulations. Considers forward planning, consultation, feedback, RIA, and transparency.
+#'   \item \strong{oecd_pmr_2018_2_1:} Measures whether tariffs are regulated and whether laws limit competition. Higher values imply worse performance.
+#'   \item \strong{oecd_pmr_2018_2_2:} Measures SOE autonomy in market decisions (e.g. operating hours, routes), and whether utilities disclose tariff and usage info. Higher values are worse.
+#'   \item \strong{oecd_pmr_2018_3_3:} Simple average of (i) use of one-stop shops/silence-is-consent rule and (ii) government communication to reduce administrative burden.
+#'   \item \strong{oecd_pmr_2018_6:} Simple average of (i) restrictiveness of FDI rules (equity limits, approvals, staffing, operations) and (ii) average applied tariffs.
+#' }
+#'
+#' @source OECD Product Market Regulation (PMR) Indicators, 2018. \url{https://www.oecd.org/economy/reform/oecdproductmarketregulationindicators.htm}
+#'
+#' @usage data(pmr)
+#' @keywords datasets
+"pmr"
