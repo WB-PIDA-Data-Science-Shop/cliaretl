@@ -20,21 +20,23 @@ write.csv(epl_df, "data-raw/input/epl/epl_raw.csv")
 epl_regular <-
   epl_df |>
   filter(
-    Version == "Version 4 (2013-2019)" &
+      Version == "Version 4 (2013-2019)",
       Measure == "Individual and collective dismissals (regular contracts)"
   ) |>
   transmute(
     # the country code used by the OECD is equivalent to the WB
     country_code = REF_AREA,
-    year = as.numeric(TIME_PERIOD),
-    oecd_epl_regular = OBS_VALUE
+    year = TIME_PERIOD,
+    oecd_epl_regular = OBS_VALUE,
+    version = Version,
+    measure = Measure,
   )
 
 epl_temporary <-
   epl_df |>
   filter(
-    Version == "Version 4 (2013-2019)" &
-      Measure == "Temporary contracts"
+    Version == "Version 4 (2013-2019)",
+    Measure == "Temporary contracts"
   ) |>
   transmute(
     country_code = REF_AREA,
