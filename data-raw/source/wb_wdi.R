@@ -223,17 +223,44 @@ wdi_cleaned_codes <- wdi_iso3 |>
                     filter(!is.na(iso3c)) |>
                     select(-c(iso2c, iso3c))
 
-
+# Remove underscores from column names and replace prefixes with `wdi_` convention
+wdi_named <- wdi_cleaned_codes |>
+  rename_with(~ str_replace_all(.x, "_", ""),
+              .cols = -c(country_name, country_code)
+  ) |>
+  rename_with(~ str_replace_all(.x, "^(.+)", "wdi_\\1"),
+              .cols = !starts_with("country") & !starts_with("year")
+  )
 
 # process -----------------------------------------------------------------
-# Remove underscores from column names and replace prefixes with `wdi_` convention
-wdi_indicators <- wdi_cleaned_codes |>
-              rename_with(~ str_replace_all(.x, "_", ""),
-                          .cols = -c(country_name, country_code)
-              ) |>
-              rename_with(~ str_replace_all(.x, "^(.+)", "wdi_\\1"),
-                          .cols = !starts_with("country") & !starts_with("year")
-              )
+
+# Step 1: Extract variable names and labels
+var_labels <- sapply(wdi_named, function(x) attr(x, "label"))  # Extract labels from the attributes
+var_names <- names(var_labels)  # Get the variable names
+
+wdi_clean <- wdi_named |>
+  rename_with(
+    ~ str_to_lower(.) %>%
+      str_replace_all("^wdi_", "wdi_"),
+    starts_with("wdi_")
+  )
+
+columns_to_drop <- c(
+  "country_name",
+  "wdi_dcodatotlgnzs",
+  "wdi_dtdodpvlxgnzs",
+  "wdi_shmedcmhwp3",
+  "wdi_sipovmdim",
+  "wdi_sipovmdimxq"
+)
+
+wdi_indicators <- wdi_clean |>
+  select(!all_of(columns_to_drop)) |>
+  filter(!is.na(country_code) & country_code != ""
+  ) |>
+  distinct(country_code, year, .keep_all = TRUE)
+
+
 
 # write-out ---------------------------------------------------------------
 usethis::use_data(wdi_indicators, overwrite = TRUE)

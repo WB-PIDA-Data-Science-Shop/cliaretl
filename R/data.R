@@ -4,17 +4,16 @@
 #' \describe{
 #'   \item{\code{country_code}}{character World Bank country code}
 #'   \item{\code{year}}{integer Year}
-#'   \item{\code{country}}{character Country name}
-#'   \item{\code{debt_transp_data}}{double Data accessibility}
-#'   \item{\code{debt_transp_instrument}}{double Instrument coverage}
-#'   \item{\code{debt_transp_sectorial}}{double Secotiral coverage}
-#'   \item{\code{debt_transp_information}}{double Information on recent contracted loans}
-#'   \item{\code{debt_transp_periodicity}}{double Periodicity of reporting}
-#'   \item{\code{debt_transp_time}}{double Time lag of reporting}
-#'   \item{\code{debt_transp_dms}}{double Debt management strategy}
-#'   \item{\code{debt_transp_abp}}{double Annual borrowing plan}
-#'   \item{\code{debt_transp_addition}}{double Other debt statistics/contingent liabilities}
-#'   \item{\code{debt_transp_index}}{double Row average of all debt transparency indicators}
+#'   \item{\code{wb_debt_transp_data}}{double. Data accessibility}
+#'   \item{\code{wb_debt_transp_instrument}}{double. Instrument coverage}
+#'   \item{\code{wb_debt_transp_sectorial}}{double. Sectoral coverage}
+#'   \item{\code{wb_debt_transp_information}}{double. Information on recently contracted loans}
+#'   \item{\code{wb_debt_transp_periodicity}}{double. Periodicity of reporting}
+#'   \item{\code{wb_debt_transp_time}}{double. Timeliness (time lag) of reporting}
+#'   \item{\code{wb_debt_transp_dms}}{double. Availability of a debt management strategy}
+#'   \item{\code{wb_debt_transp_abp}}{double. Availability of an annual borrowing plan}
+#'   \item{\code{wb_debt_transp_addition}}{double. Other debt statistics (e.g., contingent liabilities)}
+#'   \item{\code{wb_debt_transp_index}}{double. Composite index: row average of all debt transparency indicators}
 #'}
 #' @source https://www.worldbank.org/en/topic/debt/brief/debt-transparency-report/
 "debt_transparency"
@@ -110,7 +109,6 @@
 #' @description A dataset containing World Development Indicators from the World Bank, providing time-series data for multiple countries.
 #' @format A data frame with 7,310 rows and 129 variables:
 #' \describe{
-#'   \item{\code{country_name}}{character The official name of the country or region.}
 #'   \item{\code{country_code}}{character The 3-letter ISO code for the country or region.}
 #'   \item{\code{year}}{integer The year of the observation.}
 #'   \item{\code{wdi_gcdodtotlgdzs}}{double Government Consumption, Domestic Defense, Total (percentage of GDP).}
@@ -158,10 +156,8 @@
 #'   \item{\code{wdi_nygnppcapppkd}}{double GNI per capita, PPP (constant 2017 international USD).}
 #'   \item{\code{wdi_nygnpmktpppkd}}{double GNI, PPP (constant 2017 international USD).}
 #'   \item{\code{wdi_dtodaodatgnzs}}{double Net ODA received (percentage of GNI).}
-#'   \item{\code{wdi_dcodatotlgnzs}}{double Net official development assistance and official aid received (percentage of GNI).}
 #'   \item{\code{wdi_dttdsdppggnzs}}{double Debt service on external debt (percentage of exports of goods, services and primary income).}
 #'   \item{\code{wdi_dttdsdectgnzs}}{double Debt service on external debt (percentage of GNI).}
-#'   \item{\code{wdi_dtdodpvlxgnzs}}{double Present value of external debt (percentage of GNI).}
 #'   \item{\code{wdi_dtdoddstczs}}{double External debt stocks (percentage of GDP).}
 #'   \item{\code{wdi_dtdoddstcirzs}}{double External debt stocks, total (percentage of exports of goods, services and primary income).}
 #'   \item{\code{wdi_dttdsdectexzs}}{double Total debt service (percentage of exports of goods, services and primary income).}
@@ -198,12 +194,9 @@
 #'   \item{\code{wdi_sesectcaqupzs}}{double Teachers in secondary education, upper secondary (percentage of total teachers).}
 #'   \item{\code{wdi_seprmtenr}}{double Primary education, teachers (number).}
 #'   \item{\code{wdi_shstabrtczs}}{double Stunting prevalence, children (percentage).}
-#'   \item{\code{wdi_shmedcmhwp3}}{double Community health workers (per 1,000 people).}
 #'   \item{\code{wdi_shxpdchexgdzs}}{double Current health expenditure (percentage of GDP).}
 #'   \item{\code{wdi_shxpdoopcchzs}}{double Out-of-pocket health expenditure (percentage of current health expenditure).}
 #'   \item{\code{wdi_shxpdoopcppcd}}{double Out-of-pocket health expenditure per capita (current USD).}
-#'   \item{\code{wdi_sipovmdim}}{double Multidimensional poverty headcount ratio (percentage of total population).}
-#'   \item{\code{wdi_sipovmdimxq}}{double Multidimensional poverty index.}
 #'   \item{\code{wdi_sipovgaps}}{double Poverty gap at national poverty line (percentage of poverty line).}
 #'   \item{\code{wdi_sipovlmicgp}}{double Poverty gap at USD2.15 a day (2017 PPP) (percentage of poverty line).}
 #'   \item{\code{wdi_sipovumicgp}}{double Poverty gap at USD3.65 a day (2017 PPP) (percentage of poverty line).}
@@ -273,15 +266,12 @@
 #'   \item{vdem_core_v2clacjstm}{Media self‐censorship: military issues (`v2clacjstm`).}
 #'   \item{vdem_core_v2clacjstw}{Media self‐censorship: welfare issues (`v2clacjstw`).}
 #'   \item{vdem_core_v2lgqugen}{Legislature quota for gender (`v2lgqugen`).}
-#'   \item{vdem_core_v2lgfemleg}{Share of women in the legislature (percentage) (`v2lgfemleg`).}
 #'   \item{vdem_core_v2cldiscm}{State‐based political discrimination against men (`v2cldiscm`).}
 #'   \item{vdem_core_v2cldiscw}{State‐based political discrimination against women (`v2cldiscw`).}
-#'   \item{vdem_core_v2caassemb}{Freedom of peaceful assembly (`v2caassemb`).}
 #'   \item{vdem_core_v2cacamps}{Freedom of campus assembly (`v2cacamps`).}
 #'   \item{vdem_core_v2peapsecon}{Socio‑economic power inequality (`v2peapsecon`).}
 #'   \item{vdem_core_v2peasjsoecon}{Socio‑economic power by social group (`v2peasjsoecon`).}
 #'   \item{vdem_core_v2peapsgen}{Political power inequality by gender (`v2peapsgen`).}
-#'   \item{vdem_core_v2peasjgen}{Social group–gender power interaction (`v2peasjgen`).}
 #'   \item{vdem_core_v2peapspol}{Political power inequality by political group (`v2peapspol`).}
 #'   \item{vdem_core_v2peasjpol}{Social group–political power interaction (`v2peasjpol`).}
 #'   \item{vdem_core_v2x_pubcorr}{Public sector corruption index (`v2x_pubcorr`).}
@@ -302,3 +292,126 @@
 #' }
 #' @source Varieties of Democracy (V‑Dem) Institute. 2025. V‑Dem v15 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
 "vdem_data"
+
+
+#' Heritage Index of Economic Freedom Data
+#'
+#' A dataset containing country-level scores from the Heritage Foundation's Index of Economic Freedom, focused on freedom indicators relevant to business, finance, and investment sectors.
+#'
+#' @format A tibble with 2,381 rows and 5 variables:
+#' \describe{
+#'   \item{country_code}{A three-letter ISO 3166-1 alpha-3 country code identifying the country.}
+#'   \item{year}{The year of the score, adjusted so that a given year's value reflects the conditions of the previous year.}
+#'   \item{heritage_business_freedom}{Score measuring the extent to which the regulatory and infrastructure environments constrain the efficient operation of businesses.
+#'   A higher score indicates fewer regulatory barriers and more ease in starting, operating, and closing a business.}
+#'   \item{heritage_financial_freedom}{Score reflecting banking efficiency and independence from government control or interference in the financial sector.
+#'   State ownership of banks and other financial institutions typically reduces competition and lowers credit access.}
+#'   \item{heritage_investment_freedom}{Score based on the degree of regulatory restrictions on investment activities.
+#'   Deductions are made from a baseline score of 100 for various restrictions; countries with extremely high levels of restriction may receive a score of 0.}
+#' }
+#'
+#' @details
+#' The business freedom component measures the extent to which the regulatory and infrastructure environments constrain the efficient operation of businesses. The quantitative score is derived from an array of factors that affect the ease of starting, operating, and closing a business.
+#'
+#' Financial freedom is both an indicator of banking efficiency and a measure of independence from government control and interference in the financial sector. State ownership of banks and other financial institutions such as insurers and capital markets reduces competition and generally lowers access to credit.
+#'
+#' The investment freedom score reflects the degree of regulatory restrictions imposed on investment. Deductions are applied from the ideal score of 100 for each type of restriction. Countries with very high levels of restriction may receive a score of zero.
+#'
+#' @source Heritage Foundation, Index of Economic Freedom. See: \url{https://www.heritage.org/index/}
+"heritage"
+
+
+#' Global Financial Development Database (GFDB) Indicators
+#'
+#' A dataset containing selected indicators from the World Bank's Global Financial Development Database (GFDB), covering financial sector performance across countries and years. This data focuses on domestic credit provision and concentration of banking assets.
+#'
+#' @format A tibble with 6,848 rows and 4 variables:
+#' \describe{
+#'   \item{iso3}{A three-letter ISO 3166-1 alpha-3 country code.}
+#'   \item{year}{The calendar year of the observation.}
+#'   \item{wb_gfdb_ai_01}{Assets of the three largest commercial banks as a share of total commercial banking assets.
+#'   Total assets include earning assets, cash, due from banks, foreclosed real estate, fixed assets, goodwill, intangibles, tax assets, and other financial assets. A higher value indicates greater banking sector concentration.}
+#'   \item{wb_gfdb_di_01}{Domestic credit to the private sector by domestic money banks, as a share of GDP.
+#'   Domestic money banks include commercial banks and other financial institutions that accept transferable deposits. This is a measure of financial resources extended to the private sector.}
+#' }
+#'
+#' @details
+#' \strong{wb_gfdb_di_01:} The financial resources provided to the private sector by domestic money banks as a share of GDP. Domestic money banks comprise commercial banks and other financial institutions that accept transferable deposits, such as demand deposits.
+#'
+#' \strong{wb_gfdb_ai_01:} Assets of the three largest commercial banks as a share of total commercial banking assets. Total assets include total earning assets, cash and due from banks, foreclosed real estate, fixed assets, goodwill, other intangibles, current tax assets, deferred tax assets, discontinued operations, and other assets.
+#'
+#' @source World Bank, Global Financial Development Database. See: \url{https://www.worldbank.org/en/publication/gfdr/data/global-financial-development-database}
+"gfdb"
+
+
+#' OECD PMR Dataset - 2018 Edition
+#'
+#' This dataset contains a selection of indicators from the 2018 OECD Product Market Regulation (PMR)
+#' database for 49 countries. These indicators measure various aspects of government involvement in
+#' business, market openness, and regulatory quality.
+#'
+#' @format A tibble with 49 rows and 10 variables:
+#' \describe{
+#'   \item{country_code}{Three-letter ISO country code.}
+#'   \item{year}{Year of observation (2018).}
+#'   \item{oecd_pmr_2018_1_1}{Government ownership in business sectors.}
+#'   \item{oecd_pmr_2018_1_2}{Government stake in the largest network firms.}
+#'   \item{oecd_pmr_2018_1_3}{Government special rights in private firms.}
+#'   \item{oecd_pmr_2018_1_4}{Stakeholder engagement in regulatory processes.}
+#'   \item{oecd_pmr_2018_2_1}{Tariff regulation and competition-limiting rules.}
+#'   \item{oecd_pmr_2018_2_2}{Autonomy and transparency of state-owned enterprises.}
+#'   \item{oecd_pmr_2018_3_3}{Administrative simplification and communication.}
+#'   \item{oecd_pmr_2018_6}{FDI restrictiveness and trade barriers.}
+#' }
+#'
+#' @description
+#' This dataset provides numeric scores for eight OECD PMR indicators, which assess the extent of
+#' product market regulation across key domains. Higher scores generally indicate more restrictive
+#' or interventionist policy environments.
+#'
+#' @details
+#' \itemize{
+#'   \item \strong{oecd_pmr_2018_1_1:} Measures whether the government controls at least one firm in a number of business sectors, with a higher weight given to key network sectors.
+#'   \item \strong{oecd_pmr_2018_1_2:} Measures the size of the government’s stake in the largest firm in key network sectors.
+#'   \item \strong{oecd_pmr_2018_1_3:} Measures the existence of special voting rights by the government in privately owned firms and constraints on the sale of government stakes.
+#'   \item \strong{oecd_pmr_2018_1_4:} Captures how policymakers interact with stakeholders when shaping business regulations. Considers forward planning, consultation, feedback, RIA, and transparency.
+#'   \item \strong{oecd_pmr_2018_2_1:} Measures whether tariffs are regulated and whether laws limit competition. Higher values imply worse performance.
+#'   \item \strong{oecd_pmr_2018_2_2:} Measures SOE autonomy in market decisions (e.g. operating hours, routes), and whether utilities disclose tariff and usage info. Higher values are worse.
+#'   \item \strong{oecd_pmr_2018_3_3:} Simple average of (i) use of one-stop shops/silence-is-consent rule and (ii) government communication to reduce administrative burden.
+#'   \item \strong{oecd_pmr_2018_6:} Simple average of (i) restrictiveness of FDI rules (equity limits, approvals, staffing, operations) and (ii) average applied tariffs.
+#' }
+#'
+#' @source OECD Product Market Regulation (PMR) Indicators, 2018. \url{https://www.oecd.org/economy/reform/oecdproductmarketregulationindicators.htm}
+#'
+#' @usage data(pmr)
+#' @keywords datasets
+"pmr"
+
+
+
+#' OECD Employment Protection Legislation (EPL) Indicators
+#'
+#' This dataset includes composite indicators developed by the OECD to quantify the strength of employment protection legislation (EPL) for regular and temporary contracts. The indicators reflect rules and practices regarding individual dismissals and are part of the OECD Employment Protection Database.
+#'
+#' @format A tibble with 287 rows and 4 variables:
+#' \describe{
+#'   \item{country_code}{Three-letter ISO country code (e.g., "AUS", "FRA").}
+#'   \item{year}{Observation year (e.g., 2013).}
+#'   \item{oecd_epl_regular}{Composite indicator of employment protection legislation governing regular contracts (individual dismissals).}
+#'   \item{oecd_epl_temporary}{Composite indicator of employment protection legislation governing temporary contracts (individual dismissals).}
+#' }
+#'
+#' @description
+#' Measures the strictness of rules and enforcement practices surrounding hiring and firing of workers under different types of contracts. A higher score indicates more stringent regulation.
+#'
+#' @details
+#' \itemize{
+#'   \item \strong{oecd_epl_regular:} Composite indicator of employment protection legislation governing individual dismissals for regular (permanent) contracts. It captures aspects such as procedural inconveniences, notice periods, and severance pay.
+#'   \item \strong{oecd_epl_temporary:} Composite indicator of employment protection legislation for temporary contracts. This includes aspects such as valid grounds for fixed-term contracts, maximum number of renewals, and duration limits.
+#' }
+#'
+#' @source OECD Employment Protection Database. \url{https://www.oecd.org/employment/emp/oecdindicatorsofemploymentprotection.htm}
+#'
+#' @usage data(epl)
+#' @keywords datasets
+"epl"
