@@ -143,4 +143,138 @@ flag_missing_indicators <- function(db_variables, df, source_type = NULL) {
 
 
 
+#' Extract Dataset ID from Indicator Name
+#'
+#' This function extracts the EFI source (dataset ID) required for an API pull
+#' from a given indicator name. It identifies and returns the substring between
+#' the first and second occurrences of a specified delimiter character.
+#'
+#' @param input_id A character string representing the full indicator name.
+#' @param splitchar A character string used as the delimiter to split the input. Default is \code{'.'}.
+#'
+#' @return A character string representing the extracted dataset ID. If the delimiter
+#'         is not found twice, the original \code{input_id} is returned.
+#'
+#' @examples
+#' extract_dataset_id("WDI.GDP.PC")
+#' extract_dataset_id("IMF.WEO.GDP", splitchar = ".")
+#'
+#' @export
+extract_dataset_id <- function(input_id, splitchar = '.') {
+  # Find first occurrence of splitchar
+  first_dot_index <- str_locate(input_id, fixed(splitchar))[1]
+
+  if (!is.na(first_dot_index)) {
+    # Find second occurrence of splitchar
+    remaining_string <- substr(input_id, first_dot_index + 1, nchar(input_id))
+    second_dot_pos <- str_locate(remaining_string, fixed(splitchar))[1]
+
+    if (!is.na(second_dot_pos)) {
+      second_dot_index <- first_dot_index + second_dot_pos
+      return(substr(input_id, 1, second_dot_index - 1))
+    }
+  }
+
+  return(input_id)
+}
+
+#' Extract Data from World Bank API
+#'
+#' This function retrieves indicator data from either the Data360 or EFI World Bank APIs
+#' based on the specified dataset ID and indicator IDs. It handles pagination for large datasets
+#' and returns the results as a data frame.
+#'
+#' @param dataset_id A character string representing the dataset ID to query.
+#' @param indicator_ids A character vector of indicator IDs to retrieve.
+#' @param source A character string specifying the data source. Must be either \code{"d360"} or \code{"efi"}.
+#' @param verbose Logical; if \code{TRUE}, prints detailed request and response information.
+#'
+#' @return A list with two elements:
+#' \describe{
+#'   \item{"SUCCESS"}{A data frame containing the retrieved data if the request was successful.}
+#'   \item{"ERROR"}{An empty data frame if the request failed.}
+#' }
+#'
+#' @examples
+#' \dontrun{
+#' Extract_data_from_API("WDI", c("NY.GDP.MKTP.CD"), source = "d360", verbose = TRUE)
+#' }
+#'
+#' @export
+Extract_data_from_API <- function(dataset_id, indicator_ids, source, verbose = FALSE) {
+  # Base URLs (define these beforehand)
+  d360_baseurl <- "https://data360api.worldbank.org/data360/data"
+  efi_baseurl <- "https://datacatalogapi.worldbank.org/dexapps/efi/data"
+
+  if (source == 'd360') {
+    url <- paste0(d360_baseurl, "?DATABASE_ID=", dataset_id,
+                  "&INDICATOR=", paste(indicator_ids, collapse = ","),
+                  "&skip=0")
+  } else {
+    url <- paste0(efi_baseurl, "?datasetId=", dataset_id,
+                  "&indicatorIds=", paste(indicator_ids, collapse = ","),
+                  "&top=0&skip=0")
+  }
+
+  print(url)
+  response <- GET(url)
+  print(paste("REQUEST STATUS:", status_code(response)))
+
+  if (status_code(response) == 200) {
+    data <- content(response, as = "parsed", type = "application/json")
+    total_count <- data$count
+
+    if (verbose) {
+      print("REQUEST TEXT:")
+      print(data)
+    }
+
+    all_data <- list()
+
+    if (total_count > 1000) {
+      for (i in seq(0, total_count, by = 1000)) {
+        if (source == 'd360') {
+          fetch_url <- paste0(d360_baseurl, "?DATABASE_ID=", dataset_id,
+                              "&INDICATOR=", paste(indicator_ids, collapse = ","),
+                              "&skip=", i)
+        } else {
+          fetch_url <- paste0(efi_baseurl, "?datasetId=", dataset_id,
+                              "&indicatorIds=", paste(indicator_ids, collapse = ","),
+                              "&top=1000&skip=", i)
+        }
+        response_chunk <- GET(fetch_url)
+
+        if (status_code(response_chunk) == 200) {
+          if (verbose) {
+            print("CHUNK RESPONSE TEXT:")
+            print(content(response_chunk, as = "text"))
+          }
+          data_chunk <- content(response_chunk, as = "parsed", type = "application/json")$value
+          all_data <- append(all_data, data_chunk)
+        } else {
+          print(paste("FAILED TO FETCH DATA, status code:", status_code(response_chunk)))
+          return(list("ERROR", data.frame()))
+        }
+      }
+    } else {
+      data_formatted <- data$value
+      all_data <- data_formatted
+    }
+
+    # Convert list to dataframe
+    APIDataFrame <- bind_rows(all_data)
+
+    if ("count" %in% colnames(APIDataFrame)) {
+      APIDataFrame <- select(APIDataFrame, -count)
+    }
+
+    return(list("SUCCESS", APIDataFrame))
+  } else {
+    print(paste("FAILED TO CONNECT TO API, status code:", status_code(response)))
+    print(paste("ERROR MSG:", content(response, as = "text")))
+    return(list("ERROR", data.frame()))
+  }
+}
+
+
 

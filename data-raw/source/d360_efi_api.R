@@ -6,117 +6,20 @@ library(httr)
 library(jsonlite)
 library(stringr)
 library(lubridate)
+library(janitor)
+library(here)
 
 # ============= Dummy Inputs for Testing
 start_year <- 1990
 end_year <- 2024
 patch_bool <- 'TRUE'
 patch_bool <- ifelse(patch_bool == 'FALSE', FALSE, TRUE)
-og_file_path <- "G:/data/cliaretl/input/"
+og_file_path <- "/data-raw/cliar/"
 
 # =================== Data Read
-# Interacting with Cliar metadata
-temp_dbv_path <- "CLIAR_Metadata_Prod_D360.xlsx"
-dbv_df <- read_excel(paste0(og_file_path, temp_dbv_path))
-
-# ===================== Function Creation
-# This function pulls the efi source needed for the API pull from any indicator name
-extract_dataset_id <- function(input_id, splitchar = '.') {
-  # Find first occurrence of splitchar
-  first_dot_index <- str_locate(input_id, fixed(splitchar))[1]
-
-  if (!is.na(first_dot_index)) {
-    # Find second occurrence of splitchar
-    remaining_string <- substr(input_id, first_dot_index + 1, nchar(input_id))
-    second_dot_pos <- str_locate(remaining_string, fixed(splitchar))[1]
-
-    if (!is.na(second_dot_pos)) {
-      second_dot_index <- first_dot_index + second_dot_pos
-      return(substr(input_id, 1, second_dot_index - 1))
-    }
-  }
-
-  return(input_id)
-}
-
-# Function to format API JSON into data frames
-
-API_toDF <- function(dataset_id, indicator_ids, source, verbose = FALSE) {
-  # Base URLs (define these beforehand)
-  d360_baseurl <- "https://data360api.worldbank.org/data360/data"
-  efi_baseurl <- "https://datacatalogapi.worldbank.org/dexapps/efi/data"
-
-  if (source == 'd360') {
-    url <- paste0(d360_baseurl, "?DATABASE_ID=", dataset_id,
-                  "&INDICATOR=", paste(indicator_ids, collapse = ","),
-                  "&skip=0")
-  } else {
-    url <- paste0(efi_baseurl, "?datasetId=", dataset_id,
-                  "&indicatorIds=", paste(indicator_ids, collapse = ","),
-                  "&top=0&skip=0")
-  }
-
-  print(url)
-  response <- GET(url)
-  print(paste("REQUEST STATUS:", status_code(response)))
-
-  if (status_code(response) == 200) {
-    data <- content(response, as = "parsed", type = "application/json")
-    total_count <- data$count
-
-    if (verbose) {
-      print("REQUEST TEXT:")
-      print(data)
-    }
-
-    all_data <- list()
-
-    if (total_count > 1000) {
-      for (i in seq(0, total_count, by = 1000)) {
-        if (source == 'd360') {
-          fetch_url <- paste0(d360_baseurl, "?DATABASE_ID=", dataset_id,
-                              "&INDICATOR=", paste(indicator_ids, collapse = ","),
-                              "&skip=", i)
-        } else {
-          fetch_url <- paste0(efi_baseurl, "?datasetId=", dataset_id,
-                              "&indicatorIds=", paste(indicator_ids, collapse = ","),
-                              "&top=1000&skip=", i)
-        }
-        response_chunk <- GET(fetch_url)
-
-        if (status_code(response_chunk) == 200) {
-          if (verbose) {
-            print("CHUNK RESPONSE TEXT:")
-            print(content(response_chunk, as = "text"))
-          }
-          data_chunk <- content(response_chunk, as = "parsed", type = "application/json")$value
-          all_data <- append(all_data, data_chunk)
-        } else {
-          print(paste("FAILED TO FETCH DATA, status code:", status_code(response_chunk)))
-          return(list("ERROR", data.frame()))
-        }
-      }
-    } else {
-      data_formatted <- data$value
-      all_data <- data_formatted
-    }
-
-    # Convert list to dataframe
-    APIDataFrame <- bind_rows(all_data)
-
-    if ("count" %in% colnames(APIDataFrame)) {
-      APIDataFrame <- select(APIDataFrame, -count)
-    }
-
-    return(list("SUCCESS", APIDataFrame))
-  } else {
-    print(paste("FAILED TO CONNECT TO API, status code:", status_code(response)))
-    print(paste("ERROR MSG:", content(response, as = "text")))
-    return(list("ERROR", data.frame()))
-  }
-}
-
-
+dbv_df <- read_excel(
+  here("data-raw", "input", "cliar", "CLIAR_Metadata_Prod_D360.xlsx")
+)
 
 # ======== OBJECT INITIALIZATION
 # Dictionary of country names for conversion later on in the code
@@ -191,59 +94,59 @@ d360_SOURCE_DICT <- list()
 EFI_SOURCE_DICT <-list()
 row_counter <- 0
 # Loop over rows
-for (i in 1:nrow(dbv_df)) {
-  row <- dbv_df[i, ]
 
-  # Check for non-missing Indicator_ID
-  if (!is.na(row$Indicator_ID)) {
-    key <- extract_dataset_id(as.character(row$Indicator_ID))
+for (row_index in 1:nrow(dbv_df)) {
+  current_row <- dbv_df[row_index, ]
 
-    if (row$Process == "Data360") {
+  if (!is.na(current_row$Indicator_ID)) {
+    dataset_key <- extract_dataset_id(as.character(current_row$Indicator_ID))
+
+    if (current_row$Process == "Data360") {
       row_counter <- row_counter + 1
 
-      if (grepl("WB.GTMI.I", row$Indicator_ID)) {
-        value <- gsub("-", ".", row$Indicator_ID)
+      indicator_id <- if (grepl("WB.GTMI.I", current_row$Indicator_ID)) {
+        gsub("-", ".", current_row$Indicator_ID)
       } else {
-        value <- row$Indicator_ID
+        current_row$Indicator_ID
       }
 
-      if (key != 'nan' && !is.na(key))  {
-        if (is.null(d360_SOURCE_DICT[[key]])) {
-          d360_SOURCE_DICT[[key]] <- list()
+      if (dataset_key != 'nan' && !is.na(dataset_key)) {
+        if (is.null(d360_SOURCE_DICT[[dataset_key]])) {
+          d360_SOURCE_DICT[[dataset_key]] <- list()
         }
-        d360_SOURCE_DICT[[key]] <- append(d360_SOURCE_DICT[[key]], value)
+        d360_SOURCE_DICT[[dataset_key]] <- append(d360_SOURCE_DICT[[dataset_key]], indicator_id)
       }
 
-    } else if (row$Process == "EFI") {
+    } else if (current_row$Process == "EFI") {
       row_counter <- row_counter + 1
-      value <- row$Indicator_ID
+      indicator_id <- current_row$Indicator_ID
 
-      if (key != 'nan' && !is.na(key))  {
-        if (is.null(EFI_SOURCE_DICT[[key]])) {
-          EFI_SOURCE_DICT[[key]] <- list()
+      if (dataset_key != 'nan' && !is.na(dataset_key)) {
+        if (is.null(EFI_SOURCE_DICT[[dataset_key]])) {
+          EFI_SOURCE_DICT[[dataset_key]] <- list()
         }
-        EFI_SOURCE_DICT[[key]] <- append(EFI_SOURCE_DICT[[key]], value)
+        EFI_SOURCE_DICT[[dataset_key]] <- append(EFI_SOURCE_DICT[[dataset_key]], indicator_id)
       }
     }
   }
 }
 
-# Initialize variables
-API_CALLS <- 0
-Missing_sources <- list()
-Fail_Pull <- 0
-Expected_L <- 0
-Year_range <- start_year:end_year
-Years <- paste(Year_range, collapse = ", ")
+# ------------------ Initialize Variables ------------------
 
-# Convert d360 dictionary to R list
-Indicator_Dict <- lapply(d360_SOURCE_DICT, function(vals) gsub("\\.", "_", vals))
-names(Indicator_Dict) <- gsub("\\.", "_", names(d360_SOURCE_DICT))
+api_call_counter <- 0
+missing_sources <- list()
+failed_pull_counter <- 0
+expected_length <- 0
+year_range <- start_year:end_year
+year_string <- paste(year_range, collapse = ", ")
 
-# EFI dictionary remains same
+# ------------------ Convert Dictionaries to Data Frames ------------------
+
+Indicator_Dict <- lapply(d360_SOURCE_DICT, function(vals) gsub("\.", "_", vals))
+names(Indicator_Dict) <- gsub("\.", "_", names(d360_SOURCE_DICT))
+
 efi_Indicator_Dict <- EFI_SOURCE_DICT
 
-# Convert to data frame
 df_d360 <- tibble::tibble(
   DATABASE_ID = rep(names(Indicator_Dict), lengths(Indicator_Dict)),
   INDICATOR = unlist(Indicator_Dict)
@@ -254,106 +157,107 @@ df_efi <- tibble::tibble(
   INDICATOR = unlist(efi_Indicator_Dict)
 ) %>% mutate(Status = 0)
 
-# Prepare output containers
-Full_df_efi <- data.frame(
+# ------------------ EFI API Pull ------------------
+
+efi_full_data <- data.frame(
   COUNTRY_CODE = character(), PARTNER = character(), INDICATOR_ID = character(),
   ATTRIBUTE_1 = character(), ATTRIBUTE_2 = character(), ATTRIBUTE_3 = character(),
   CAL_YEAR = character(), IND_VALUE = numeric(), Median = character(),
   stringsAsFactors = FALSE
 )
 
-# ----------- EFI API Pull
-for (i in 1:nrow(df_efi)) {
-  API_CALLS <- API_CALLS + 1
-  Current_dataset <- df_efi$DATABASE_ID[i]
-  current_indicators <- df_efi$INDICATOR[i]
+for (row_index in 1:nrow(df_efi)) {
+  api_call_counter <- api_call_counter + 1
+  current_dataset <- df_efi$DATABASE_ID[row_index]
+  current_indicators <- df_efi$INDICATOR[row_index]
 
-  result <- API_toDF(Current_dataset, current_indicators, 'efi')
+  result <- Extract_data_from_API(current_dataset, current_indicators, 'efi')
 
   if (result[[1]] == 'ERROR') {
     next
   } else {
     api_pull <- result[[2]]
-    Full_df_efi <- bind_rows(Full_df_efi, api_pull)
-    df_efi$Status[i] <- 1
+    efi_full_data <- bind_rows(efi_full_data, api_pull)
+    df_efi$Status[row_index] <- 1
   }
 }
 
-Full_df_efi <- distinct(Full_df_efi)
+efi_full_data <- distinct(efi_full_data)
 
-# ----------- Reshape EFI data
-df_filtered <- Full_df_efi %>% select(-any_of(c("PARTNER", "ATTRIBUTE_1", "ATTRIBUTE_2", "ATTRIBUTE_3", "Median")))
-pivot_df <- df_filtered %>%
+# ------------------ Reshape EFI Data ------------------
+
+efi_filtered_df <- efi_full_data %>%
+  select(-any_of(c("PARTNER", "ATTRIBUTE_1", "ATTRIBUTE_2", "ATTRIBUTE_3", "Median")))
+
+efi_wide_df <- efi_filtered_df %>%
   pivot_wider(names_from = INDICATOR_ID, values_from = IND_VALUE) %>%
-  mutate(Year = as.integer(lubridate::year(as.Date(CAL_YEAR))))
-
-pivot_df <- pivot_df %>%
   mutate(Year = as.integer(format(as.Date(CAL_YEAR, format = "%d/%m/%Y"), "%Y"))) %>%
   select(-CAL_YEAR)
 
-df_final <- pivot_df %>%
+efi_final_df <- efi_wide_df %>%
   filter(Year >= start_year & Year <= end_year) %>%
   rename(ISO3 = COUNTRY_CODE)
 
-# Fill missing (ISO3, Year) combinations
-iso3_codes <- unique(df_final$ISO3)
-missing_rows <- expand.grid(ISO3 = iso3_codes, Year = Year_range) %>%
-  anti_join(df_final, by = c("ISO3", "Year"))
-df_final <- bind_rows(df_final, missing_rows) %>%
+iso3_codes <- unique(efi_final_df$ISO3)
+missing_rows <- expand.grid(ISO3 = iso3_codes, Year = year_range) %>%
+  anti_join(efi_final_df, by = c("ISO3", "Year"))
+
+efi_final_df <- bind_rows(efi_final_df, missing_rows) %>%
   arrange(ISO3, Year)
 
-
-# Clean column names
-colnames(df_final) <- colnames(df_final) %>%
+colnames(efi_final_df) <- colnames(efi_final_df) %>%
   str_replace_all("\\.", "_") %>%
   str_replace_all("-", "_") %>%
   str_replace_all("IMF_WoRLD", "IMF_WORLD") %>%
   str_replace_all("WB_ENTERPRISESURVEYS_IC_FRM", "WB_SURVEY") %>%
   str_replace_all("IDEA_GSOD_v", "IDEA_GSOD_V")
 
+# ------------------ D360 API Pull ------------------
 
-# ------------ D360 API Pull
-Full_df_d360 <- data.frame()
+d360_full_data <- data.frame()
 
-for (i in 1:nrow(df_d360)) {
-  API_CALLS <- API_CALLS + 1
-  Current_dataset <- df_d360$DATABASE_ID[i]
-  current_indicators <- df_d360$INDICATOR[i]
+for (row_index in 1:nrow(df_d360)) {
+  api_call_counter <- api_call_counter + 1
+  current_dataset <- df_d360$DATABASE_ID[row_index]
+  current_indicators <- df_d360$INDICATOR[row_index]
 
-  result <- API_toDF(Current_dataset, current_indicators, 'd360')
+  result <- Extract_data_from_API(current_dataset, current_indicators, 'd360')
 
   if (result[[1]] == 'ERROR') {
     next
   } else {
     api_pull <- result[[2]]
-    Full_df_d360 <- bind_rows(Full_df_d360, api_pull)
-    df_d360$Status[i] <- 1
+    d360_full_data <- bind_rows(d360_full_data, api_pull)
+    df_d360$Status[row_index] <- 1
   }
 }
 
-Full_df_d360 <- distinct(Full_df_d360)
+d360_full_data <- distinct(d360_full_data)
 
-# Reshape D360
-data <- Full_df_d360 %>%
+d360_data <- d360_full_data %>%
   select(INDICATOR, REF_AREA, TIME_PERIOD, OBS_VALUE) %>%
   rename(ISO3 = REF_AREA, Year = TIME_PERIOD)
 
-pivot_df2 <- data %>%
+d360_wide_df <- d360_data %>%
   pivot_wider(names_from = INDICATOR, values_from = OBS_VALUE)
 
-pivot_df2$Year <- as.integer(pivot_df2$Year)
-df_final2 <- pivot_df2 %>%
+d360_wide_df$Year <- as.integer(d360_wide_df$Year)
+
+d360_final_df <- d360_wide_df %>%
   filter(Year >= start_year & Year <= end_year)
 
-# Merge EFI and D360
+# ------------------ Merge EFI and D360 ------------------
+
 key_df <- bind_rows(
-  df_final %>% select(ISO3, Year),
-  df_final2 %>% select(ISO3, Year)
+  efi_final_df %>% select(ISO3, Year),
+  d360_final_df %>% select(ISO3, Year)
 ) %>% distinct()
 
-df_final_left <- left_join(key_df, df_final, by = c("ISO3", "Year"))
-df_final2_left <- left_join(key_df, df_final2, by = c("ISO3", "Year"))
-df_merged <- full_join(df_final_left, df_final2_left, by = c("ISO3", "Year"))
-df_merged <- df_merged %>% filter(ISO3 != "AGGREGATE")
+efi_merged_df <- left_join(key_df, efi_final_df, by = c("ISO3", "Year"))
+d360_merged_df <- left_join(key_df, d360_final_df, by = c("ISO3", "Year"))
 
+merged_final_df <- full_join(efi_merged_df, d360_merged_df, by = c("ISO3", "Year")) %>%
+  filter(ISO3 != "AGGREGATE")
+
+save(df_merged, file = here("data","D360_EFI_Data_extract.rda"))
 
