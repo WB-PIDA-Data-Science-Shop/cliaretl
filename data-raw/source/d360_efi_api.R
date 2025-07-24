@@ -142,8 +142,8 @@ year_string <- paste(year_range, collapse = ", ")
 
 # ------------------ Convert Dictionaries to Data Frames ------------------
 
-Indicator_Dict <- lapply(d360_SOURCE_DICT, function(vals) gsub("\.", "_", vals))
-names(Indicator_Dict) <- gsub("\.", "_", names(d360_SOURCE_DICT))
+Indicator_Dict <- lapply(d360_SOURCE_DICT, function(vals) gsub("\\.", "_", vals))
+names(Indicator_Dict) <- gsub("\\.", "_", names(d360_SOURCE_DICT))
 
 efi_Indicator_Dict <- EFI_SOURCE_DICT
 
