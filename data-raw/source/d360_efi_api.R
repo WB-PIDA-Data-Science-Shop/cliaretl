@@ -21,6 +21,8 @@ dbv_df <- read_excel(
   here("data-raw", "input", "cliar", "CLIAR_Metadata_Prod_D360.xlsx")
 )
 
+dbvars_dt <- read_excel("data-raw/input/cliar/db_variables.xlsx")
+
 # ======== OBJECT INITIALIZATION
 # Dictionary of country names for conversion later on in the code
 Country_DICT <- c(
@@ -171,7 +173,7 @@ for (row_index in 1:nrow(df_efi)) {
   current_dataset <- df_efi$DATABASE_ID[row_index]
   current_indicators <- df_efi$INDICATOR[row_index]
 
-  result <- Extract_data_from_API(current_dataset, current_indicators, 'efi')
+  result <- extract_data_from_api(current_dataset, current_indicators, 'efi')
 
   if (result[[1]] == 'ERROR') {
     next
@@ -224,7 +226,7 @@ for (row_index in 1:nrow(df_d360)) {
   current_dataset <- df_d360$DATABASE_ID[row_index]
   current_indicators <- df_d360$INDICATOR[row_index]
 
-  result <- Extract_data_from_API(current_dataset, current_indicators, 'd360')
+  result <- extract_data_from_api(current_dataset, current_indicators, 'd360')
 
   if (result[[1]] == 'ERROR') {
     next
@@ -272,5 +274,59 @@ d360_efi_data <- d360_efi_data %>%
   ))
 
 
+#### prepare the data to match db_variables specifications
+d360_efi_data <-
+d360_efi_data |>
+  clean_names() |>
+  # fix enterprise surveys variable name
+  rename_with(
+    \(x) str_replace(x, "wb_survey", "wb_es_ic_frm"),
+    .cols = starts_with("wb_survey")
+  ) |>
+  # create PFM MIS indicator by summing over the following and rescaling:
+  # GTMI_I-12       Is there an e-Procurement System in place? (foreign and domestic debt)
+  # GTMI_I-13       Is there a Debt Management System (DMS) in place? (foreign and domestic debt)
+  # GTMI_I-14       Is there a Public Investment Management System (PIMS) in place?
+  # GTMI_I-8        Is there a Customs System in place?
+  # GTMI_I-7        Is there a Tax Management Information System in place?
+  # GTMI_I-6        Is there a TSA supported by FMIS to automate payments and bank reconciliation?
+  # GTMI_I-5        Is there an operational FMIS in place to support core PFM functions?
+  rowwise() |>
+  mutate(
+    wb_gtmi_pfm_mis = sum(
+      # wb_gtmi_i_12,
+      wb_gtmi_i_13,
+      wb_gtmi_i_14,
+      wb_gtmi_i_8,
+      wb_gtmi_i_7,
+      wb_gtmi_i_6,
+      wb_gtmi_i_5
+    )
+  ) |>
+  ungroup() |>
+  mutate(
+    wb_gtmi_pfm_mis = scale_values(wb_gtmi_pfm_mis)
+  ) |>
+  # edit WJP indicators to: (1) use 2018 data for 2017 in WJP and drop data if year < 2015
+  arrange(
+    iso3, year
+  ) |>
+  mutate(
+    across(
+      starts_with("wjp_rol"),
+      ~ case_when(
+        year == 2017 ~ lead(.), # use 2018 data for 2017
+        year < 2015 ~ NA, # drop data if year < 2015
+        T ~ .
+      )
+    )
+  ) |>
+  select(
+    country_code = iso3,
+    year,
+    everything()
+  )
+
+### write package data for lazy loading
 usethis::use_data(d360_efi_data, overwrite = TRUE)
 
