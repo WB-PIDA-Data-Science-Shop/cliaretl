@@ -189,7 +189,10 @@ efi_full_data <- distinct(efi_full_data)
 efi_filtered_df <- efi_full_data %>%
   select(-any_of(c("PARTNER", "ATTRIBUTE_1", "ATTRIBUTE_2", "ATTRIBUTE_3", "Median")))
 
+
 efi_wide_df <- efi_filtered_df %>%
+  filter(COUNTRY_CODE != 'AGGREGATE') %>%
+  distinct(COUNTRY_CODE, CAL_YEAR, INDICATOR_ID, .keep_all = TRUE) %>%
   pivot_wider(names_from = INDICATOR_ID, values_from = IND_VALUE) %>%
   mutate(Year = as.integer(format(as.Date(CAL_YEAR, format = "%d/%m/%Y"), "%Y"))) %>%
   select(-CAL_YEAR)
@@ -236,7 +239,9 @@ d360_full_data <- distinct(d360_full_data)
 
 d360_data <- d360_full_data %>%
   select(INDICATOR, REF_AREA, TIME_PERIOD, OBS_VALUE) %>%
-  rename(ISO3 = REF_AREA, Year = TIME_PERIOD)
+  rename(ISO3 = REF_AREA, Year = TIME_PERIOD)%>%
+  distinct(INDICATOR, ISO3, Year, .keep_all = TRUE)
+
 
 d360_wide_df <- d360_data %>%
   pivot_wider(names_from = INDICATOR, values_from = OBS_VALUE)
@@ -256,8 +261,16 @@ key_df <- bind_rows(
 efi_merged_df <- left_join(key_df, efi_final_df, by = c("ISO3", "Year"))
 d360_merged_df <- left_join(key_df, d360_final_df, by = c("ISO3", "Year"))
 
-merged_final_df <- full_join(efi_merged_df, d360_merged_df, by = c("ISO3", "Year")) %>%
+d360_efi_data <- full_join(efi_merged_df, d360_merged_df, by = c("ISO3", "Year")) %>%
   filter(ISO3 != "AGGREGATE")
 
-save(df_merged, file = here("data","D360_EFI_Data_extract.rda"))
+
+d360_efi_data <- d360_efi_data %>%
+  mutate(across(
+    .cols = where(is.character) & !c("ISO3", "Year"),
+    .fns = ~ as.numeric(.)
+  ))
+
+
+usethis::use_data(d360_efi_data, overwrite = TRUE)
 
