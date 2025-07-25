@@ -327,6 +327,15 @@ d360_efi_data |>
     everything()
   )
 
+
+### quickly add pipeline metadata to the d360_efi_data
+d360_efi_data <-
+  d360_efi_data |>
+  add_plmetadata(source = "World Bank EFI Data 360 API",
+                 other_info = "Data collected for EFI and Data 360 indicators")
+
+
+
 ### write package data for lazy loading
 usethis::use_data(d360_efi_data, overwrite = TRUE)
 
