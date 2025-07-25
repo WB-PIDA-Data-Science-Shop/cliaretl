@@ -17,7 +17,9 @@ RoxygenNote: 7.3.2
 Imports: 
     purrr,
     tibble,
-    rlang
+    rlang,
+    stringr,
+    httr
 Suggests: 
     dplyr,
     testthat (>= 3.0.0)
