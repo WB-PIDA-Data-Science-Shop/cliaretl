@@ -1,0 +1,139 @@
+Country_Code,region,idaeligibility,incomeclassification
+EAS,,,
+UMC,,,
+WLD,,,
+LIC,,,
+HIC,,,
+SSF,,,
+ECS,,,
+LCN,,,
+SAS,,,
+IDA,,,
+LMC,,,
+MEA,,,
+AFG,SAS,IDA,Low income
+AGO,SSF,IBRD,Lower middle income
+ALB,ECS,IBRD,Upper middle income
+ARG,LCN,IBRD,Upper middle income
+ARM,ECS,IBRD,Upper middle income
+AZE,ECS,IBRD,Upper middle income
+BEN,SSF,IDA,Lower middle income
+BFA,SSF,IDA,Low income
+BGD,SAS,IDA,Lower middle income
+BGR,ECS,IBRD,Upper middle income
+BIH,ECS,IBRD,Upper middle income
+BLR,ECS,IBRD,Upper middle income
+BLZ,LCN,IBRD,Lower middle income
+BOL,LCN,IBRD,Lower middle income
+BRA,LCN,IBRD,Upper middle income
+BTN,SAS,IDA,Lower middle income
+BWA,SSF,IBRD,Upper middle income
+CAF,SSF,IDA,Low income
+CHL,LCN,IBRD,High income
+CHN,EAS,IBRD,Upper middle income
+CIV,SSF,IDA,Lower middle income
+CMR,SSF,Blend,Lower middle income
+COD,SSF,IDA,Low income
+COG,SSF,Blend,Lower middle income
+COL,LCN,IBRD,Upper middle income
+COM,SSF,IDA,Lower middle income
+CPV,SSF,Blend,Lower middle income
+CRI,LCN,IBRD,Upper middle income
+DJI,MEA,IDA,Lower middle income
+DMA,LCN,Blend,Upper middle income
+DOM,LCN,IBRD,Upper middle income
+ECU,LCN,IBRD,Upper middle income
+EGY,MEA,IBRD,Lower middle income
+ETH,SSF,IDA,Low income
+FJI,EAS,Blend,Upper middle income
+FSM,EAS,IDA,Lower middle income
+GAB,SSF,IBRD,Upper middle income
+GEO,ECS,IBRD,Upper middle income
+GHA,SSF,IDA,Lower middle income
+GIN,SSF,IDA,Low income
+GMB,SSF,IDA,Low income
+GTM,LCN,IBRD,Upper middle income
+HND,LCN,IDA,Lower middle income
+HRV,ECS,IBRD,High income
+HTI,LCN,IDA,Lower middle income
+HUN,ECS,,High income
+IDN,EAS,IBRD,Lower middle income
+IND,SAS,IBRD,Lower middle income
+IRQ,MEA,IBRD,Upper middle income
+JAM,LCN,IBRD,Upper middle income
+JOR,MEA,IBRD,Upper middle income
+KAZ,ECS,IBRD,Upper middle income
+KEN,SSF,Blend,Lower middle income
+KGZ,ECS,IDA,Lower middle income
+KHM,EAS,IDA,Lower middle income
+KIR,EAS,IDA,Lower middle income
+LAO,EAS,IDA,Lower middle income
+LBN,MEA,IBRD,Upper middle income
+LBR,SSF,IDA,Low income
+LKA,SAS,IBRD,Lower middle income
+LSO,SSF,IDA,Lower middle income
+LTU,ECS,,High income
+LVA,ECS,,High income
+MAR,MEA,IBRD,Lower middle income
+MDA,ECS,IBRD,Upper middle income
+MDG,SSF,IDA,Low income
+MDV,SAS,IDA,Upper middle income
+MEX,LCN,IBRD,Upper middle income
+MHL,EAS,IDA,Upper middle income
+MLI,SSF,IDA,Low income
+MMR,EAS,IDA,Lower middle income
+MNE,ECS,IBRD,Upper middle income
+MNG,EAS,IBRD,Lower middle income
+MOZ,SSF,IDA,Low income
+MRT,SSF,IDA,Lower middle income
+MUS,SSF,IBRD,Upper middle income
+MWI,SSF,IDA,Low income
+MYS,EAS,IBRD,Upper middle income
+NAM,SSF,IBRD,Upper middle income
+NER,SSF,IDA,Low income
+NGA,SSF,Blend,Lower middle income
+NIC,LCN,IDA,Lower middle income
+NPL,SAS,IDA,Lower middle income
+PAK,SAS,Blend,Lower middle income
+PAN,LCN,IBRD,Upper middle income
+PER,LCN,IBRD,Upper middle income
+PHL,EAS,IBRD,Lower middle income
+PLW,EAS,IBRD,High income
+PNG,EAS,Blend,Lower middle income
+POL,ECS,IBRD,High income
+PRY,LCN,IBRD,Upper middle income
+PSE,MEA,,Lower middle income
+ROU,ECS,IBRD,Upper middle income
+RUS,ECS,IBRD,Upper middle income
+RWA,SSF,IDA,Low income
+SDN,SSF,IDA,Low income
+SEN,SSF,IDA,Lower middle income
+SLB,EAS,IDA,Lower middle income
+SLE,SSF,IDA,Low income
+SLV,LCN,IBRD,Lower middle income
+SRB,ECS,IBRD,Upper middle income
+SSD,SSF,IDA,Low income
+SVK,ECS,,High income
+SWZ,SSF,IBRD,Lower middle income
+SYR,MEA,IDA,Low income
+TCD,SSF,IDA,Low income
+TGO,SSF,IDA,Low income
+THA,EAS,IBRD,Upper middle income
+TJK,ECS,IDA,Lower middle income
+TLS,EAS,Blend,Lower middle income
+TON,EAS,IDA,Upper middle income
+TUN,MEA,IBRD,Lower middle income
+TUR,ECS,IBRD,Upper middle income
+TZA,SSF,IDA,Lower middle income
+UGA,SSF,IDA,Low income
+UKR,ECS,IBRD,Lower middle income
+URY,LCN,IBRD,High income
+UZB,ECS,Blend,Lower middle income
+VEN,LCN,IBRD,
+VNM,EAS,IBRD,Lower middle income
+WSM,EAS,IDA,Lower middle income
+XKX,ECS,IDA,Upper middle income
+YEM,MEA,IDA,Low income
+ZAF,SSF,IBRD,Upper middle income
+ZMB,SSF,IDA,Lower middle income
+ZWE,SSF,Blend,Lower middle income
