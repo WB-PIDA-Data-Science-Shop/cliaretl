@@ -258,10 +258,17 @@ wdi_indicators <- wdi_clean |>
   select(!all_of(columns_to_drop)) |>
   filter(!is.na(country_code) & country_code != ""
   ) |>
-  distinct(country_code, year, .keep_all = TRUE)
+  distinct(country_code, year, .keep_all = TRUE) |>
+  rename(
+    wb_wdi_gc_rev_xgrt_gd_zs =wdi_gcrevxgrtgdzs # Change in name
+  ) |>
+  select(-wdi_gctaxtotlgdzs) # Extracted in EFI API pull
 
+
+wdi_indicators |>
+  add_plmetadata(source = wdi_indicators_list,
+                 other_info = "R package")
 
 
 # write-out ---------------------------------------------------------------
 usethis::use_data(wdi_indicators, overwrite = TRUE)
-
