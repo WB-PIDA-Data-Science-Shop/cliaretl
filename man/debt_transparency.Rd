@@ -9,16 +9,12 @@ A data frame with 373 rows and 13 variables:
 \describe{
   \item{\code{country_code}}{character World Bank country code}
   \item{\code{year}}{integer Year}
-  \item{\code{wb_debt_transp_data}}{double. Data accessibility}
-  \item{\code{wb_debt_transp_instrument}}{double. Instrument coverage}
-  \item{\code{wb_debt_transp_sectorial}}{double. Sectoral coverage}
-  \item{\code{wb_debt_transp_information}}{double. Information on recently contracted loans}
-  \item{\code{wb_debt_transp_periodicity}}{double. Periodicity of reporting}
-  \item{\code{wb_debt_transp_time}}{double. Timeliness (time lag) of reporting}
-  \item{\code{wb_debt_transp_dms}}{double. Availability of a debt management strategy}
-  \item{\code{wb_debt_transp_abp}}{double. Availability of an annual borrowing plan}
-  \item{\code{wb_debt_transp_addition}}{double. Other debt statistics (e.g., contingent liabilities)}
   \item{\code{wb_debt_transp_index}}{double. Composite index: row average of all debt transparency indicators}
+}
+#' @details
+Below are the longer descriptions for each variable (when provided):
+\itemize{
+  \item \strong{wb_debt_transp_index}: The debt transparency index is obtained as a simple average of the World Bank's debt reporting heatmap sub-components (Debt Transparency in Developing Economies) that measure instrument and sectorial coverage of debt statistics, availability of financial terms on new loans, and publication of DMS and ABP.
 }
 }
 \source{

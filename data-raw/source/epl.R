@@ -49,7 +49,9 @@ epl_df <-
   epl_regular |>
   full_join(epl_temporary,
             by = c("country_code", "year")) |>
-  filter(country_code %in% unique(wb_country_list$country_code))
+  filter(country_code %in% unique(wb_country_list$country_code)) |>
+  dplyr::select(-version, -measure) |>
+  as_tibble()
 
 epl <- epl_df
 
@@ -58,7 +60,7 @@ rm(epl_df)
 epl <-
   epl |>
   add_plmetadata(source = url,
-                 other_info = "CSV Data Pulled for OECD API")
+                 other_info = "Pull from OECD API using the latest version 4 (2013-2019) data")
 
 ## write data to data folder
 usethis::use_data(epl, overwrite = TRUE)

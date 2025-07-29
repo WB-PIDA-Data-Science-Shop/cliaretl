@@ -77,7 +77,8 @@ debt_transparency <- debt_transparency %>%
 debt_transparency <- debt_transparency %>%
   select(country_code, year, everything())
 
-debt_transparency <- debt_transparency %>%
+debt_transparency <-
+  debt_transparency %>%
   mutate(
     debt_transp_index = rowMeans(
       across(starts_with("debt_transp")),
@@ -91,6 +92,11 @@ debt_transparency <- debt_transparency %>%
     ~ paste0("wb_", .),
     .cols = starts_with("debt")
   ) |>
-  select(-country)
+  dplyr::select(country_code, year, wb_debt_transp_index)
+
+debt_transparency <-
+debt_transparency |>
+  add_plmetadata(source = "https://www.worldbank.org/en/topic/debt/brief/debt-transparency-report",
+                 other_info = "The last date of access for the raw data is actually 6/3/2025")
 
 usethis::use_data(debt_transparency, overwrite = TRUE)
