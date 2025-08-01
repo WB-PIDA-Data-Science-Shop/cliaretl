@@ -4,16 +4,12 @@
 #' \describe{
 #'   \item{\code{country_code}}{character World Bank country code}
 #'   \item{\code{year}}{integer Year}
-#'   \item{\code{wb_debt_transp_data}}{double. Data accessibility}
-#'   \item{\code{wb_debt_transp_instrument}}{double. Instrument coverage}
-#'   \item{\code{wb_debt_transp_sectorial}}{double. Sectoral coverage}
-#'   \item{\code{wb_debt_transp_information}}{double. Information on recently contracted loans}
-#'   \item{\code{wb_debt_transp_periodicity}}{double. Periodicity of reporting}
-#'   \item{\code{wb_debt_transp_time}}{double. Timeliness (time lag) of reporting}
-#'   \item{\code{wb_debt_transp_dms}}{double. Availability of a debt management strategy}
-#'   \item{\code{wb_debt_transp_abp}}{double. Availability of an annual borrowing plan}
-#'   \item{\code{wb_debt_transp_addition}}{double. Other debt statistics (e.g., contingent liabilities)}
 #'   \item{\code{wb_debt_transp_index}}{double. Composite index: row average of all debt transparency indicators}
+#'}
+#'#' @details
+#' Below are the longer descriptions for each variable (when provided):
+#' \itemize{
+#'   \item \strong{wb_debt_transp_index}: The debt transparency index is obtained as a simple average of the World Bank's debt reporting heatmap sub-components (Debt Transparency in Developing Economies) that measure instrument and sectorial coverage of debt statistics, availability of financial terms on new loans, and publication of DMS and ABP.
 #'}
 #' @source https://www.worldbank.org/en/topic/debt/brief/debt-transparency-report/
 "debt_transparency"
@@ -143,9 +139,8 @@
 #'   \item{\code{wdi_gcnldtotlgdzs}}{double Net lending/borrowing (percentage of GDP).}
 #'   \item{\code{wdi_nygdppetrrtzs}}{double Oil rents (percentage of GDP).}
 #'   \item{\code{wdi_bxtrfpwkrdtgdzs}}{double Personal remittances, received (percentage of GDP).}
-#'   \item{\code{wdi_gcrevxgrtgdzs}}{double Revenue, excluding grants (percentage of GDP).}
+#'   \item{\code{wb_wdi_gc_rev_xgrt_gd_zs}}{double Revenue, excluding grants (percentage of GDP).}
 #'   \item{\code{wdi_nvsrvtotlzs}}{double Services, etc., value added (percentage of GDP).}
-#'   \item{\code{wdi_gctaxtotlgdzs}}{double Tax revenue (percentage of GDP).}
 #'   \item{\code{wdi_nygdptotlrtzs}}{double Total natural resource rents (percentage of GDP).}
 #'   \item{\code{wdi_netrdgnfszs}}{double Trade (percentage of GDP).}
 #'   \item{\code{wdi_nygnpmktpkd}}{double GNI (constant LCU).}
@@ -327,18 +322,15 @@
 #'
 #' @format A tibble with 6,848 rows and 4 variables:
 #' \describe{
-#'   \item{iso3}{A three-letter ISO 3166-1 alpha-3 country code.}
+#'   \item{country_code}{A three-letter ISO 3166-1 alpha-3 country code.}
 #'   \item{year}{The calendar year of the observation.}
-#'   \item{wb_gfdb_ai_01}{Assets of the three largest commercial banks as a share of total commercial banking assets.
+#'   \item{wb_gfdb_oi_01}{Assets of the three largest commercial banks as a share of total commercial banking assets.
 #'   Total assets include earning assets, cash, due from banks, foreclosed real estate, fixed assets, goodwill, intangibles, tax assets, and other financial assets. A higher value indicates greater banking sector concentration.}
-#'   \item{wb_gfdb_di_01}{Domestic credit to the private sector by domestic money banks, as a share of GDP.
-#'   Domestic money banks include commercial banks and other financial institutions that accept transferable deposits. This is a measure of financial resources extended to the private sector.}
+#'   \item{wb_gfdb_di_01}{Measures the financial resources provided to the private sector by domestic money banks as a share of GDP.
+#'   Domestic money banks comprise commercial banks and other financial institutions that accept transferable deposits, such as demand deposits.}
 #' }
 #'
-#' @details
-#' \strong{wb_gfdb_di_01:} The financial resources provided to the private sector by domestic money banks as a share of GDP. Domestic money banks comprise commercial banks and other financial institutions that accept transferable deposits, such as demand deposits.
 #'
-#' \strong{wb_gfdb_ai_01:} Assets of the three largest commercial banks as a share of total commercial banking assets. Total assets include total earning assets, cash and due from banks, foreclosed real estate, fixed assets, goodwill, other intangibles, current tax assets, deferred tax assets, discontinued operations, and other assets.
 #'
 #' @source World Bank, Global Financial Development Database. See: \url{https://www.worldbank.org/en/publication/gfdr/data/global-financial-development-database}
 "gfdb"

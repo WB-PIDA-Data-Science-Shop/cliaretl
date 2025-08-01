@@ -239,8 +239,6 @@ extract_dataset_id <- function(input_id, splitchar = '.') {
 #' @import httr
 #' @export
 #'
-
-
 extract_data_from_api <- function(dataset_id,
                                   indicator_ids,
                                   source,

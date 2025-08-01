@@ -41,9 +41,8 @@ A data frame with 7,310 rows and 129 variables:
   \item{\code{wdi_gcnldtotlgdzs}}{double Net lending/borrowing (percentage of GDP).}
   \item{\code{wdi_nygdppetrrtzs}}{double Oil rents (percentage of GDP).}
   \item{\code{wdi_bxtrfpwkrdtgdzs}}{double Personal remittances, received (percentage of GDP).}
-  \item{\code{wdi_gcrevxgrtgdzs}}{double Revenue, excluding grants (percentage of GDP).}
+  \item{\code{wb_wdi_gc_rev_xgrt_gd_zs}}{double Revenue, excluding grants (percentage of GDP).}
   \item{\code{wdi_nvsrvtotlzs}}{double Services, etc., value added (percentage of GDP).}
-  \item{\code{wdi_gctaxtotlgdzs}}{double Tax revenue (percentage of GDP).}
   \item{\code{wdi_nygdptotlrtzs}}{double Total natural resource rents (percentage of GDP).}
   \item{\code{wdi_netrdgnfszs}}{double Trade (percentage of GDP).}
   \item{\code{wdi_nygnpmktpkd}}{double GNI (constant LCU).}

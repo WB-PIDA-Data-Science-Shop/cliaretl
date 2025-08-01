@@ -1,5 +1,5 @@
 ## code to prepare `vdem_data` dataset goes here
-# source: V-dem Package https://github.com/vdeminstitute/vdemdata
+# source: V-dem Package (V-15) https://github.com/vdeminstitute/vdemdata
 # access date: 6/10/2025
 library(here)
 library(dplyr)
@@ -87,6 +87,11 @@ vdem_data <- vdem_clean |>
     ~ paste0("vdem_core_", .),
     .cols = starts_with("v2")
   )
+
+vdem_data |>
+  add_plmetadata(source = vdemdata::vdem,
+                 other_info = "R package, Version 15")
+
 
 # write-out ---------------------------------------------------------------
 usethis::use_data(vdem_data, overwrite = TRUE)

@@ -41,14 +41,15 @@ gfdb_df <-
 
 gfdb_df <-
   gfdb_df |>
-    filter(series %in% c("di", "ai"), item == "01") |>
+    filter(series %in% c("di", "oi"), item == "01") |>
     dplyr::select(iso3, year, series, item, value) |>
     unite("series_item", series, item, sep = "_") |>
     pivot_wider(names_from = series_item,
                 values_from = value) |>
     rename_with(~ paste0("wb_gfdb_", .),
                 .cols = -c(iso3, year)) |>
-    filter(year >= 1990)
+    filter(year >= 1990) |>
+    rename(country_code = "iso3")
 
 gfdb <- gfdb_df
 
