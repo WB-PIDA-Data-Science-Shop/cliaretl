@@ -267,7 +267,7 @@ d360_efi_data <- full_join(efi_merged_df, d360_merged_df, by = c("ISO3", "Year")
   filter(ISO3 != "AGGREGATE")
 
 
-d360_efi_data <- d360_efi_data %>%
+d360_efi_data_pre_clean <- d360_efi_data %>%
   mutate(across(
     .cols = where(is.character) & !c("ISO3", "Year"),
     .fns = ~ as.numeric(.)
@@ -275,8 +275,8 @@ d360_efi_data <- d360_efi_data %>%
 
 
 #### prepare the data to match db_variables specifications
-d360_efi_data <-
-d360_efi_data |>
+d360_efi_data_clean <-
+d360_efi_data_pre_clean |>
   clean_names() |>
   # fix enterprise surveys variable name
   rename_with(
@@ -326,6 +326,21 @@ d360_efi_data |>
     year,
     everything()
   )
+
+d360_efi_data <- d360_efi_data_clean |>
+  # Generate an average index of the census and survey indexes
+  mutate(
+    wb_spi_census_and_survey_index = rowMeans(
+      cbind(wb_spi_dim4_1_cen_index, wb_spi_dim4_1_svy_index),
+      na.rm = TRUE
+    )
+  ) |>
+  select(-wb_spi_dim4_1_cen_index, -wb_spi_dim4_1_svy_index
+  ) |>
+  rename(
+    wb_spi_std_and_methods = wb_spi_dim5_2_index
+  )
+
 
 
 ### quickly add pipeline metadata to the d360_efi_data

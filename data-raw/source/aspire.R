@@ -11,6 +11,8 @@ library(here)
 library(purrr)
 library(countrycode)
 
+devtools::load_all()
+
 # ============= Dummy Inputs for Testing
 start_year <- 1990
 end_year <- 2024
@@ -25,7 +27,7 @@ dbv_df <- read_excel(
 
 dbvars_dt <- read_excel("data-raw/input/cliar/db_variables.xlsx")
 
-country_info<-read.csv("data-raw/input/cliar/Country Code Mapping.csv")
+wb_country_codes <- wb_country_list
 
 # ======== OBJECT INITIALIZATION
 # Dictionary of country names for conversion later on in the code
@@ -111,11 +113,16 @@ df <- result %>%
   select(-CAL_YEAR) %>%
   filter(Year >= 1990 & Year <= 2024) %>%
   mutate(Countries = Country_DICT[COUNTRY_CODE]) %>%
-  rename(Country_Code = COUNTRY_CODE) %>%
-  filter(Country_Code != "AGGREGATE") %>%
-  relocate(Country_Code, Countries, Year)
+  rename(country_code = COUNTRY_CODE,
+         year = Year) %>%
+  filter(country_code != "AGGREGATE") %>%
+  relocate(country_code, Countries, year)
 
-df <- left_join(df, country_info, by = "Country_Code")
+# Use unique wb_country_list country codes
+country_info <- wb_country_codes |>
+                distinct(country_code, .keep_all = TRUE)
+
+df <- left_join(df, country_info, by = "country_code")
 
 
 df <- df %>%
@@ -155,7 +162,7 @@ mapping_dict <- list(
 )
 
 # Add each mapped column to ASPIRE using the dictionary
-aspire <- df %>%
+aspire_pre_clean <- df %>%
   mutate(
     indicator_name = map_chr(Indicator_Code, ~ trimws(mapping_dict$indicator_name[[.x]] %||% NA_character_)),
     Sub_Topic1 = map_chr(Indicator_Code, ~ mapping_dict$Sub_Topic1[[.x]] %||% NA_character_),
@@ -166,7 +173,42 @@ aspire <- df %>%
     Sub_Topic6 = map_chr(Indicator_Code, ~ mapping_dict$Sub_Topic6[[.x]] %||% NA_character_)
   )
 
+aspire <- aspire_pre_clean |>
+  filter(
+    indicator_name %in% c(
+      "Adequacy of benefits (%) -All Social Protection and Labor",
+      "Coverage (%) -All Social Protection and Labor"
+    )
+  ) |>
+  transmute(
+    # identify non-country codes (aspire includes regions, for example)
+    country_code = countrycode(
+      country_code,
+      origin = "iso3c", destination = "iso3c",
+      # create exception for kosovo
+      custom_match = c("XKX" = "XKX")
+    ),
+    year = as.numeric(year),
+    Indicator_Code,
+    value = val
+  ) |>
+  filter(
+    # exclude non-country codes
+    !is.na(country_code)
+  ) |>
+  pivot_wider(
+    id_cols = c(country_code, year),
+    values_from = value,
+    names_from = Indicator_Code
+  ) |>
+  rename(
+    wb_aspire_coverage = per_allsp.cov_pop_tot,
+    wb_aspire_adequacy_benefits = per_allsp.adq_pop_tot
+  )
 
+aspire |>
+  add_plmetadata(source = "d360_efi_data",
+                 other_info = "API pull")
 
 
 usethis::use_data(aspire, overwrite = TRUE)

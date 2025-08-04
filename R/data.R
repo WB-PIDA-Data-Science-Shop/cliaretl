@@ -583,9 +583,8 @@
 #'   \item{imf_world_rtp_rm_gdp}{Property Tax Revenue in Percent of GDP}
 #'   \item{imf_world_rtpay_rm_gdp}{Taxes on Payroll and Workforce Revenue in Percent of GDP}
 #'   \item{imf_world_rtt_rm_gdp}{Tax revenue (Percent of GDP)}
-#'   \item{wb_spi_dim4_1_cen_index}{spi_census_and_survey_index}
-#'   \item{wb_spi_dim4_1_svy_index}{Censuses and Surveys - Surveys only}
-#'   \item{wb_spi_dim5_2_index}{spi_std_and_methods}
+#'   \item{wb_spi_census_and_survey_index}{Standards and Methods indicator}
+#'   \item{wb_spi_std_and_methods}{Censuses and Surveys indicator (EGVPI processed)}
 #'   \item{wb_girg_6}{Captures how policymakers interact with stakeholders when shaping regulations affecting business communities}
 #'   \item{wb_gtmi_cgsi}{Captures the key aspects of a whole-of-government approach, including government cloud, interoperability framework and other platforms.}
 #'   \item{wb_gtmi_dcei}{Measures aspects of public participation platforms, citizen feedback mechanisms, open data, and open government portals.}
@@ -874,34 +873,42 @@
 #' head(d360_efi_data)
 "d360_efi_data"
 
-#' @title ASPIRE
+
+#' @title ASPIRE Social Protection Indicators
 #'
 #' @description
-#' The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized indicators related to social protection and labor programs across countries and years. It includes information on adequacy, coverage, and benefit levels, disaggregated by region, income classification, and sub-topics.
+#' The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized, cross-country indicators related to social protection and labor programs. It includes harmonized measures on adequacy and coverage of benefits, enabling regional and income-level comparisons over time.
 #'
-#' @format A data frame with 995 rows and 17 variables:
+#' @format A data frame with 512 rows and 4 variables:
 #' \describe{
-#'   \item{\code{Country_Code}}{character. World Bank 3-letter country code.}
-#'   \item{\code{Countries}}{character. Full name of the country.}
-#'   \item{\code{Year}}{numeric. Year of the observation.}
-#'   \item{\code{INDICATOR_ID}}{character. Legacy or deprecated indicator ID (if applicable).}
-#'   \item{\code{val}}{numeric. Value of the indicator.}
-#'   \item{\code{Median}}{character. Placeholder or unused field; often NA or blank.}
-#'   \item{\code{region}}{character. World Bank region (e.g., EAP, SSA, LAC).}
-#'   \item{\code{idaeligibility}}{character. IDA eligibility classification (e.g., IDA, Blend, IBRD).}
-#'   \item{\code{incomeclassification}}{character. World Bank income group (e.g., Low income, Upper middle income).}
-#'   \item{\code{Indicator_Code}}{character. Standardized code for the indicator (e.g., per_allsp.adq_pop_tot).}
-#'   \item{\code{indicator_name}}{character. Full descriptive name of the indicator.}
-#'   \item{\code{Sub_Topic1}}{character. First-level sub-topic classification (e.g., data source or estimation method).}
-#'   \item{\code{Sub_Topic2}}{character. Second-level sub-topic classification (e.g., Benefit level).}
-#'   \item{\code{Sub_Topic3}}{character. Third-level sub-topic (e.g., Adequacy of benefits).}
-#'   \item{\code{Sub_Topic4}}{character. Fourth-level sub-topic (e.g., Total or subgroup breakdown).}
-#'   \item{\code{Sub_Topic5}}{character. Broader program classification (e.g., All Social Protection and Labor).}
-#'   \item{\code{Sub_Topic6}}{character. Extended or duplicated sub-topic description.}
+#'   \item{\code{country_code}}{Character. ISO3 country code based on World Bank standards.}
+#'   \item{\code{year}}{Numeric. Year of the observation.}
+#'   \item{\code{wb_aspire_adequacy_benefits}}{Numeric. Average benefit received by beneficiaries as a percentage of the total welfare of the beneficiary population (proxy for adequacy).}
+#'   \item{\code{wb_aspire_coverage}}{Numeric. Percentage of the population participating in social protection and labor programs (proxy for coverage).}
 #' }
 #'
 #' @details
-#' The ASPIRE dataset supports cross-country comparison and benchmarking of social protection and labor systems. Indicators are harmonized and estimated using standardized methodologies across countries and household surveys. For more details, visit the World Bank ASPIRE website.
+#' The ASPIRE indicators are derived from nationally representative household surveys and harmonized using consistent methodologies across countries. The dataset supports policy analysis, benchmarking, and global monitoring of social protection systems. For more information, see the [World Bank ASPIRE website](https://www.worldbank.org/en/data/datatopics/aspire).
 "aspire"
+
+
+#' Fraser Economic Freedom Dataset
+#'
+#' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
+#'
+#' @format A data frame with 4,786 rows and 6 variables:
+#' \describe{
+#'   \item{\code{country_code}}{Character. The 3-letter ISO country code.}
+#'   \item{\code{year}}{Numeric. The year of the observation.}
+#'   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
+#'   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
+#'   \item{\code{fraser_efw_capital_controls}}{Numeric. Capital controls.}
+#'   \item{\code{fraser_efw_credit_market_regulation}}{Numeric. Credit market regulations.}
+#' }
+#' @source \url{https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0}
+#' @usage data(fraser)
+#' @keywords datasets
+"fraser"
+
 
 
