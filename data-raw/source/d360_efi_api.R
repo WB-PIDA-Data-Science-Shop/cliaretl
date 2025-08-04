@@ -330,7 +330,7 @@ d360_efi_data_pre_clean |>
 d360_efi_data <- d360_efi_data_clean |>
   # Generate an average index of the census and survey indexes
   mutate(
-    spi_census_and_survey_index = rowMeans(
+    wb_spi_census_and_survey_index = rowMeans(
       cbind(wb_spi_dim4_1_cen_index, wb_spi_dim4_1_svy_index),
       na.rm = TRUE
     )
@@ -338,7 +338,7 @@ d360_efi_data <- d360_efi_data_clean |>
   select(-wb_spi_dim4_1_cen_index, -wb_spi_dim4_1_svy_index
   ) |>
   rename(
-    spi_std_and_methods = wb_spi_dim5_2_index
+    wb_spi_std_and_methods = wb_spi_dim5_2_index
   )
 
 
