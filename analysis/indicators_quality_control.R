@@ -8,9 +8,7 @@ library(purrr)
 library(stringr)
 
 
-
 devtools::load_all()
-
 
 
 # read-in data ------------------------------------------------------------
@@ -28,6 +26,8 @@ pmr_indicators <- pmr
 epl_indicators <- epl
 # API indicators
 d30_indicators <- d360_efi_data
+fraser_indicators <- fraser
+aspire_indicators <- aspire
 
 # Dictionary df
 db_variables <-  read_xlsx(
@@ -85,8 +85,9 @@ dataframes <- list(
                     heritage_indicators = heritage,
                     pmr_indicators = pmr,
                     epl_indicators = epl,
-                    d30_indicators = d360_efi_data
-
+                    d30_indicators = d360_efi_data,
+                    fraser_indicators = fraser,
+                    aspire_indicators = aspire
                 )
 
 # Apply the `flag_mismatched_indicators` function across all and bind results
@@ -119,11 +120,20 @@ dictionary_identifiers <- db_variables|>
   distinct(variable, source)
 
 
-
 # Then call the function to each of the data frames
 wdi_missing_df <- flag_missing_indicators(db_variables,
                                           wdi_indicators,
-                                          source_type = "WDI")
+                                          source_type = ("WDI")
+)
+
+# Important WDI note: indicators come also from d360 API pull
+d360_cols <- colnames(d360_efi_data)
+
+wdi_missing_df <- wdi_missing_df |>
+  mutate(is_present = variable %in% d360_cols)
+# This should be empty:
+wdi_missing_df |> filter(!is_present)
+
 
 vdem_missing_df <- flag_missing_indicators(db_variables,
                                            vdem_data_indicators,
@@ -149,10 +159,25 @@ heritage_missing_df <- flag_missing_indicators(db_variables,
                                            heritage_indicators,
                                            source_type = "Heritage Index of Economic Freedom")
 
+fraser_missing_df <- flag_missing_indicators(db_variables,
+                                               fraser_indicators,
+                                               source_type = "Fraser Institute")
+
+aspire_missing_df <- flag_missing_indicators(db_variables,
+                                             aspire_indicators,
+                                             source_type = "ASPIRE")
 
 
 # Combine them into a single dataframe
-all_missing_vars <- bind_rows(wdi_missing_df, vdem_missing_df, pefa_missing_df)
+all_missing_vars <- bind_rows(vdem_missing_df, # Ommiting WDI
+                              pefa_missing_df,
+                              pmr_oecd_missing_df,
+                              epl_oecd_missing_df,
+                              gfdb_missing_df,
+                              heritage_missing_df,
+                              fraser_missing_df,
+                              aspire_missing_df
+                              )
 
 
 if (nrow(all_mismatched_vars) > 0) {
@@ -180,61 +205,58 @@ There are missing indicators not found in the extracted data.")
 
 sources <-  db_variables |> count(source)
 
-# Step 1.Build panel
-# Let's re map the sources form the ETL extraction
+# Step 1: Clean and classify
 dictionary_clean <- dictionary_identifiers |>
-  mutate(etl_source = case_when(
-    variable == "bs_sgi"              ~ "wb_api",
-    variable == "bs_bti"              ~ "wb_api",
-    variable == "fh_fiw"              ~ "wb_api",
-    variable == "fraser_efw"          ~ "wb_api", # NEW TO API
-    variable == "heritage_business"   ~ "heritage",
-    variable == "heritage_financial"  ~ "heritage",
-    variable == "heritage_investment" ~ "heritage",
-    variable == "ibp_obs"             ~ "wb_api",
-    variable == "idea_gsod"           ~ "wb_api",
-    variable == "imf_fm"              ~ "wb_api",
-    variable == "imf_gfscofog"        ~ "wb_api",
-    variable == "imf_world"           ~ "wb_api",
-    variable == "oecd_epl"            ~ "oecd_epl",
-    variable == "oecd_pmr"            ~ "oecd_pmr",
-    variable == "rise_ee"             ~ "wb_api", # NEW TO API
-    variable == "rise_re"             ~ "wb_api", # NEW TO API
-    variable == "romelli_cbi"         ~ "romelli",
-    variable == "rwb_pfi"             ~ "wb_api",
-    variable == "spi_census"          ~ "wb_api",
-    variable == "spi_std"             ~ "wb_api",
-    variable == "vdem_core"           ~ "vdem",
-    variable == "wb_aspire"           ~ "wb_api", # NEW TO API
-    variable == "wb_debt"             ~ "debt_transparency",
-    variable == "wb_es"               ~ "wb_api",
-    variable == "wb_gfdb"             ~ "gfdb",
-    variable == "wb_girg"             ~ "wb_api",
-    variable == "wb_gtmi"             ~ "wb_api",
-    variable == "wb_lpi"              ~ "wb_api",
-    variable == "wb_pefa"             ~ "pefa",
-    variable == "wb_wbl"              ~ "wb_api",
-    variable == "wb_wdi"              ~ "wb_api",
-    variable == "wb_wwbi"             ~ "wb_api",
-    variable == "wdi_"                ~ "wdi",
-    variable == "wjp_rol"             ~ "wb_api",
-    TRUE                              ~ "unknown")
-  )
+  mutate(variable = str_trim(as.character(variable)),
+         etl_source = case_when(
+           # Exact match group
+           variable %in% c("bs_sgi",
+                           "bs_bti",
+                           "fh_fiw",
+                           "ibp_obs",
+                           "idea_gsod",
+                           "imf_fm",
+                           "imf_gfscofog",
+                           "imf_world",
+                           "rise_ee",
+                           "rise_re",
+                           "rwb_pfi",
+                           "spi_census",
+                           "spi_std",
+                           "wb_aspire",
+                           "wb_es",
+                           "wb_girg",
+                           "wb_gtmi",
+                           "wb_lpi",
+                           "wb_wbl",
+                           "wb_wwbi",
+                           "wjp_rol") ~ "wb_api",
+           variable == "fraser_efw" ~ "fraser",
+           variable %in% c("heritage_business",
+                           "heritage_financial",
+                           "heritage_investment") ~ "heritage",
+           variable == "oecd_epl" ~ "oecd_epl",
+           variable == "oecd_pmr" ~ "oecd_pmr",
+           variable == "romelli_cbi" ~ "romelli",
+           variable == "wb_debt" ~ "debt_transparency",
+           variable == "wb_gfdb" ~ "gfdb",
+           variable == "wb_pefa" ~ "pefa",
+           variable == "vdem_core" ~ "vdem",
+           TRUE ~ "wdi"
+         ))
 
 
-# Add to db_variables a new variable called etl_source
-
+# Map etl_source by source
 etl_mapping <- dictionary_clean |>
   group_by(source) |>
   summarise(etl_source = first(etl_source), .groups = "drop")
 
+# Step 3: Join to db_variables
 db_variables_joined <- db_variables |>
-  left_join(etl_mapping, by = "source")
+                        left_join(etl_mapping,
+                                  by = "source")
 
-# Run full check:
-
-compiled_sources_missing <- flag_missing_indicators(db_variables_joined,
-                                                    wdi_indicators,
-                                                    source_type = "source")
+db_variables_joined |>
+  count(etl_source)
 
 
