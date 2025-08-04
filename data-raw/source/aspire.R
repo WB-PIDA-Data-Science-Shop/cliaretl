@@ -9,6 +9,7 @@ library(lubridate)
 library(janitor)
 library(here)
 library(purrr)
+library(countrycode)
 
 # ============= Dummy Inputs for Testing
 start_year <- 1990
@@ -111,6 +112,7 @@ df <- result %>%
   filter(Year >= 1990 & Year <= 2024) %>%
   mutate(Countries = Country_DICT[COUNTRY_CODE]) %>%
   rename(Country_Code = COUNTRY_CODE) %>%
+  filter(Country_Code != "AGGREGATE") %>%
   relocate(Country_Code, Countries, Year)
 
 df <- left_join(df, country_info, by = "Country_Code")
@@ -155,7 +157,7 @@ mapping_dict <- list(
 # Add each mapped column to ASPIRE using the dictionary
 aspire <- df %>%
   mutate(
-    indicator_name = map_chr(Indicator_Code, ~ mapping_dict$indicator_name[[.x]] %||% NA_character_),
+    indicator_name = map_chr(Indicator_Code, ~ trimws(mapping_dict$indicator_name[[.x]] %||% NA_character_)),
     Sub_Topic1 = map_chr(Indicator_Code, ~ mapping_dict$Sub_Topic1[[.x]] %||% NA_character_),
     Sub_Topic2 = map_chr(Indicator_Code, ~ mapping_dict$Sub_Topic2[[.x]] %||% NA_character_),
     Sub_Topic3 = map_chr(Indicator_Code, ~ mapping_dict$Sub_Topic3[[.x]] %||% NA_character_),
@@ -163,5 +165,8 @@ aspire <- df %>%
     Sub_Topic5 = map_chr(Indicator_Code, ~ mapping_dict$Sub_Topic5[[.x]] %||% NA_character_),
     Sub_Topic6 = map_chr(Indicator_Code, ~ mapping_dict$Sub_Topic6[[.x]] %||% NA_character_)
   )
+
+
+
 
 usethis::use_data(aspire, overwrite = TRUE)

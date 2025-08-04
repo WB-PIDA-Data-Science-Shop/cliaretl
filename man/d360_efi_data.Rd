@@ -174,8 +174,9 @@ A data frame with 8878 rows and 223 variables:
   \item{imf_world_rtp_rm_gdp}{Property Tax Revenue in Percent of GDP}
   \item{imf_world_rtpay_rm_gdp}{Taxes on Payroll and Workforce Revenue in Percent of GDP}
   \item{imf_world_rtt_rm_gdp}{Tax revenue (Percent of GDP)}
-  \item{wb_spi_dim4_1_cen_index}{(Description not found in db_variables.xlsx)}
-  \item{wb_spi_dim5_2_index}{(Description not found in db_variables.xlsx)}
+  \item{wb_spi_dim4_1_cen_index}{spi_census_and_survey_index}
+  \item{wb_spi_dim4_1_svy_index}{Censuses and Surveys - Surveys only}
+  \item{wb_spi_dim5_2_index}{spi_std_and_methods}
   \item{wb_girg_6}{Captures how policymakers interact with stakeholders when shaping regulations affecting business communities}
   \item{wb_gtmi_cgsi}{Captures the key aspects of a whole-of-government approach, including government cloud, interoperability framework and other platforms.}
   \item{wb_gtmi_dcei}{Measures aspects of public participation platforms, citizen feedback mechanisms, open data, and open government portals.}
