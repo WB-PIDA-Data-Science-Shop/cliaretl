@@ -343,4 +343,152 @@ scale_values <- function(x){
 }
 
 
+#' Compare Variable Values Between CLIAR Pipelines Using Pointblank
+#'
+#' @param old_df Data frame from the previous pipeline (gold standard)
+#' @param new_df Data frame from the new pipeline
+#'
+#' @return A summary tibble and a printed pointblank agent
+#' @export
+#'
+#' @import dplyr tidyr pointblank
+#' @importFrom stats median na.omit
+#'
+#' @examples
+#' # Create example old and new datasets
+#' set.seed(123)
+#' old_df <- data.frame(
+#'   country_code = rep(c("USA", "KEN", "NGA"), each = 2),
+#'   year = rep(2020:2021, 3),
+#'   gdp = c(50000, 52000, 1800, 1900, 2400, 2600),
+#'   population = c(330e6, 331e6, 53e6, 54e6, 206e6, 208e6)
+#' )
+#'
+#' new_df <- data.frame(
+#'   country_code = rep(c("USA", "KEN", "NGA"), each = 2),
+#'   year = rep(2020:2021, 3),
+#'   gdp = c(50500, 52200, 1850, 1950, 2450, 2650),  # small changes
+#'   population = c(330e6, 331e6, 53e6, 54.1e6, 206e6, 208.5e6)  # small changes
+#' )
+#'
+#' # Run quality check
+#' results <- qualitycheck_plvalue(old_df, new_df)
+#'
+#' # View summary
+#' results$summary
+#'
+#' # Export a single agent report (optional)
+#' # pointblank::export_report(results$agents[[1]], filename = "example_qc_report.html")
+#'
+qualitycheck_plvalue <- function(old_df, new_df) {
+  common_vars <- intersect(names(old_df), names(new_df))
+
+  check_list <-
+    lapply(common_vars,
+           function(var) {
+
+            old_df <-
+              old_df |>
+              dplyr::select(country_code, year, !!sym(var)) |>
+              na.omit()
+
+            country_list <- unique(old_df[["country_code"]])
+            year_list <- unique(old_df[["year"]])
+
+
+            new_df <-
+              new_df |>
+              dplyr::select(country_code, year, !!sym(var)) |>
+              dplyr::filter(country_code %in% country_list &
+                              year %in% year_list)
+
+            old_col <- old_df[[var]]
+            new_col <- new_df[[var]]
+
+            # Ensure comparable numeric values
+            if (is.numeric(old_col) && is.numeric(new_col)) {
+              tibble(
+                variable = var,
+                old_class = class(old_col)[1],
+                new_class = class(new_col)[1],
+                type_equal = class(old_col)[1] != class(new_col)[1],
+                old_min = min(old_col, na.rm = TRUE),
+                old_max = max(old_col, na.rm = TRUE),
+                new_min = min(new_col, na.rm = TRUE),
+                new_max = max(new_col, na.rm = TRUE),
+                old_mean = mean(old_col, na.rm = TRUE),
+                new_mean = mean(new_col, na.rm = TRUE),
+                old_median = median(old_col, na.rm = TRUE),
+                new_median = median(new_col, na.rm = TRUE),
+                old_n_na = sum(is.na(old_col)),
+                new_n_na = sum(is.na(new_col)),
+                range_equal = (min(old_col, na.rm = TRUE) != min(new_col, na.rm = TRUE)) |
+                  (max(old_col, na.rm = TRUE) != max(new_col, na.rm = TRUE)),
+                mean_equal = !isTRUE(all.equal(mean(old_col, na.rm = TRUE), mean(new_col, na.rm = TRUE))),
+                median_equal = !isTRUE(all.equal(median(old_col, na.rm = TRUE), median(new_col, na.rm = TRUE))),
+                missingness_equal = sum(is.na(old_col)) != sum(is.na(new_col))
+              )
+            } else {
+              tibble(
+                variable = var,
+                old_class = class(old_col)[1],
+                new_class = class(new_col)[1],
+                type_equal = class(old_col)[1] != class(new_col)[1],
+                old_min = NA_real_,
+                old_max = NA_real_,
+                new_min = NA_real_,
+                new_max = NA_real_,
+                old_mean = NA_real_,
+                new_mean = NA_real_,
+                old_median = NA_real_,
+                new_median = NA_real_,
+                old_n_na = sum(is.na(old_col)),
+                new_n_na = sum(is.na(new_col)),
+                range_equal = NA,
+                mean_equal = NA,
+                median_equal = NA,
+                missingness_equal = sum(is.na(old_col)) != sum(is.na(new_col))
+              )
+            }
+  })
+
+  comparison_tbl <- bind_rows(check_list)
+
+  # Pointblank summary agent (optional)
+  agent <-
+    create_agent(tbl = comparison_tbl) %>%
+    col_vals_not_null(vars(variable)) %>%
+    col_vals_equal(vars(type_equal), value = FALSE, brief = "Type changed") %>%
+    col_vals_equal(vars(range_equal), value = FALSE, brief = "Range changed") %>%
+    col_vals_equal(vars(mean_equal), value = FALSE, brief = "Mean changed") %>%
+    col_vals_equal(vars(median_equal), value = FALSE, brief = "Median changed") %>%
+    col_vals_equal(vars(missingness_equal), value = FALSE, brief = "Missingness changed")
+
+  agent <- interrogate(agent)
+
+  print(agent)
+
+  return(comparison_tbl)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
