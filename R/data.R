@@ -40,7 +40,7 @@
 #' @description This dataset contains indicators from the PEFA (Public Expenditure and Financial Accountability) assessments conducted using the 2016 PEFA framework. It provides scores on various dimensions of public financial management across countries and time periods. The indicators cover budget credibility, transparency, asset and debt management, internal controls, auditing, and more. The data are sourced from the PEFA bulk download page: \url{https://www.pefa.org/assessments/batch-downloads}.
 #' @format A data frame with one row per PEFA assessment and the following variables:
 #' \describe{
-#'   \item{country_name}{The Country Name}
+#'   \item{country_code}{A 3-letter ISO country code}
 #'   \item{year}{Year}
 #'   \item{wb_pefa_pi_2016_05}{Budget Documentation — Quality and comprehensiveness of budget documentation provided to the legislature.}
 #'   \item{wb_pefa_pi_2016_07}{Transfers to subnational governments — Transparency and timeliness of transfers from central to subnational levels.}
@@ -910,5 +910,30 @@
 #' @keywords datasets
 "fraser"
 
-
+#' Database Variable Metadata
+#'
+#' A dataset containing metadata for variables used in the database, including indicator names, codes, families, and benchmarking information.
+#'
+#' @format A data frame with 427 rows and 17 variables:
+#' \describe{
+#'   \item{\code{var_name}}{Character. Name of the indicator or variable.}
+#'   \item{\code{api_id}}{Character. API identifier or note.}
+#'   \item{\code{variable}}{Character. Internal variable code.}
+#'   \item{\code{var_level}}{Character. Level of the variable.}
+#'   \item{\code{family_var}}{Character. Thematic cluster variable code.}
+#'   \item{\code{family_name}}{Character. Name of the variable thematic cluster.}
+#'   \item{\code{family_order}}{Numeric. Order for sorting or grouping.}
+#'   \item{\code{processing}}{Character. Processing notes or flags.}
+#'   \item{\code{description}}{Character. Full description of the variable.}
+#'   \item{\code{description_short}}{Character. Short description of the variable.}
+#'   \item{\code{source}}{Character. Original data source.}
+#'   \item{\code{benchmarked_ctf}}{Character. Whether the variable is benchmarked in CTF (\"Yes\"/\"No\").}
+#'   \item{\code{benchmark_static_family_aggregate_download}}{Character. Static family aggregate download flag.}
+#'   \item{\code{benchmark_dynamic_indicator}}{Character. Dynamic indicator benchmark flag.}
+#'   \item{\code{benchmark_dynamic_family_aggregate}}{Character. Dynamic family aggregate benchmark flag.}
+#'   \item{\code{indicator_order}}{Numeric. Order of the indicator within its family.}
+#'   \item{\code{etl_source}}{Character. Cliaretl pipeline source.}
+#' }
+#' @source Internal project documentation and data sources.
+"db_variables"
 

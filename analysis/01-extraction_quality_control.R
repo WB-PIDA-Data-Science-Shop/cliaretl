@@ -1,4 +1,18 @@
+# Title: Extraction Quality Control Report
+# Description: This script generates a quality control report for the indicators
+# extracted from various databases and updates metadata accordingly.
+
+# Essentially, it checks for mismatched and missing indicators against a reference dictionary.
+
+# - Input:
+# Lazy loaded `data/*.rda` files containing extracted indicators and
+# `data-raw/input/cliar/db_variables.xlsx` for updating dictionary.
+# - Output:
+# `data/db_variables.rds` containing the updated dictionary
+
+
 # set-up ------------------------------------------------------------------
+# Load necessary libraries
 library(haven)
 library(dplyr)
 library(here)
@@ -7,7 +21,7 @@ library(dplyr)
 library(purrr)
 library(stringr)
 
-
+# Load custom functions
 devtools::load_all()
 
 
@@ -19,12 +33,10 @@ wdi_wb_indicators <- wdi_indicators
 pefa_assessments_indicators <- pefa_assessments
 romelli_indicators <- romelli
 vdem_data_indicators <- vdem_data
-# Second batch
 gfdb_indicators <-  gfdb
 heritage_indicators <- heritage
 pmr_indicators <- pmr
 epl_indicators <- epl
-# API indicators
 d30_indicators <- d360_efi_data
 fraser_indicators <- fraser
 aspire_indicators <- aspire
@@ -35,25 +47,28 @@ db_variables <-  read_xlsx(
 )
 
 
-# dictionary-fix -----------------------------------------------------
+# Update db_variables -----------------------------------------------------
 
-# 1. WDI
 # Documenting variable changes in our dictionary
-# Backup original variable names (optional)
-db_variables$variable_old <- db_variables$variable
+
+# Use `update_db_variables` function to update the `db_variables` dataframe.
 
 # Named vector of changes: new name = old name
-rename_vector <- c(
-  "wdi_enghgco2rtgdpppkd" = "wdi_enatmco2eppgdkd"
+renames <- c(
+  "wdi_enghgco2rtgdpppkd" = "wdi_enatmco2eppgdkd",
+  "wb_spi_std_and_methods" = "spi_std_and_methods",
+  "wb_spi_census_and_survey_index" = "spi_census_and_survey_index"
 )
 
-# Apply the renaming in the `variable` column
-idx <- match(db_variables$variable, rename_vector)
-db_variables$variable[!is.na(idx)] <- names(rename_vector)[na.omit(idx)]
+# Apply the renaming to the db_variables dataframe
+db_renamed <- update_db_variables(db_variables, rename_map = renames)
+
+# Continue to use the updated db_variables
+db_variables <- db_renamed
 
 
-# 2. VDEM
-# Problematic indicators that changed their name:
+# VDEM
+# Problematic indicators that changed their variable name:
 # vdem_core_v2lgfemleg       Lower chamber female legislators (v2lgqugen) extra
 # vdem_core_v2caassemb       Freedom of peaceful assembly
 # vdem_core_v2peasjgen       Access to state jobs by gender
@@ -70,13 +85,12 @@ db_variables$variable[!is.na(idx)] <- names(rename_vector)[na.omit(idx)]
 # Identify indicators in the databases that do not match the reference dictionary (`db_variables`).
 # For each flagged indicator, assess the following:
 # a. Has the original data source renamed or updated the indicator?
-#    If yes, notify the team so the `db_variables` dictionary can be updated accordingly.
+#    If yes, use the `update_db_variables` function above to update the file accordingly.
 # b. Is the indicator irrelevant to the current indicator framework?
 #    If yes, consider removing it from the database to maintain consistency with `db_variables`.
 
 
-dataframes <- list(
-                    debt_transparency_indicators = debt_transparency,
+dataframes <- list( debt_transparency_indicators = debt_transparency,
                     wdi_wb_indicators = wdi_indicators,
                     pefa_assessments_indicators = pefa_assessments,
                     romelli_indicators = romelli,
@@ -223,7 +237,6 @@ dictionary_clean <- dictionary_identifiers |>
                            "rwb_pfi",
                            "spi_census",
                            "spi_std",
-                           "wb_aspire",
                            "wb_es",
                            "wb_girg",
                            "wb_gtmi",
@@ -238,6 +251,7 @@ dictionary_clean <- dictionary_identifiers |>
            variable == "oecd_epl" ~ "oecd_epl",
            variable == "oecd_pmr" ~ "oecd_pmr",
            variable == "romelli_cbi" ~ "romelli",
+           variable == "aspire" ~ "wb_aspire_api",
            variable == "wb_debt" ~ "debt_transparency",
            variable == "wb_gfdb" ~ "gfdb",
            variable == "wb_pefa" ~ "pefa",
@@ -252,11 +266,22 @@ etl_mapping <- dictionary_clean |>
   summarise(etl_source = first(etl_source), .groups = "drop")
 
 # Step 3: Join to db_variables
-db_variables_joined <- db_variables |>
+db_variables <- db_variables |>
                         left_join(etl_mapping,
                                   by = "source")
 
-db_variables_joined |>
-  count(etl_source)
+# Ultimately check d360 API indicators
+api_missing_indicators <- flag_missing_indicators(db_variables,
+                                     d360_efi_data,
+                                     source_type = "wb_api",
+                                     source_colname = "etl_source")
 
+devprint(api_missing_indicators)
+
+db_variables <- db_variables |>
+  add_plmetadata(source = "metadata dictionary",
+                 other_info = "")
+
+# export db_variables -----------------------------------------------------
+usethis::use_data(db_variables, overwrite = TRUE)
 

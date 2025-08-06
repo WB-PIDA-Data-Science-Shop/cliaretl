@@ -73,7 +73,7 @@ pefaclean_tbl <-
   pefaclean_tbl |>
   rename(country_name = "country") |>
   dplyr::filter(country_name %in% country_list) |>
-  dplyr::select(country_name, year, all_of(pefa_vars))
+  dplyr::select(country_code, year, all_of(pefa_vars))
 
 pefa_assessments <- pefaclean_tbl
 
