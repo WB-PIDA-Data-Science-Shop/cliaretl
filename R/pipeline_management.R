@@ -380,7 +380,9 @@ scale_values <- function(x){
 #' # Export a single agent report (optional)
 #' # pointblank::export_report(results$agents[[1]], filename = "example_qc_report.html")
 #'
-qualitycheck_plvalue <- function(old_df, new_df) {
+qualitycheck_plvalue <- function(old_df,
+                                 new_df) {
+
   common_vars <- intersect(names(old_df), names(new_df))
 
   check_list <-
@@ -475,8 +477,109 @@ qualitycheck_plvalue <- function(old_df, new_df) {
 
 
 
+#' Compare CLIAR Pipeline Indicator Values Across Versions
+#'
+#' This function compares the indicator values between an old (published) and a new (updated)
+#' version of a CLIAR pipeline dataset. It identifies changes in values for matching country-year-indicator
+#' combinations, as well as any new data entries (e.g. new country-year combinations).
+#' A [pointblank](https://rich-iannone.github.io/pointblank/) agent report is generated to summarize changes.
+#'
+#' @param old_df A data frame representing the old CLIAR dataset (e.g., already published).
+#' Must include `country_code`, `year`, and indicator columns.
+#'
+#' @param new_df A data frame representing the new CLIAR dataset (e.g., updated data for new release).
+#' Must include `country_code`, `year`, and indicator columns.
+#'
+#' @return A data frame (tibble) showing rows where indicator values have changed, mismatched, or are newly introduced.
+#' Also prints a `pointblank` interrogation report to the console.
+#'
+#' @details
+#' - Only compares indicators common to both `old_df` and `new_df`.
+#' - Assumes both data frames are in wide format, with indicator variables as columns.
+#' - Indicator values are compared for all shared `(country_code, year, indicator)` triples.
+#' - Differences due to `NA` mismatches are also reported.
+#' - New `country_code-year-indicator` combinations in the updated pipeline are flagged.
+#'
+#' @export
+#'
+#' @import dplyr tidyr pointblank rlang
+compare_pipeline_indicators <- function(old_df, new_df) {
+
+  # Identify common columns
+  common_indicators <- setdiff(intersect(names(old_df), names(new_df)),
+                               c("country_code", "year"))
+
+  # Reshape both to long format
+  old_long <-
+    old_df %>%
+    select(country_code, year, all_of(common_indicators)) |>
+    pivot_longer(cols = all_of(common_indicators),
+                 names_to = "indicator", values_to = "old_value")
+
+  new_long <-
+    new_df %>%
+    select(country_code, year, all_of(common_indicators)) |>
+    pivot_longer(cols = all_of(common_indicators),
+                 names_to = "indicator", values_to = "new_value")
+
+  # Full outer join to keep all combinations
+  compare_df <-
+    merge(old_long,
+          new_long,
+          by = c("country_code", "year", "indicator"),
+          all = TRUE) |>
+    mutate(value_equal = old_value == new_value,
+           is_update = is.na(old_value) & !is.na(new_value)) |>
+    mutate(over_1pct_change =
+             case_when(!is.na(old_value) & !is.na(new_value) & old_value != 0 ~
+                        abs((new_value - old_value) / old_value) > 0.01,
+        TRUE ~ NA))
+
+  # Create pointblank agent
+  agent <-
+    compare_df %>%
+    create_agent() %>%
+    col_vals_equal(vars(value_equal), value = TRUE,
+                   preconditions = ~ . %>% filter(!is.na(old_value) & !is.na(new_value)),
+                   brief = "Check if indicator values changed") |>
+    col_vals_not_equal(over_1pct_change, value = TRUE,
+                       preconditions = ~ . %>% filter(!is.na(over_1pct_change)),
+                       brief = "Check if changed values are more than 1% abs difference") |>
+    col_vals_equal(vars(is_update), value = FALSE,
+                   preconditions = ~ . %>% filter(!is.na(new_value)),
+                   brief = "Check for new data not in previous pipeline") |>
+    interrogate()
+
+  # Print the agent report
+  print(agent)
+
+  # Rows that changed or are newly added
+  diff_df <-
+    compare_df |>
+    filter(is_update | !value_equal | is.na(value_equal)) |>
+    filter(!if_all(c(old_value, new_value, value_equal), is.na))
+
+  # Message if no updates or changes
+  if (nrow(diff_df) == 0) {
+    message("✅ No indicator updates or changes detected between versions.")
+  }
+
+  return(list(agent = agent, difference_table = diff_df))
+}
 
 
+#' @keywords internal
+#' @noRd
+generate_pipeline_comparison_report <- function() {
+
+  rmarkdown::render(
+    input = "inst/qcheck/indicators_compare_pipeline.Rmd",
+    output_format = "html_document",
+    output_file = "indicators_compare_pipeline.html",
+    output_dir = "inst/qcheck"
+  )
+
+}
 
 
 
