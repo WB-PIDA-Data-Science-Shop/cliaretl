@@ -320,7 +320,7 @@ extract_data_from_api <- function(dataset_id,
 
 #' Scale Values to [0, 1] Range
 #'
-#' This function rescales a numeric vector to a 0–1 range using
+#' This function rescales a numeric vector to the zero to unit range using
 #' min-max normalization. Missing values (`NA`) are ignored
 #' when computing the minimum and maximum.
 #'
@@ -561,7 +561,7 @@ compare_pipeline_indicators <- function(old_df, new_df) {
 
   # Message if no updates or changes
   if (nrow(diff_df) == 0) {
-    message("✅ No indicator updates or changes detected between versions.")
+    message("No indicator updates or changes detected between versions.")
   }
 
   return(list(agent = agent, difference_table = diff_df))
@@ -570,15 +570,24 @@ compare_pipeline_indicators <- function(old_df, new_df) {
 
 #' @keywords internal
 #' @noRd
+#'
+#' @importFrom rmarkdown render
+#'
+#' This quick function will generate the comparison report using the
+#' compare_pipeline_indicators() function within a markdown file stored
+#' in a temporary location.
+#'
 generate_pipeline_comparison_report <- function() {
+  tmp_file <- tempfile(fileext = ".html")
 
   rmarkdown::render(
     input = "inst/qcheck/indicators_compare_pipeline.Rmd",
     output_format = "html_document",
-    output_file = "indicators_compare_pipeline.html",
-    output_dir = "inst/qcheck"
+    output_file = tmp_file
   )
 
+  message("Report generated at: ", tmp_file)
+  return(tmp_file)
 }
 
 

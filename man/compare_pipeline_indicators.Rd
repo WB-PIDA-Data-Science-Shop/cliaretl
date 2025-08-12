@@ -14,18 +14,19 @@ Must include `country_code`, `year`, and indicator columns.}
 Must include `country_code`, `year`, and indicator columns.}
 }
 \value{
-A data frame (tibble) showing rows where indicator values have changed or are mismatched
-(i.e., not equal or include `NA`s). Also prints a `pointblank` interrogation report to the console.
+A data frame (tibble) showing rows where indicator values have changed, mismatched, or are newly introduced.
+Also prints a `pointblank` interrogation report to the console.
 }
 \description{
 This function compares the indicator values between an old (published) and a new (updated)
 version of a CLIAR pipeline dataset. It identifies changes in values for matching country-year-indicator
-combinations and flags differences. A [pointblank](https://rich-iannone.github.io/pointblank/)
-agent report is generated to summarize changes.
+combinations, as well as any new data entries (e.g. new country-year combinations).
+A [pointblank](https://rich-iannone.github.io/pointblank/) agent report is generated to summarize changes.
 }
 \details{
 - Only compares indicators common to both `old_df` and `new_df`.
 - Assumes both data frames are in wide format, with indicator variables as columns.
 - Indicator values are compared for all shared `(country_code, year, indicator)` triples.
 - Differences due to `NA` mismatches are also reported.
+- New `country_code-year-indicator` combinations in the updated pipeline are flagged.
 }
