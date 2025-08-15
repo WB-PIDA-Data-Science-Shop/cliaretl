@@ -320,7 +320,7 @@ extract_data_from_api <- function(dataset_id,
 
 #' Scale Values to [0, 1] Range
 #'
-#' This function rescales a numeric vector to a 0–1 range using
+#' This function rescales a numeric vector to the zero to unit range using
 #' min-max normalization. Missing values (`NA`) are ignored
 #' when computing the minimum and maximum.
 #'
@@ -341,6 +341,266 @@ extract_data_from_api <- function(dataset_id,
 scale_values <- function(x){
   (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
 }
+
+
+#' Compare Variable Values Between CLIAR Pipelines Using Pointblank
+#'
+#' @param old_df Data frame from the previous pipeline (gold standard)
+#' @param new_df Data frame from the new pipeline
+#'
+#' @return A summary tibble and a printed pointblank agent
+#' @export
+#'
+#' @import dplyr tidyr pointblank
+#' @importFrom stats median na.omit
+#'
+#' @examples
+#' # Create example old and new datasets
+#' set.seed(123)
+#' old_df <- data.frame(
+#'   country_code = rep(c("USA", "KEN", "NGA"), each = 2),
+#'   year = rep(2020:2021, 3),
+#'   gdp = c(50000, 52000, 1800, 1900, 2400, 2600),
+#'   population = c(330e6, 331e6, 53e6, 54e6, 206e6, 208e6)
+#' )
+#'
+#' new_df <- data.frame(
+#'   country_code = rep(c("USA", "KEN", "NGA"), each = 2),
+#'   year = rep(2020:2021, 3),
+#'   gdp = c(50500, 52200, 1850, 1950, 2450, 2650),  # small changes
+#'   population = c(330e6, 331e6, 53e6, 54.1e6, 206e6, 208.5e6)  # small changes
+#' )
+#'
+#' # Run quality check
+#' results <- qualitycheck_plvalue(old_df, new_df)
+#'
+#' # View summary
+#' results$summary
+#'
+#' # Export a single agent report (optional)
+#' # pointblank::export_report(results$agents[[1]], filename = "example_qc_report.html")
+#'
+qualitycheck_plvalue <- function(old_df,
+                                 new_df) {
+
+  common_vars <- intersect(names(old_df), names(new_df))
+
+  check_list <-
+    lapply(common_vars,
+           function(var) {
+
+            old_df <-
+              old_df |>
+              dplyr::select(country_code, year, !!sym(var)) |>
+              na.omit()
+
+            country_list <- unique(old_df[["country_code"]])
+            year_list <- unique(old_df[["year"]])
+
+
+            new_df <-
+              new_df |>
+              dplyr::select(country_code, year, !!sym(var)) |>
+              dplyr::filter(country_code %in% country_list &
+                              year %in% year_list)
+
+            old_col <- old_df[[var]]
+            new_col <- new_df[[var]]
+
+            # Ensure comparable numeric values
+            if (is.numeric(old_col) && is.numeric(new_col)) {
+              tibble(
+                variable = var,
+                old_class = class(old_col)[1],
+                new_class = class(new_col)[1],
+                type_equal = class(old_col)[1] != class(new_col)[1],
+                old_min = min(old_col, na.rm = TRUE),
+                old_max = max(old_col, na.rm = TRUE),
+                new_min = min(new_col, na.rm = TRUE),
+                new_max = max(new_col, na.rm = TRUE),
+                old_mean = mean(old_col, na.rm = TRUE),
+                new_mean = mean(new_col, na.rm = TRUE),
+                old_median = median(old_col, na.rm = TRUE),
+                new_median = median(new_col, na.rm = TRUE),
+                old_n_na = sum(is.na(old_col)),
+                new_n_na = sum(is.na(new_col)),
+                range_equal = (min(old_col, na.rm = TRUE) != min(new_col, na.rm = TRUE)) |
+                  (max(old_col, na.rm = TRUE) != max(new_col, na.rm = TRUE)),
+                mean_equal = !isTRUE(all.equal(mean(old_col, na.rm = TRUE), mean(new_col, na.rm = TRUE))),
+                median_equal = !isTRUE(all.equal(median(old_col, na.rm = TRUE), median(new_col, na.rm = TRUE))),
+                missingness_equal = sum(is.na(old_col)) != sum(is.na(new_col))
+              )
+            } else {
+              tibble(
+                variable = var,
+                old_class = class(old_col)[1],
+                new_class = class(new_col)[1],
+                type_equal = class(old_col)[1] != class(new_col)[1],
+                old_min = NA_real_,
+                old_max = NA_real_,
+                new_min = NA_real_,
+                new_max = NA_real_,
+                old_mean = NA_real_,
+                new_mean = NA_real_,
+                old_median = NA_real_,
+                new_median = NA_real_,
+                old_n_na = sum(is.na(old_col)),
+                new_n_na = sum(is.na(new_col)),
+                range_equal = NA,
+                mean_equal = NA,
+                median_equal = NA,
+                missingness_equal = sum(is.na(old_col)) != sum(is.na(new_col))
+              )
+            }
+  })
+
+  comparison_tbl <- bind_rows(check_list)
+
+  # Pointblank summary agent (optional)
+  agent <-
+    create_agent(tbl = comparison_tbl) %>%
+    col_vals_not_null(vars(variable)) %>%
+    col_vals_equal(vars(type_equal), value = FALSE, brief = "Type changed") %>%
+    col_vals_equal(vars(range_equal), value = FALSE, brief = "Range changed") %>%
+    col_vals_equal(vars(mean_equal), value = FALSE, brief = "Mean changed") %>%
+    col_vals_equal(vars(median_equal), value = FALSE, brief = "Median changed") %>%
+    col_vals_equal(vars(missingness_equal), value = FALSE, brief = "Missingness changed")
+
+  agent <- interrogate(agent)
+
+  print(agent)
+
+  return(comparison_tbl)
+
+}
+
+
+
+
+#' Compare CLIAR Pipeline Indicator Values Across Versions
+#'
+#' This function compares the indicator values between an old (published) and a new (updated)
+#' version of a CLIAR pipeline dataset. It identifies changes in values for matching country-year-indicator
+#' combinations, as well as any new data entries (e.g. new country-year combinations).
+#' A [pointblank](https://rich-iannone.github.io/pointblank/) agent report is generated to summarize changes.
+#'
+#' @param old_df A data frame representing the old CLIAR dataset (e.g., already published).
+#' Must include `country_code`, `year`, and indicator columns.
+#'
+#' @param new_df A data frame representing the new CLIAR dataset (e.g., updated data for new release).
+#' Must include `country_code`, `year`, and indicator columns.
+#'
+#' @return A data frame (tibble) showing rows where indicator values have changed, mismatched, or are newly introduced.
+#' Also prints a `pointblank` interrogation report to the console.
+#'
+#' @details
+#' - Only compares indicators common to both `old_df` and `new_df`.
+#' - Assumes both data frames are in wide format, with indicator variables as columns.
+#' - Indicator values are compared for all shared `(country_code, year, indicator)` triples.
+#' - Differences due to `NA` mismatches are also reported.
+#' - New `country_code-year-indicator` combinations in the updated pipeline are flagged.
+#'
+#' @export
+#'
+#' @import dplyr tidyr pointblank rlang
+compare_pipeline_indicators <- function(old_df, new_df) {
+
+  # Identify common columns
+  common_indicators <- setdiff(intersect(names(old_df), names(new_df)),
+                               c("country_code", "year"))
+
+  # Reshape both to long format
+  old_long <-
+    old_df %>%
+    select(country_code, year, all_of(common_indicators)) |>
+    pivot_longer(cols = all_of(common_indicators),
+                 names_to = "indicator", values_to = "old_value")
+
+  new_long <-
+    new_df %>%
+    select(country_code, year, all_of(common_indicators)) |>
+    pivot_longer(cols = all_of(common_indicators),
+                 names_to = "indicator", values_to = "new_value")
+
+  # Full outer join to keep all combinations
+  compare_df <-
+    merge(old_long,
+          new_long,
+          by = c("country_code", "year", "indicator"),
+          all = TRUE) |>
+    mutate(value_equal = old_value == new_value,
+           is_update = is.na(old_value) & !is.na(new_value)) |>
+    mutate(over_1pct_change =
+             case_when(!is.na(old_value) & !is.na(new_value) & old_value != 0 ~
+                        abs((new_value - old_value) / old_value) > 0.01,
+        TRUE ~ NA))
+
+  # Create pointblank agent
+  agent <-
+    compare_df %>%
+    create_agent() %>%
+    col_vals_equal(vars(value_equal), value = TRUE,
+                   preconditions = ~ . %>% filter(!is.na(old_value) & !is.na(new_value)),
+                   brief = "Check if indicator values changed") |>
+    col_vals_not_equal(over_1pct_change, value = TRUE,
+                       preconditions = ~ . %>% filter(!is.na(over_1pct_change)),
+                       brief = "Check if changed values are more than 1% abs difference") |>
+    col_vals_equal(vars(is_update), value = FALSE,
+                   preconditions = ~ . %>% filter(!is.na(new_value)),
+                   brief = "Check for new data not in previous pipeline") |>
+    interrogate()
+
+  # Print the agent report
+  print(agent)
+
+  # Rows that changed or are newly added
+  diff_df <-
+    compare_df |>
+    filter(is_update | !value_equal | is.na(value_equal)) |>
+    filter(!if_all(c(old_value, new_value, value_equal), is.na))
+
+  # Message if no updates or changes
+  if (nrow(diff_df) == 0) {
+    message("No indicator updates or changes detected between versions.")
+  }
+
+  return(list(agent = agent, difference_table = diff_df))
+}
+
+
+#' @keywords internal
+#' @noRd
+#'
+#' @importFrom rmarkdown render
+#'
+#' This quick function will generate the comparison report using the
+#' compare_pipeline_indicators() function within a markdown file stored
+#' in a temporary location.
+#'
+generate_pipeline_comparison_report <- function() {
+  tmp_file <- tempfile(fileext = ".html")
+
+  rmarkdown::render(
+    input = "inst/qcheck/indicators_compare_pipeline.Rmd",
+    output_format = "html_document",
+    output_file = tmp_file
+  )
+
+  message("Report generated at: ", tmp_file)
+  return(tmp_file)
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

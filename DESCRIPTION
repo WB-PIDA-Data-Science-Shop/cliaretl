@@ -19,8 +19,11 @@ Imports:
     tibble,
     rlang,
     stringr,
-    httr
-Suggests: 
+    httr,
     dplyr,
+    pointblank,
+    tidyr,
+    rmarkdown
+Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

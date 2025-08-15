@@ -15,7 +15,7 @@ rescaled to the range [0, 1]. If all elements of `x` are `NA`,
 the result will be `NA`.
 }
 \description{
-This function rescales a numeric vector to a 0–1 range using
+This function rescales a numeric vector to the zero to unit range using
 min-max normalization. Missing values (`NA`) are ignored
 when computing the minimum and maximum.
 }
