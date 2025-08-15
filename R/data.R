@@ -139,7 +139,6 @@
 #'   \item{\code{wdi_gcnldtotlgdzs}}{double Net lending/borrowing (percentage of GDP).}
 #'   \item{\code{wdi_nygdppetrrtzs}}{double Oil rents (percentage of GDP).}
 #'   \item{\code{wdi_bxtrfpwkrdtgdzs}}{double Personal remittances, received (percentage of GDP).}
-#'   \item{\code{wb_wdi_gc_rev_xgrt_gd_zs}}{double Revenue, excluding grants (percentage of GDP).}
 #'   \item{\code{wdi_nvsrvtotlzs}}{double Services, etc., value added (percentage of GDP).}
 #'   \item{\code{wdi_nygdptotlrtzs}}{double Total natural resource rents (percentage of GDP).}
 #'   \item{\code{wdi_netrdgnfszs}}{double Trade (percentage of GDP).}
@@ -937,3 +936,37 @@
 #' @source Internal project documentation and data sources.
 "db_variables"
 
+#' Family Order and Names
+#'
+#' A tibble mapping numeric family order codes to their corresponding
+#' institutional family names. This dataset is intended for use in
+#' organizing or categorizing indicators in dashboards, reports, or analyses.
+#'
+#' @format A tibble with 13 rows and 2 variables:
+#' \describe{
+#'   \item{family_order}{Numeric code (integer) indicating the institutional family order.}
+#'   \item{family_name}{Character string with the institutional family name.}
+#' }
+#'
+#' @source Created manually for internal project use.
+"family_order"
+
+
+#' World Bank Women, Business and the Law (WBL) Dataset
+#'
+#' A comprehensive dataset containing Women, Business and the Law indicators
+#' across countries and years. The WBL index measures legal barriers to women's
+#' economic participation across different areas including entrepreneurship,
+#' social protections, and labor market participation.
+#'
+#' @format A tibble with 6,460 rows and 5 variables:
+#' \describe{
+#'   \item{country_code}{Character. ISO 3-letter country codes.}
+#'   \item{year}{Numeric. Year of observation.}
+#'   \item{wb_wbl_entrepreneurship}{Numeric. WBL Entrepreneurship sub-index score.}
+#'   \item{wb_wbl_social}{Numeric. WBL Social Protection sub-index score.}
+#'   \item{wb_wbl_labor}{Numeric. WBL Labor market participation sub-index score.}
+#' }
+#'
+#' @source \url{https://wbl.worldbank.org/content/dam/sites/wbl/documents/2024/WBL1-0-1971-2024.dta}
+"wbl_data"

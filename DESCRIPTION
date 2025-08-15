@@ -19,8 +19,8 @@ Imports:
     tibble,
     rlang,
     stringr,
-    httr
+    httr,
+    dplyr
 Suggests: 
-    dplyr,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

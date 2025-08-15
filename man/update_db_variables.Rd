@@ -2,18 +2,26 @@
 % Please edit documentation in R/pipeline_management.R
 \name{update_db_variables}
 \alias{update_db_variables}
-\title{Update Variable Names in a Data Frame}
+\title{Update Variable Names in db_variables}
 \usage{
-update_db_variables(data, rename_map = NULL, find_var_name = NULL)
+update_db_variables(
+  data,
+  rename_map = NULL,
+  column_name = "variable",
+  find_var_name = NULL
+)
 }
 \arguments{
-\item{data}{A data frame containing a 'variable' column (e.g., `db_variables`).}
+\item{data}{A data frame containing the target column for renaming.}
 
 \item{rename_map}{A named character vector (e.g., `c("new_var" = "old_var")`).
 If `NULL`, no bulk renaming is applied.}
 
+\item{column_name}{A character string specifying which column to apply the
+renaming to. Defaults to "variable" for backward compatibility.}
+
 \item{find_var_name}{An optional character string. If provided, the function
-will return the row index of this variable after any renames.}
+will return the row index of this value in the specified column after any renames.}
 }
 \value{
 The modified data frame if `find_var_name` is `NULL`.
@@ -21,20 +29,19 @@ The modified data frame if `find_var_name` is `NULL`.
   match, or `NA` if not found.
 }
 \description{
-This function efficiently renames multiple 'variable' entries within a
-provided data frame using a named vector of `new_name = old_name` pairs.
+This function efficiently renames multiple entries within a specified column
+of a provided data frame using a named vector of `new_name = old_name` pairs.
 It also allows for finding a specific variable's index for manual edits.
 }
 \examples{
-# Example 1: Apply bulk renames
-# my_data <- data.frame(variable = c("old_a", "old_b"), var_name = c("A", "B"))
-# renames <- c("new_a" = "old_a")
-# my_data_updated <- update_db_variables(my_data, rename_map = renames)
-# print(my_data_updated)
+\dontrun{
+# Example 1: Apply bulk renames to 'var_name' column
+rename_map <- c("New Variable A" = "Old Variable A")
+data_updated <- update_db_variables(data, rename_map = rename_map, column_name = "var_name")
 
-# Example 2: Find a variable's index after renames
-# db_variables_renamed <- update_db_variables(db_variables, rename_map = my_renames)
-# idx <- update_db_variables(db_variables_renamed, find_var_name = "spi_std_and_methods")
-# print(idx)
-# if (!is.na(idx)) { print(db_variables_renamed[idx, ]) }
+# Example 2: Apply bulk renames to 'description' column
+desc_renames <- c("Updated description" = "Old description")
+data_updated <- update_db_variables(data, rename_map = desc_renames, column_name = "description")
+}
+
 }

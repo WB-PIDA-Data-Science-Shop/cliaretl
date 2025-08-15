@@ -21,6 +21,7 @@ library(dplyr)
 library(purrr)
 library(stringr)
 
+
 # Load custom functions
 devtools::load_all()
 
@@ -40,46 +41,45 @@ epl_indicators <- epl
 d30_indicators <- d360_efi_data
 fraser_indicators <- fraser
 aspire_indicators <- aspire
+wbl_indicators <- wbl_data
 
 # Dictionary df
-db_variables <-  read_xlsx(
+db_variables_2024 <-  read_xlsx(
   here("data-raw", "input", "cliar", "db_variables.xlsx")
 )
 
 
-# Update db_variables -----------------------------------------------------
+# 1. Update db_variables -----------------------------------------------------
 
 # Documenting variable changes in our dictionary
-
 # Use `update_db_variables` function to update the `db_variables` dataframe.
 
 # Named vector of changes: new name = old name
-renames <- c(
+rename_variable <- c(
   "wdi_enghgco2rtgdpppkd" = "wdi_enatmco2eppgdkd",
   "wb_spi_std_and_methods" = "spi_std_and_methods",
   "wb_spi_census_and_survey_index" = "spi_census_and_survey_index"
 )
 
 # Apply the renaming to the db_variables dataframe
-db_renamed <- update_db_variables(db_variables, rename_map = renames)
+db_variables_2024 <- update_db_variables(db_variables_2024,
+                                  rename_map = rename_variable,
+                                  column_name = "variable")
 
-# Continue to use the updated db_variables
-db_variables <- db_renamed
+
+# Documenting var_names changes in our dictionary
+# Cite: https://www.v-dem.net/documents/55/codebook.pdf
 
 
-# VDEM
-# Problematic indicators that changed their variable name:
 # vdem_core_v2lgfemleg       Lower chamber female legislators (v2lgqugen) extra
 # vdem_core_v2caassemb       Freedom of peaceful assembly
 # vdem_core_v2peasjgen       Access to state jobs by gender
 
-# https://www.v-dem.net/documents/55/codebook.pdf
 
 
+# 2. Conflicting indicators analysis ---------------------------------------------
 
-# Conflicting indicators analysis ---------------------------------------------
-
-# 1. Mismatching -------------------------------------------------------------
+# a. Mismatching -------------------------------------------------------------
 
 # Mismatching Indicators
 # Identify indicators in the databases that do not match the reference dictionary (`db_variables`).
@@ -88,7 +88,6 @@ db_variables <- db_renamed
 #    If yes, use the `update_db_variables` function above to update the file accordingly.
 # b. Is the indicator irrelevant to the current indicator framework?
 #    If yes, consider removing it from the database to maintain consistency with `db_variables`.
-
 
 dataframes <- list( debt_transparency_indicators = debt_transparency,
                     wdi_wb_indicators = wdi_indicators,
@@ -101,7 +100,8 @@ dataframes <- list( debt_transparency_indicators = debt_transparency,
                     epl_indicators = epl,
                     d30_indicators = d360_efi_data,
                     fraser_indicators = fraser,
-                    aspire_indicators = aspire
+                    aspire_indicators = aspire,
+                    wbl_indicators = wbl_data
                 )
 
 # Apply the `flag_mismatched_indicators` function across all and bind results
@@ -109,14 +109,13 @@ all_mismatched_vars <- map_dfr( #From list to data frame
   names(dataframes),
   function(name) {
     mismatched_df <- flag_mismatched_indicators(dataframes[[name]],
-                                                db_variables)[[1]]
+                                                db_variables_2024)[[1]]
     mismatched_df|> mutate(source = name)
   }
 )
 
 
-
-# 2. Missing Indicators ---------------------------------------------------
+# b. Missing Indicators ---------------------------------------------------
 
 # Here we are interested in flagging those variables expected but not present.
 
@@ -124,9 +123,9 @@ all_mismatched_vars <- map_dfr( #From list to data frame
 # interest with the following object:
 
 
-# 2.1 by source -----------------------------------------------------------
+# ... by source -----------------------------------------------------------
 
-dictionary_identifiers <- db_variables|>
+dictionary_identifiers <- db_variables_2024|>
   mutate(variable = case_when(
     str_starts(variable, "wdi_") ~ "wdi_", ### To be updated in the extraction
     TRUE ~ str_extract(variable, "^([^_]+_[^_]+)")
@@ -135,7 +134,7 @@ dictionary_identifiers <- db_variables|>
 
 
 # Then call the function to each of the data frames
-wdi_missing_df <- flag_missing_indicators(db_variables,
+wdi_missing_df <- flag_missing_indicators(db_variables_2024,
                                           wdi_indicators,
                                           source_type = ("WDI")
 )
@@ -149,37 +148,41 @@ wdi_missing_df <- wdi_missing_df |>
 wdi_missing_df |> filter(!is_present)
 
 
-vdem_missing_df <- flag_missing_indicators(db_variables,
+vdem_missing_df <- flag_missing_indicators(db_variables_2024,
                                            vdem_data_indicators,
                                            source_type = "V-Dem, Variety of Democracy database")
 
-pefa_missing_df <- flag_missing_indicators(db_variables,
+pefa_missing_df <- flag_missing_indicators(db_variables_2024,
                                            pefa_assessments_indicators,
                                            source_type = "Public Expenditure Financial Accountability")
 
-pmr_oecd_missing_df <- flag_missing_indicators(db_variables,
+pmr_oecd_missing_df <- flag_missing_indicators(db_variables_2024,
                                           pmr_indicators,
                                           source_type = "OECD Product Market Regulation Database")
 
-epl_oecd_missing_df <- flag_missing_indicators(db_variables,
+epl_oecd_missing_df <- flag_missing_indicators(db_variables_2024,
                                        epl_indicators,
                                        source_type = "OECD")
 
-gfdb_missing_df <- flag_missing_indicators(db_variables,
+gfdb_missing_df <- flag_missing_indicators(db_variables_2024,
                                        gfdb_indicators,
                                        source_type = "wb_gfdb")
 
-heritage_missing_df <- flag_missing_indicators(db_variables,
+heritage_missing_df <- flag_missing_indicators(db_variables_2024,
                                            heritage_indicators,
                                            source_type = "Heritage Index of Economic Freedom")
 
-fraser_missing_df <- flag_missing_indicators(db_variables,
+fraser_missing_df <- flag_missing_indicators(db_variables_2024,
                                                fraser_indicators,
                                                source_type = "Fraser Institute")
 
-aspire_missing_df <- flag_missing_indicators(db_variables,
+aspire_missing_df <- flag_missing_indicators(db_variables_2024,
                                              aspire_indicators,
                                              source_type = "ASPIRE")
+
+# wbl_missing_df <- flag_missing_indicators(db_variables_2024,
+#                                              wbl_indicators,
+#                                              source_type = "CLIAR")
 
 
 # Combine them into a single dataframe
@@ -191,6 +194,7 @@ all_missing_vars <- bind_rows(vdem_missing_df, # Ommiting WDI
                               heritage_missing_df,
                               fraser_missing_df,
                               aspire_missing_df
+                              # wbl_missing_df
                               )
 
 
@@ -213,11 +217,11 @@ There are missing indicators not found in the extracted data.")
 
 
 
-# 2.2 all vs all db -------------------------------------------------------
+# ...by etl source -------------------------------------------------------
 # db variables source column is not reliable at this point.
 # Build a compiled indicators panel df to check matching
 
-sources <-  db_variables |> count(source)
+sources <-  db_variables_2024 |> count(source)
 
 # Step 1: Clean and classify
 dictionary_clean <- dictionary_identifiers |>
@@ -241,7 +245,6 @@ dictionary_clean <- dictionary_identifiers |>
                            "wb_girg",
                            "wb_gtmi",
                            "wb_lpi",
-                           "wb_wbl",
                            "wb_wwbi",
                            "wjp_rol") ~ "wb_api",
            variable == "fraser_efw" ~ "fraser",
@@ -255,6 +258,7 @@ dictionary_clean <- dictionary_identifiers |>
            variable == "wb_debt" ~ "debt_transparency",
            variable == "wb_gfdb" ~ "gfdb",
            variable == "wb_pefa" ~ "pefa",
+           variable == "wb_wbl" ~ "wb_wbl",
            variable == "vdem_core" ~ "vdem",
            TRUE ~ "wdi"
          ))
@@ -265,23 +269,79 @@ etl_mapping <- dictionary_clean |>
   group_by(source) |>
   summarise(etl_source = first(etl_source), .groups = "drop")
 
-# Step 3: Join to db_variables
-db_variables <- db_variables |>
+# Step 3: Join to db_variables_2024
+db_variables_2025 <- db_variables_2024 |>
                         left_join(etl_mapping,
                                   by = "source")
 
 # Ultimately check d360 API indicators
-api_missing_indicators <- flag_missing_indicators(db_variables,
+api_missing_indicators <- flag_missing_indicators(db_variables_2025,
                                      d360_efi_data,
                                      source_type = "wb_api",
                                      source_colname = "etl_source")
 
-devprint(api_missing_indicators)
+print(api_missing_indicators)
 
-db_variables <- db_variables |>
+db_variables <- db_variables_2025 |>
   add_plmetadata(source = "metadata dictionary",
                  other_info = "")
 
-# export db_variables -----------------------------------------------------
-usethis::use_data(db_variables, overwrite = TRUE)
 
+
+# 3. clean db_variables ---------------------------------------------------
+
+## Create the Family Order dataframe:
+family_order <- tibble(
+  family_order = c(
+    13,
+    12,
+    11,
+    10,
+    9,
+    8,
+    7,
+    6,
+    5,
+    4,
+    3,
+    2,
+    1
+  ),
+  family_name = c(
+    "Political Institutions",
+    "Social Institutions",
+    "Absence of Corruption",
+    "Transparency and Accountability Institutions",
+    "Justice Institutions",
+    "Public Financial Management Institutions",
+    "Public Human Resource Management Institutions",
+    "Digital and Data Institutions",
+    "Business Environment",
+    "SOE Corporate Governance",
+    "Labor and Social Protection Institutions",
+    "Service Delivery Institutions",
+    "Climate Change and Environment Institutions"
+  )
+)
+
+
+# Clean and prepare db_variables
+db_variables <- db_variables |>
+  clean_names() |>
+  mutate(
+    variable = make_clean_names(variable),
+    var_name = str_to_sentence(var_name, locale = "en") # To Sentence
+  )
+
+# Add year attribute
+attr(db_variables, "ref_year") <- 2025
+
+
+db_variables <- db_variables |>
+  add_plmetadata(source = "Own dictionary",
+                 other_info = "Version 2025, updated with indicators extracted from various sources and cleaned.")
+
+
+# export data -----------------------------------------------------
+usethis::use_data(db_variables, overwrite = TRUE)
+usethis::use_data(family_order, overwrite = TRUE)

@@ -52,7 +52,7 @@ pefaclean_tbl <-
 
 ### handling country codes, including Kosovo
 pefaclean_tbl <-
-pefaclean_tbl %>%
+pefaclean_tbl |>
   mutate(country_code = case_when(
     country == "Kosovo" ~ "XKX",
     TRUE ~ countrycode(country, "country.name", "iso3c", custom_match = c("Kosovo" = "XKX"))

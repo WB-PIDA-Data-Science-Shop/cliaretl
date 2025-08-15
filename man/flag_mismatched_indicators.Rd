@@ -4,12 +4,12 @@
 \alias{flag_mismatched_indicators}
 \title{Flag Mismatched Indicators to Dictionary}
 \usage{
-flag_mismatched_indicators(df, db_variables)
+flag_mismatched_indicators(df, dictionary)
 }
 \arguments{
 \item{df}{A data frame containing extracted indicators along with identifying columns such as `country_code`, `country_name`, and `year`.}
 
-\item{db_variables}{A data frame called `db_variables` containing a column named `variable` with the list of valid variable names.}
+\item{dictionary}{A data frame containing a column named `variable` with the list of valid variable names.}
 }
 \value{
 A named list containing a tibble with one column, `variable`, listing the mismatched variables found in `df` but not in `db_variables$variable`.

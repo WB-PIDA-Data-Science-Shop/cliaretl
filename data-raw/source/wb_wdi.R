@@ -240,7 +240,7 @@ var_names <- names(var_labels)  # Get the variable names
 
 wdi_clean <- wdi_named |>
   rename_with(
-    ~ str_to_lower(.) %>%
+    ~ str_to_lower(.) |>
       str_replace_all("^wdi_", "wdi_"),
     starts_with("wdi_")
   )
@@ -251,7 +251,8 @@ columns_to_drop <- c(
   "wdi_dtdodpvlxgnzs",
   "wdi_shmedcmhwp3",
   "wdi_sipovmdim",
-  "wdi_sipovmdimxq"
+  "wdi_sipovmdimxq",
+  "wdi_gcrevxgrtgdzs"
 )
 
 wdi_indicators <- wdi_clean |>
@@ -259,13 +260,10 @@ wdi_indicators <- wdi_clean |>
   filter(!is.na(country_code) & country_code != ""
   ) |>
   distinct(country_code, year, .keep_all = TRUE) |>
-  rename(
-    wb_wdi_gc_rev_xgrt_gd_zs =wdi_gcrevxgrtgdzs # Change in name
-  ) |>
   select(-wdi_gctaxtotlgdzs) # Extracted in EFI API pull
 
 
-wdi_indicators |>
+wdi_indicators <- wdi_indicators |>
   add_plmetadata(source = wdi_indicators_list,
                  other_info = "R package")
 

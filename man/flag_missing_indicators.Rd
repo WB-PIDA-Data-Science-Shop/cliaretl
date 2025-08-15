@@ -5,14 +5,14 @@
 \title{Flag Missing Indicators Compared to Dictionary}
 \usage{
 flag_missing_indicators(
-  db_variables,
+  dictionary,
   df,
   source_type = NULL,
   source_colname = "source"
 )
 }
 \arguments{
-\item{db_variables}{A data frame containing a column named `variable` with the list of valid variable names.
+\item{dictionary}{A data frame containing a column named `variable` with the list of valid variable names.
 It can also contain a column (specified by `source_colname`) with source information.}
 
 \item{df}{A data frame containing extracted indicators along with identifying columns such as `country_code`, `country_name`, and `year`.}
