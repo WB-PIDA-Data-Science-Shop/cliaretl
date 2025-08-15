@@ -1,0 +1,165 @@
+---
+title: "CLIAR Pipeline Indicator Change Report"
+author: "Ifeanyi Edochie"
+date: "2025-08-08"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+devtools::load_all()
+
+library(here)
+library(purrr)
+library(flextable)
+library(DT)
+library(htmltools)
+
+source(here("analysis/indicators_compare_pipeline.R"))
+
+```
+
+# Comparison of Previous Published Pipeline vs Latest Update
+
+## Introduction
+The purpose of this report is to compare the results of the latest data pipeline updates (FY26) to the pipeline used in the FY25 version of the CLIAR dashboard. This data pipeline comparison serves two purposes:
+
+* First, to understand which indicator values (by `country_code` and `year`) changed between the baseline pipeline (FY25) and our latest update (FY26). The goal is to flag significant changes to already published estimates perhaps due to methodological changes from the source or perhaps API retrieval errors from either source or our team. 
+
+* Next, to also detect new data points as a result of the updates which could be part of any release notes included with the CLIAR publication. 
+
+### Dataset-by-Dataset Change Summary Table
+
+```{r, echo = FALSE}
+
+summary_table <- 
+  purrr::map_dfr(names(check_list), 
+                 function(name) {
+  
+  diff_tbl <- check_list[[name]]$difference_table
+  
+  tibble(
+    dataset = name,
+    has_changes = nrow(diff_tbl) > 0,
+    indicators_changed = diff_tbl %>%
+      pull(indicator) %>%
+      unique() %>%
+      length(),
+    rows_changed = nrow(diff_tbl),
+    indicators_changed_over_1pct = diff_tbl %>%
+      filter(over_1pct_change == TRUE & !is.na(indicator)) %>%
+      pull(indicator) %>%
+      unique() %>%
+      length(),
+    over_1pct_changes = sum(diff_tbl$over_1pct_change, na.rm = TRUE)
+  )
+  
+})
+
+summary_table |>
+flextable() %>%
+  set_header_labels(
+    dataset = "Dataset",
+    has_changes = "Any changes?",
+    indicators_changed = "Indicators Changed",
+    rows_changed = "Values Changed",
+    indicators_changed_over_1pct = "Indicators Changed greater than 1%",
+    over_1pct_changes = "Values changes greater than 1%"
+  ) %>%
+  theme_box() %>%
+  autofit() %>%
+  color(i = ~ has_changes == TRUE, color = "black", part = "body") %>%
+  bg(i = ~ has_changes == TRUE, bg = "#FFF2CC", part = "body") %>% # light yellow for changed datasets
+  bold(i = ~ over_1pct_changes > 0, bold = TRUE, part = "body") %>%
+  align(align = "center", part = "all")
+
+```
+
+
+### Pointblank Validation Reports
+
+The pointblank agent summarizes the results for each dataset quality check. There are three tests completed on each dataset below. The first checks if each indicator value (for each `country_code` and `year` pair) for each pipeline dataset that went into the published CLAIR dashboard (FY25) is equal to the estimate sourced into the pipeline in the latest round. The values could be different as a result of methodological changes to indicator estimation from the author. Differences may also occur as a result of our own handling, for instance rounding error. In this case, the second test we perform flags indicator value changes that are over 1% different between the pipeline versions under quality control. The final check shows how many new estimates are being introduced in this latest pipeline, i.e. indicator in `country_code` and `year` that were not published in the previous pipeline vintage (`is_update`). `is_update` likely overestimates the number of new estimates as some pipeline datasets may have included years of data outside of the temporal range of the CLIAR dataset for all/specific indicators. 
+
+
+```{r, echo = FALSE, results = "asis"}
+
+cat('<h2 style="font-size:24px;">Validation Reports: Aspire</h2>\n')
+
+check_list[["aspire"]]$agent
+
+cat("\n\n")
+
+
+cat('<h2 style="font-size:24px;">Validation Reports: EFI Data 360</h2>\n')
+
+check_list[["d360_efi_data"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: Debt Transparency</h2>\n')
+
+check_list[["debt_transparency"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: EPL</h2>\n')
+
+check_list[["epl"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: Fraser</h2>\n')
+
+check_list[["fraser"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: GFDB</h2>\n')
+
+check_list[["gfdb"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: Heritage</h2>\n')
+
+check_list[["heritage"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: PEFA Assessments</h2>\n')
+
+check_list[["pefa_assessments"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: PMR</h2>\n')
+
+check_list[["pmr"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: Romelli</h2>\n')
+
+check_list[["romelli"]]$agent
+
+cat("\n\n")
+
+cat('<h2 style="font-size:24px;">Validation Reports: VDEM</h2>\n')
+
+check_list[["vdem_data"]]$agent
+
+cat("\n\n")
+
+
+```
+
+
+
+
+
+
+
+
+
+
