@@ -40,12 +40,7 @@
 #' @description This dataset contains indicators from the PEFA (Public Expenditure and Financial Accountability) assessments conducted using the 2016 PEFA framework. It provides scores on various dimensions of public financial management across countries and time periods. The indicators cover budget credibility, transparency, asset and debt management, internal controls, auditing, and more. The data are sourced from the PEFA bulk download page: \url{https://www.pefa.org/assessments/batch-downloads}.
 #' @format A data frame with one row per PEFA assessment and the following variables:
 #' \describe{
-<<<<<<< HEAD
-#'   \item{country_code}{A 3-letter ISO country code}
-=======
-#'   \item{country_name}{The Country Name}
 #'   \item{country_code}{character A 3-letter ISO 3166-3 country code}
->>>>>>> main
 #'   \item{year}{Year}
 #'   \item{wb_pefa_pi_2016_05}{Budget Documentation — Quality and comprehensiveness of budget documentation provided to the legislature.}
 #'   \item{wb_pefa_pi_2016_07}{Transfers to subnational governments — Transparency and timeliness of transfers from central to subnational levels.}

@@ -61,13 +61,8 @@ pefaclean_tbl |>
 
 #### prepare the country list from the previous pefa dataset and the worldbank
 #### country list
-# country_list <- unique(c(origpefa_tbl$country,
-#                          wb_country_list$country_name))
-
-code_df <-
-  wb_country_list |>
-  dplyr::select(country_code, country_name) |>
-  unique()
+country_list <- unique(c(origpefa_tbl$country,
+                         wb_country_list$country_name))
 
 #### select the set of variables from the db_variables list
 pefa_vars <- intersect(colnames(pefaclean_tbl), dbvar_dt$variable)
@@ -77,13 +72,9 @@ pefa_vars <- intersect(colnames(pefaclean_tbl), dbvar_dt$variable)
 pefaclean_tbl <-
   pefaclean_tbl |>
   rename(country_name = "country") |>
-<<<<<<< HEAD
   dplyr::filter(country_name %in% country_list) |>
-  dplyr::select(country_code, year, all_of(pefa_vars))
-=======
-  dplyr::filter(country_code %in% unique(code_df[["country_code"]])) |>
-  dplyr::select(country_name, country_code, year, all_of(pefa_vars))
->>>>>>> main
+  dplyr::select(country_name, year, all_of(pefa_vars))
+
 
 pefa_assessments <- pefaclean_tbl
 

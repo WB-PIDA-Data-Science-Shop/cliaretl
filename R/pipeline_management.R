@@ -425,8 +425,6 @@ scale_values <- function(x){
   (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
 }
 
-<<<<<<< HEAD
-=======
 
 #' Compare Variable Values Between CLIAR Pipelines Using Pointblank
 #'
@@ -561,7 +559,6 @@ qualitycheck_plvalue <- function(old_df,
 
 
 
-
 #' Compare CLIAR Pipeline Indicator Values Across Versions
 #'
 #' This function compares the indicator values between an old (published) and a new (updated)
@@ -651,17 +648,14 @@ compare_pipeline_indicators <- function(old_df, new_df) {
 
   return(list(agent = agent, difference_table = diff_df))
 }
-
-
-#' @keywords internal
-#' @noRd
-#'
-#' @importFrom rmarkdown render
 #'
 #' This quick function will generate the comparison report using the
 #' compare_pipeline_indicators() function within a markdown file stored
 #' in a temporary location.
 #'
+#' @keywords internal
+#' @noRd
+#' @importFrom rmarkdown render
 generate_pipeline_comparison_report <- function() {
   tmp_file <- tempfile(fileext = ".html")
 
@@ -681,12 +675,3 @@ generate_pipeline_comparison_report <- function() {
 
 
 
-
-
-
-
-
-
-
-
->>>>>>> main
