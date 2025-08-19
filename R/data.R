@@ -890,6 +890,24 @@
 #' The ASPIRE indicators are derived from nationally representative household surveys and harmonized using consistent methodologies across countries. The dataset supports policy analysis, benchmarking, and global monitoring of social protection systems. For more information, see the [World Bank ASPIRE website](https://www.worldbank.org/en/data/datatopics/aspire).
 "aspire"
 
+#' Fraser Economic Freedom Dataset
+#'
+#' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
+#'
+#' @format A data frame with 4,786 rows and 6 variables:
+#' \describe{
+#'   \item{\code{country_code}}{Character. The 3-letter ISO country code.}
+#'   \item{\code{year}}{Numeric. The year of the observation.}
+#'   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
+#'   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
+#'   \item{\code{fraser_efw_capital_controls}}{Numeric. Capital controls.}
+#'   \item{\code{fraser_efw_credit_market_regulation}}{Numeric. Credit market regulations.}
+#' }
+#' @source \url{https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0}
+#' @usage data(fraser)
+#' @keywords datasets
+"fraser"
+
 
 #' Fraser Economic Freedom Dataset
 #'
@@ -970,3 +988,32 @@
 #'
 #' @source \url{https://wbl.worldbank.org/content/dam/sites/wbl/documents/2024/WBL1-0-1971-2024.dta}
 "wbl_data"
+
+
+#' World Bank Country Classifications by Region and Income
+#'
+#' A dataset containing the most recent country-level classifications published by the World Bank.
+#' Each country is assigned to both a regional grouping and an income group, following the World Bank's official taxonomy.
+#' This version corresponds to the World Bank classifications as of August 2025.
+#'
+#' @format A tibble with 264 rows and 4 variables:
+#' \describe{
+#'   \item{country_code}{Character. Three-letter ISO country code.}
+#'   \item{country_name}{Character. Official country name.}
+#'   \item{region}{Character. World Bank regional classification
+#'                 (e.g., "South Asia", "Europe & Central Asia").}
+#'   \item{income_group}{Character. World Bank income group classification
+#'                       (e.g., "Low income", "Lower middle income",
+#'                       "Upper middle income", "High income").}
+#' }
+#'
+#' @details
+#' The dataset is based on World Bank country groupings and provides a
+#' standardized reference for linking countries to their region and
+#' income group. It is commonly used for aggregating indicators,
+#' stratifying analyses, and comparing outcomes across different
+#' development levels.
+#'
+#' @source World Bank Group — \url{https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755}
+"wb_income_and_region"
+

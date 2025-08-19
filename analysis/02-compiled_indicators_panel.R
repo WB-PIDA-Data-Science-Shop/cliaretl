@@ -61,10 +61,12 @@ rise_indicators <- read_dta(
   here("data-raw", "input", "RISE_20102021.dta")
   ) |> clean_names()
 
+compiled_indicators <- readRDS(
+  here("data-raw", "input", "cliar", "compiled_indicators.rds")
+)
 
 
-
-# compiling indicators ----------------------------------------------------
+# 1. Create Panel ----------------------------------------------------
 
 d30_indicators_clean <- d30_indicators |>
   select(!starts_with("wb_pefa_"))
@@ -102,7 +104,7 @@ cliar_indicators <- list(
   fraser_indicators = fraser,
   aspire_indicators = aspire,
   wbl_indicators = wbl_data,
-  rise_indicators = rise_indicators,
+  rise_indicators = rise_indicators, # Provisional
   wdi_wb_indicators = wdi_indicators
 ) |>
   map(
@@ -138,7 +140,7 @@ cliar_indicators <- cliar_indicators |>
   )
 
 
-# 1. Indicators Selection control ------------------------------------------
+##QC: Indicators Selection control ------------------------------------------
 
 # verify that the indicators are selected correctly
 db_variables_indicators <- db_variables |>
@@ -180,55 +182,52 @@ test_that(
   }
 )
 
-# Print issues
-db_variables_indicators |>
-  anti_join(cliar_indicators_id, by = "variable") |>
-  as.data.frame()
 
 
+# 2. Clusters avgs processing ---------------------------------------------
 
- ## Country avgs processing ---------------------------------------------
+# This section computes family (clusters) averages,
+# dynamically adapting to the selection of indicators from `db_variables`.
+# Essentially creating the family averages for each country and year useful for
+# the CLIAR CTF analysis.
 
-## Compute family averages
-vars_family <- get_variable_lists(db_variables)
+# a. Get the variable lists from the database variables
+# Pull the family keys as a character vector
+vars_all_lists <- get_variable_lists(db_variables)
+families_vec   <- vars_all_lists$vars_family  # <- this is the vector you need
 
-# This section computes family averages, dynamically adapting to the selection of indicators.
-
-# compute family averages
+# Create a long format of the indicators
 cliar_indicators_long <-
   cliar_indicators |>
-  pivot_longer(
-    cols = -c(country_code, country_name, year),  # Added country_name here
-    names_to = "variable"
+  tidyr::pivot_longer(
+    cols = -c(country_code, country_name, year),
+    names_to = "variable", values_to = "value"
   ) |>
-  select(-contains("gdp")) |>
-  left_join(
+  # if you meant to drop GDP *variables*, filter rows (not select columns)
+  dplyr::filter(!grepl("gdp", variable, ignore.case = TRUE)) |>
+  dplyr::left_join(
     db_variables |>
-      select(variable, var_name, family_name, family_var),
+      dplyr::select(variable, var_name, family_name, family_var),
     by = "variable"
   )
 
-# only calculate family averages for relevant institutional clusters
+# b. Calculate the family averages
 cliar_family_level_long <- cliar_indicators_long |>
-  filter(
-    family_var %in% vars_family
-  ) |>
-  group_by(
-    country_code, year, family_var
-  ) |>
-  summarise(
-    value = mean(value, na.rm = TRUE),
-    .groups = "drop"
-  )
+  dplyr::filter(family_var %in% families_vec) |>
+  dplyr::group_by(country_code, year, family_var) |>
+  dplyr::summarise(value = mean(value, na.rm = TRUE), .groups = "drop")
 
+
+# Pivot the long format to wide format
 cliar_family_level <- cliar_family_level_long |>
-  pivot_wider(
-    id_cols = c(country_code, year),
-    names_from = family_var,
-    names_glue = "{family_var}_avg",
+  tidyr::pivot_wider(
+    id_cols   = c(country_code, year),
+    names_from  = family_var,
+    names_glue  = "{family_var}_avg",
     values_from = value
   )
 
+# c. Join the family averages back to the original indicators
 cliar_indicators_clean <- cliar_indicators |>
   left_join(
     cliar_family_level,
@@ -238,7 +237,7 @@ cliar_indicators_clean <- cliar_indicators |>
 
 
 
-# 2. Country code consistency ------------------------------------------------
+## QC: Country code consistency ------------------------------------------------
 # Define the list of regional/aggregate codes to exclude
 regional_codes <- c(
   "AFE", "AFW", "ARB", "CEB", "CSS", "EAP", "EAR", "EAS", "ECA", "ECS", "EMU", "EUU",
@@ -264,7 +263,7 @@ test_that("All country codes are official WB countries", {
     info = paste0("Unexpected codes found: ", paste(bad_codes, collapse = ", "))
   )
 
-  # 2) Optional stricter check: code + name pairs match official list
+  # 2) Optional check: code + name pairs match official list
   missing_pairs <- cliar_indicators_clean |>
     distinct(country_code, country_name) |>
     anti_join(
@@ -283,7 +282,25 @@ test_that("All country codes are official WB countries", {
 })
 
 
-# 3. Distinct country-year consistency ------------------------------------
+## QC: Uniqueness ------------------------------------
+
+# Identify duplicates for Kosovo (country code "XKX")
+dup_xkx <- cliar_indicators_clean |>
+  filter(country_code == "XKX") |>
+  group_by(year) |>
+  filter(n() > 1) |>
+  ungroup()
+
+# Remove id-only columns
+id_cols <- c("country_code", "year")
+dup_noid <- dup_xkx |> select(-country_name)
+
+# Find duplicates that are not identical across all indicators
+non_identical <- dup_noid |>
+  distinct() |>           # collapse perfectly identical rows
+  anti_join(dup_noid, by = names(dup_noid))
+
+# print(non_identical) #For all duplicates for XKX, all values are the same
 
 # Remove exact duplicates and ensure unique country-year pairs for Kosovo
 cliar_indicators_clean <- cliar_indicators_clean |>
@@ -307,7 +324,30 @@ test_that("CLIAR has no duplicate country-year pairs", {
 })
 
 
-# 4. Panel country-year observations --------------------------------------
+## QC: Panel completeness --------------------------------------
+
+# Define your year range
+all_years <- 1990:ref_year
+
+# Ensure every country has the full set of years
+cliar_indicators_completed <- cliar_indicators_clean |>
+  group_by(country_code, country_name) |>
+  complete(year = all_years) |>
+  ungroup()
+
+# Issue with TUV
+extra_years <- cliar_indicators_completed |>
+  filter(country_code == "TUV", year == 2025) |>
+  summarise(across(everything(), ~!is.na(.))) |>
+  pivot_longer(everything(),
+               names_to = "column",
+               values_to = "has_value") |>
+  filter(has_value)
+
+# Drop Tuvalu (TUV) for 2025 as it has only PEFA data
+cliar_indicators_clean <- cliar_indicators_completed |>
+  filter(!(year == "2025"))
+
 
 test_that(
   "Verify that country codes have coverage for all years",{
@@ -317,31 +357,81 @@ test_that(
         count(country_code) |>
         pull(n) |>
         unique(),
-      ref_year + 1 - 1990 # 1990 to ref_year inclusive
+      ref_year - 1990 # 1990 to ref_year inclusive
     )
   }
 )
+# 3. Brief Coverage diagnostics -------------------------------------------------
 
-# See the distribution of years per country
-coverage_summary <- cliar_indicators_clean |>
-  count(country_code, name = "years_covered") |>
-  count(years_covered, name = "countries_with_this_coverage")
+# Internal coverage: Use the compute_coverage function from funs.R to create
+# the coverage countries and years it is present for. With that information,
+# percentage coverage,# year range, percent of complete records, as well as
+# standard distribution information such as mean and standard deviation are calculated.
 
-print(coverage_summary)
+wb_regions <- c(
+  "Africa Eastern and Southern",
+  "Africa Western and Central",
+  "East Asia & Pacific",
+  "Europe & Central Asia",
+  "Latin America & Caribbean",
+  "Middle East & North Africa",
+  "South Asia"
+)
 
-# Find countries with incomplete coverage
-incomplete_coverage <- cliar_indicators_clean |>
-  count(country_code) |>
-  filter(n != (ref_year - 1990)) |>
-  arrange(n)
+# Create a list of country codes and regions
+country_region_list <- wb_countries |>
+  # this filter excludes Canada, Bermuda and USA
+  filter(group %in% wb_regions) |>
+  select(country_code, region = group)
 
-print(incomplete_coverage)
+# Compute coverage for each indicator
+cliar_indicators_diagnostic <- cliar_indicators_clean |>
+  select(-country_name) |>
+  compute_coverage(country_code, year, ref_year - 5) |>
+  left_join(
+    db_variables |> select(variable, var_name, source, family_name),
+    by = c("Indicator" = "variable")
+  ) |>
+  select(
+    `Indicator`,
+    `Indicator Name` = var_name,
+    `Institutional Family` = family_name,
+    everything(),
+    `Data Source` = source
+  ) |>
+  arrange(
+    `Institutional Family`,
+    Indicator
+  )
 
-cliar_indicators_clean |>
-  count(country_code, country_name, name = "years_covered") |>
-  filter(years_covered == 36)
 
-# 5. Save the compiled indicators panel -----------------------------------
+# 4. Incorporate income and region class -------------------------------------
 
-# Work in progress
+# We incorporate the country income group and region.
+# Please note that there is no available data on income group for Venezuela
+# (`country_code` == "VEN").
+
+# We retroactively classify income groups using must recent data.
+# For info on income groups, see: ?wb_income_and_region
+
+cliar_indicators_classified_complete <- cliar_indicators_clean |>
+  left_join(
+    wb_income_and_region |>
+    select(-country_name), # Keep cliar country_codes only
+    by = c("country_code")
+  ) |>
+  select(
+    country_code, country_name, income_group, region, year, everything()
+  )
+
+
+# 5. Save the compiled indicators panel -------------------------------------
+
+write.csv(
+  cliar_indicators_classified_complete,
+  here("data-raw", "output", "compiled_indicators.csv.gz"),
+  row.names = FALSE,
+  fileEncoding = "UTF-8"
+)
+
 
