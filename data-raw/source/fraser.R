@@ -42,6 +42,7 @@ double_columns <- c(
   )
 
 
+
 fraser_clean <- fraser_df |>
   transmute(
     country_code = iso_code_3,
@@ -53,14 +54,14 @@ fraser_clean <- fraser_df |>
       .cols = c(3:6)
   )
 
-fraser <- fraser_clean |>
+fraser_renamed <- fraser_clean |>
   rename(
    fraser_efw_foreign_currency_bank_accounts =  fraser_efw_freedom_to_own_foreign_currency_bank_accounts,
    fraser_efw_credit_market_regulation = fraser_efw_credit_market_regulations
   )
 
 
-fraser |>
+fraser <- fraser_renamed |>
   add_plmetadata(source = "https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0",
                  other_info = "Manually downloaded")
 

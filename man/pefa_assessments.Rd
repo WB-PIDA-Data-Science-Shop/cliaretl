@@ -7,7 +7,6 @@
 \format{
 A data frame with one row per PEFA assessment and the following variables:
 \describe{
-  \item{country_name}{The Country Name}
   \item{country_code}{character A 3-letter ISO 3166-3 country code}
   \item{year}{Year}
   \item{wb_pefa_pi_2016_05}{Budget Documentation — Quality and comprehensiveness of budget documentation provided to the legislature.}

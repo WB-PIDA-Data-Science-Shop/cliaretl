@@ -40,7 +40,6 @@
 #' @description This dataset contains indicators from the PEFA (Public Expenditure and Financial Accountability) assessments conducted using the 2016 PEFA framework. It provides scores on various dimensions of public financial management across countries and time periods. The indicators cover budget credibility, transparency, asset and debt management, internal controls, auditing, and more. The data are sourced from the PEFA bulk download page: \url{https://www.pefa.org/assessments/batch-downloads}.
 #' @format A data frame with one row per PEFA assessment and the following variables:
 #' \describe{
-#'   \item{country_name}{The Country Name}
 #'   \item{country_code}{character A 3-letter ISO 3166-3 country code}
 #'   \item{year}{Year}
 #'   \item{wb_pefa_pi_2016_05}{Budget Documentation — Quality and comprehensiveness of budget documentation provided to the legislature.}
@@ -140,7 +139,6 @@
 #'   \item{\code{wdi_gcnldtotlgdzs}}{double Net lending/borrowing (percentage of GDP).}
 #'   \item{\code{wdi_nygdppetrrtzs}}{double Oil rents (percentage of GDP).}
 #'   \item{\code{wdi_bxtrfpwkrdtgdzs}}{double Personal remittances, received (percentage of GDP).}
-#'   \item{\code{wb_wdi_gc_rev_xgrt_gd_zs}}{double Revenue, excluding grants (percentage of GDP).}
 #'   \item{\code{wdi_nvsrvtotlzs}}{double Services, etc., value added (percentage of GDP).}
 #'   \item{\code{wdi_nygdptotlrtzs}}{double Total natural resource rents (percentage of GDP).}
 #'   \item{\code{wdi_netrdgnfszs}}{double Trade (percentage of GDP).}
@@ -892,7 +890,6 @@
 #' The ASPIRE indicators are derived from nationally representative household surveys and harmonized using consistent methodologies across countries. The dataset supports policy analysis, benchmarking, and global monitoring of social protection systems. For more information, see the [World Bank ASPIRE website](https://www.worldbank.org/en/data/datatopics/aspire).
 "aspire"
 
-
 #' Fraser Economic Freedom Dataset
 #'
 #' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
@@ -912,4 +909,111 @@
 "fraser"
 
 
+#' Fraser Economic Freedom Dataset
+#'
+#' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
+#'
+#' @format A data frame with 4,786 rows and 6 variables:
+#' \describe{
+#'   \item{\code{country_code}}{Character. The 3-letter ISO country code.}
+#'   \item{\code{year}}{Numeric. The year of the observation.}
+#'   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
+#'   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
+#'   \item{\code{fraser_efw_capital_controls}}{Numeric. Capital controls.}
+#'   \item{\code{fraser_efw_credit_market_regulation}}{Numeric. Credit market regulations.}
+#' }
+#' @source \url{https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0}
+#' @usage data(fraser)
+#' @keywords datasets
+"fraser"
+
+#' Database Variable Metadata
+#'
+#' A dataset containing metadata for variables used in the database, including indicator names, codes, families, and benchmarking information.
+#'
+#' @format A data frame with 427 rows and 17 variables:
+#' \describe{
+#'   \item{\code{var_name}}{Character. Name of the indicator or variable.}
+#'   \item{\code{api_id}}{Character. API identifier or note.}
+#'   \item{\code{variable}}{Character. Internal variable code.}
+#'   \item{\code{var_level}}{Character. Level of the variable.}
+#'   \item{\code{family_var}}{Character. Thematic cluster variable code.}
+#'   \item{\code{family_name}}{Character. Name of the variable thematic cluster.}
+#'   \item{\code{family_order}}{Numeric. Order for sorting or grouping.}
+#'   \item{\code{processing}}{Character. Processing notes or flags.}
+#'   \item{\code{description}}{Character. Full description of the variable.}
+#'   \item{\code{description_short}}{Character. Short description of the variable.}
+#'   \item{\code{source}}{Character. Original data source.}
+#'   \item{\code{benchmarked_ctf}}{Character. Whether the variable is benchmarked in CTF (\"Yes\"/\"No\").}
+#'   \item{\code{benchmark_static_family_aggregate_download}}{Character. Static family aggregate download flag.}
+#'   \item{\code{benchmark_dynamic_indicator}}{Character. Dynamic indicator benchmark flag.}
+#'   \item{\code{benchmark_dynamic_family_aggregate}}{Character. Dynamic family aggregate benchmark flag.}
+#'   \item{\code{indicator_order}}{Numeric. Order of the indicator within its family.}
+#'   \item{\code{etl_source}}{Character. Cliaretl pipeline source.}
+#' }
+#' @source Internal project documentation and data sources.
+"db_variables"
+
+#' Family Order and Names
+#'
+#' A tibble mapping numeric family order codes to their corresponding
+#' institutional family names. This dataset is intended for use in
+#' organizing or categorizing indicators in dashboards, reports, or analyses.
+#'
+#' @format A tibble with 13 rows and 2 variables:
+#' \describe{
+#'   \item{family_order}{Numeric code (integer) indicating the institutional family order.}
+#'   \item{family_name}{Character string with the institutional family name.}
+#' }
+#'
+#' @source Created manually for internal project use.
+"family_order"
+
+
+#' World Bank Women, Business and the Law (WBL) Dataset
+#'
+#' A comprehensive dataset containing Women, Business and the Law indicators
+#' across countries and years. The WBL index measures legal barriers to women's
+#' economic participation across different areas including entrepreneurship,
+#' social protections, and labor market participation.
+#'
+#' @format A tibble with 6,460 rows and 5 variables:
+#' \describe{
+#'   \item{country_code}{Character. ISO 3-letter country codes.}
+#'   \item{year}{Numeric. Year of observation.}
+#'   \item{wb_wbl_entrepreneurship}{Numeric. WBL Entrepreneurship sub-index score.}
+#'   \item{wb_wbl_social}{Numeric. WBL Social Protection sub-index score.}
+#'   \item{wb_wbl_labor}{Numeric. WBL Labor market participation sub-index score.}
+#' }
+#'
+#' @source \url{https://wbl.worldbank.org/content/dam/sites/wbl/documents/2024/WBL1-0-1971-2024.dta}
+"wbl_data"
+
+
+#' World Bank Country Classifications by Region and Income
+#'
+#' A dataset containing the most recent country-level classifications published by the World Bank.
+#' Each country is assigned to both a regional grouping and an income group, following the World Bank's official taxonomy.
+#' This version corresponds to the World Bank classifications as of August 2025.
+#'
+#' @format A tibble with 264 rows and 4 variables:
+#' \describe{
+#'   \item{country_code}{Character. Three-letter ISO country code.}
+#'   \item{country_name}{Character. Official country name.}
+#'   \item{region}{Character. World Bank regional classification
+#'                 (e.g., "South Asia", "Europe & Central Asia").}
+#'   \item{income_group}{Character. World Bank income group classification
+#'                       (e.g., "Low income", "Lower middle income",
+#'                       "Upper middle income", "High income").}
+#' }
+#'
+#' @details
+#' The dataset is based on World Bank country groupings and provides a
+#' standardized reference for linking countries to their region and
+#' income group. It is commonly used for aggregating indicators,
+#' stratifying analyses, and comparing outcomes across different
+#' development levels.
+#'
+#' @source World Bank Group — \url{https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755}
+"wb_income_and_region"
 
