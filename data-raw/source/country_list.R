@@ -117,6 +117,24 @@ wb_country_list |>
     wb_country_list_original |> distinct(country_code, group_name) |> rename(group = group_name)
   )
 
+
+# add metadata ------------------------------------------------------------
+
+wb_country_list |>
+  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+                 other_info = "2025 CLASSIFICATION")
+
+wb_country_groups <- wb_country_groups |>
+  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+                 other_info = "2025 CLASSIFICATION")
+
+wb_income_and_region <- wb_country_income_and_region |>
+  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+                 other_info = "2025 CLASSIFICATION")
+
+
+
 # write-out ---------------------------------------------------------------
 usethis::use_data(wb_country_list, overwrite = TRUE)
 usethis::use_data(wb_country_groups, overwrite = TRUE)
+usethis::use_data(wb_income_and_region, overwrite = TRUE)

@@ -52,7 +52,7 @@ pefaclean_tbl <-
 
 ### handling country codes, including Kosovo
 pefaclean_tbl <-
-pefaclean_tbl %>%
+pefaclean_tbl |>
   mutate(country_code = case_when(
     country == "Kosovo" ~ "XKX",
     TRUE ~ countrycode(country, "country.name", "iso3c", custom_match = c("Kosovo" = "XKX"))
@@ -74,6 +74,7 @@ pefaclean_tbl <-
   rename(country_name = "country") |>
   dplyr::filter(country_name %in% country_list) |>
   dplyr::select(country_name, year, all_of(pefa_vars))
+
 
 pefa_assessments <- pefaclean_tbl
 

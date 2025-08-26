@@ -23,14 +23,14 @@ end_year <- 2023
 
 
 # For problematic indicator: # "EN.ATM.CO2E.PP.GD.KD", it's recommended to:
-# 1. Double-check the exact indicator code on the World Bank DataBank.
-# 2. Search for alternative indicators if the desired one is deprecated.
-# 3. Consider removing indicators that consistently fail to download.
+# replace it for the "EN.GHG.CO2.RT.GDP.PP.KD", Carbon intensity of GDP (kg CO2e per 2021 PPP $ of GDP)
+# Implement it also in the compiled indicators
 
 wdi_indicators_list <- c(
   # Macroeconomic Indicators
   "GC.DOD.TOTL.GD.ZS",        # Central government debt, total (% of GDP)
-# "EN.ATM.CO2E.PP.GD.KD",     # CO2 emissions (kg per 2021 PPP $ of GDP) [Issue]
+  # "EN.ATM.CO2E.PP.GD.KD",   # CO2 emissions (kg per 2021 PPP $ of GDP) [Dropped]
+  "EN.GHG.CO2.RT.GDP.PP.KD",  # Carbon intensity of GDP (kg CO2e per 2021 PPP $ of GDP) [Replaced]
   "BN.CAB.XOKA.GD.ZS",        # Current account balance (% of GDP)
   "GC.XPN.TOTL.GD.ZS",        # Expense (% of GDP)
   "NE.EXP.GNFS.ZS",           # Exports of goods and services (% of GDP)
@@ -223,18 +223,50 @@ wdi_cleaned_codes <- wdi_iso3 |>
                     filter(!is.na(iso3c)) |>
                     select(-c(iso2c, iso3c))
 
-
+# Remove underscores from column names and replace prefixes with `wdi_` convention
+wdi_named <- wdi_cleaned_codes |>
+  rename_with(~ str_replace_all(.x, "_", ""),
+              .cols = -c(country_name, country_code)
+  ) |>
+  rename_with(~ str_replace_all(.x, "^(.+)", "wdi_\\1"),
+              .cols = !starts_with("country") & !starts_with("year")
+  )
 
 # process -----------------------------------------------------------------
-# Remove underscores from column names and replace prefixes with `wdi_` convention
-wdi_indicators <- wdi_cleaned_codes |>
-              rename_with(~ str_replace_all(.x, "_", ""),
-                          .cols = -c(country_name, country_code)
-              ) |>
-              rename_with(~ str_replace_all(.x, "^(.+)", "wdi_\\1"),
-                          .cols = !starts_with("country") & !starts_with("year")
-              )
+
+# Step 1: Extract variable names and labels
+var_labels <- sapply(wdi_named, function(x) attr(x, "label"))  # Extract labels from the attributes
+var_names <- names(var_labels)  # Get the variable names
+
+wdi_clean <- wdi_named |>
+  rename_with(
+    ~ str_to_lower(.) |>
+      str_replace_all("^wdi_", "wdi_"),
+    starts_with("wdi_")
+  )
+
+columns_to_drop <- c(
+  "country_name",
+  "wdi_dcodatotlgnzs",
+  "wdi_dtdodpvlxgnzs",
+  "wdi_shmedcmhwp3",
+  "wdi_sipovmdim",
+  "wdi_sipovmdimxq",
+  "wdi_gcrevxgrtgdzs"
+)
+
+wdi_indicators <- wdi_clean |>
+  select(!all_of(columns_to_drop)) |>
+  filter(!is.na(country_code) & country_code != ""
+  ) |>
+  distinct(country_code, year, .keep_all = TRUE) |>
+  select(-wdi_gctaxtotlgdzs) # Extracted in EFI API pull
+
+
+wdi_indicators <- wdi_indicators |>
+  add_plmetadata(source = wdi_indicators_list,
+                 other_info = "R package")
+
 
 # write-out ---------------------------------------------------------------
 usethis::use_data(wdi_indicators, overwrite = TRUE)
-

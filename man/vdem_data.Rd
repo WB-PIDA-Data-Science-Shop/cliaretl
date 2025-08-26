@@ -33,15 +33,12 @@ A data frame with 6,204 rows and 52 variables:
   \item{vdem_core_v2clacjstm}{Media self‐censorship: military issues (`v2clacjstm`).}
   \item{vdem_core_v2clacjstw}{Media self‐censorship: welfare issues (`v2clacjstw`).}
   \item{vdem_core_v2lgqugen}{Legislature quota for gender (`v2lgqugen`).}
-  \item{vdem_core_v2lgfemleg}{Share of women in the legislature (percentage) (`v2lgfemleg`).}
   \item{vdem_core_v2cldiscm}{State‐based political discrimination against men (`v2cldiscm`).}
   \item{vdem_core_v2cldiscw}{State‐based political discrimination against women (`v2cldiscw`).}
-  \item{vdem_core_v2caassemb}{Freedom of peaceful assembly (`v2caassemb`).}
   \item{vdem_core_v2cacamps}{Freedom of campus assembly (`v2cacamps`).}
   \item{vdem_core_v2peapsecon}{Socio‑economic power inequality (`v2peapsecon`).}
   \item{vdem_core_v2peasjsoecon}{Socio‑economic power by social group (`v2peasjsoecon`).}
   \item{vdem_core_v2peapsgen}{Political power inequality by gender (`v2peapsgen`).}
-  \item{vdem_core_v2peasjgen}{Social group–gender power interaction (`v2peasjgen`).}
   \item{vdem_core_v2peapspol}{Political power inequality by political group (`v2peapspol`).}
   \item{vdem_core_v2peasjpol}{Social group–political power interaction (`v2peasjpol`).}
   \item{vdem_core_v2x_pubcorr}{Public sector corruption index (`v2x_pubcorr`).}

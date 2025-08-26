@@ -9,7 +9,12 @@ A data frame with 373 rows and 13 variables:
 \describe{
   \item{\code{country_code}}{character World Bank country code}
   \item{\code{year}}{integer Year}
-  \item{\code{debt_transp_index}}{double Row average of all debt transparency indicators}
+  \item{\code{wb_debt_transp_index}}{double. Composite index: row average of all debt transparency indicators}
+}
+#' @details
+Below are the longer descriptions for each variable (when provided):
+\itemize{
+  \item \strong{wb_debt_transp_index}: The debt transparency index is obtained as a simple average of the World Bank's debt reporting heatmap sub-components (Debt Transparency in Developing Economies) that measure instrument and sectorial coverage of debt statistics, availability of financial terms on new loans, and publication of DMS and ABP.
 }
 }
 \source{
