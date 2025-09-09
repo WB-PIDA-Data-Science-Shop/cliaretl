@@ -475,7 +475,7 @@ compare_pipeline_indicators <- function(old_df, new_df) {
 
   return(list(agent = agent, difference_table = diff_df))
 }
-#'
+
 #' This quick function will generate the comparison report using the
 #' compare_pipeline_indicators() function within a markdown file stored
 #' in a temporary location.
