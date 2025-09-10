@@ -12,6 +12,7 @@ library(stringr)
 wb_country_list_temp <- tempfile(fileext = ".xlsx")
 
 # Download the file
+# last updated: 6/12/2025
 download.file(
   "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
   destfile = wb_country_list_temp,
