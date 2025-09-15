@@ -196,7 +196,7 @@ all_missing_vars <- bind_rows(
   gfdb_missing_df,
   heritage_missing_df,
   fraser_missing_df,
-  aspire_missing_df
+  aspire_missing_df,
   wbl_missing_df
 )
 
@@ -287,7 +287,15 @@ etl_mapping <- dictionary_clean |>
 
 # Step 3:Join to db_variables_2024
 db_variables_2025 <- db_variables_2024 |>
-                    left_join(etl_mapping, by = "source")
+  mutate(
+    source = case_when(
+      source == "CLIAR" & str_detect(variable, "^wb_debt") ~ "CLIAR (Debt Transparency)",
+      source == "CLIAR" & str_detect(variable, "^wb_wbl") ~ "CLIAR (WBL)",
+      source == "CLIAR" & str_detect(variable, "^wb_gtmi") ~ "CLIAR (WB API)",
+      T ~ source
+    )
+  ) |>
+  left_join(etl_mapping, by = "source")
 
 # Ultimately check d360 API indicators
 api_missing_indicators <- flag_missing_indicators(
@@ -298,10 +306,6 @@ api_missing_indicators <- flag_missing_indicators(
 )
 
 print(api_missing_indicators)
-
-# db_variables <- db_variables_2025 |>
-#   add_plmetadata(source = "metadata dictionary", other_info = "")
-
 
 
 # 3. Add important attributes to db_variables ---------------------------------------------------

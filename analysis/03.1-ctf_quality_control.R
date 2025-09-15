@@ -26,6 +26,7 @@ library(testthat)
 library(janitor)
 library(ggplot2)
 library(scales)
+library(dlookr)
 
 devtools::load_all()
 
@@ -83,33 +84,11 @@ ctf_dynamic_complete <-
   dynamic_clean |>
   left_join(
     income_and_region_class,
-    by = c("country_code")
+    by = c("country_code","country_name")
   ) |>
   select(
     country_code, country_name, income_group, region, year, everything()
   )
-
-
-
-# Create family-level variables
-family_level_vars <- db_variables |>
-  distinct(family_var, family_name) |>
-  rowwise() |>
-  mutate(
-    variable = paste0(family_var, "_avg"),
-    var_name = paste0(family_name, " Average"),
-    var_level = "indicator",
-    description = "The cluster-level average is an unweighted average of the corresponding and included indicators of this cluster. See Methodological note for details on the inclusion criteria.",
-    description_short = "The cluster-level average is an unweighted average of the corresponding and included indicators for this cluster.",
-    source = "CLIAR",
-    benchmarked_ctf = "Yes",
-    rank_id = 1
-  )
-
-# Create final db_variables with family-level vars included
-db_variables <- db_variables |>
-  bind_rows(var_lists$family_level_vars) |>
-  arrange(family_var, rank_id)
 
 
 # 2. CTF Quality Control ---------------------------------------------------
@@ -180,7 +159,7 @@ ctf_dynamic_variance <- ctf_dynamic_complete |>
 #   (b) Scores based on the latest available year
 
 
-# Rescale indicators again
+# Rescale indicators again (LAST YEAR)
 cliar_indicators_rescaled <-
   compiled_indicators |>
   filter(year >= 2013) |>
@@ -357,7 +336,56 @@ ctf_robustness |>
   theme_minimal()
 # Finding: [ADD THE COEF FOR THE CORR]
 
-# 4. Prepare final datasets ------------------------------------------------
+
+# 4. Missingness Detection ------------------------------------------------------
+# Use dlookr package to diagnose missingness and outliers in static and dynamic CTFs
+diagnostic_s <- ctf_static_complete |>
+  diagnose()
+
+
+diagnostic_d <- ctf_dynamic_complete |>
+  diagnose()
+
+
+diagnostics_complete_d <- ctf_dynamic_complete |>
+  filter(year >= 2013) |>
+  summarise(
+    across(everything(), \(var) sum(!is.na(var)))
+  ) |>
+  pivot_longer(
+    everything(),
+    names_to = "variables",
+    values_to = "n_complete_obs"
+  )
+
+# Join with diagnostics to get unique percent
+diagnostics_d_full <- diagnostic_d|>
+  left_join(
+    diagnostics_complete_d,
+    by = "variables"
+  ) |>
+  mutate(
+    # we deduct unique count by 1 to account for the fact that NAs are considered
+    # unique values
+    unique_percent = (unique_count - 1)/n_complete_obs * 100
+  )
+
+# Outlier detection
+diagnostics_s_outlier <- ctf_static_complete |>
+  diagnose_outlier() |>
+  filter(
+    outliers_ratio > 5
+  )
+
+
+diagnostics_d_outlier <- ctf_dynamic_complete |>
+  diagnose_outlier() |>
+  filter(
+    outliers_ratio > 5
+  )
+
+
+# 5. Prepare final datasets ------------------------------------------------
 
 # Final static CTF scores and time stamp
 static_ctf_scores <- ctf_static_complete |>
@@ -368,7 +396,6 @@ static_ctf_scores <- ctf_static_complete |>
 dynamic_ctf_scores <- ctf_dynamic_complete |>
   add_plmetadata(source = "CLIAR database",
                  other_info = "")
-
 
 
 # Export data ------------------------------------------------------------
