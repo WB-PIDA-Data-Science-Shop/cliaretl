@@ -211,17 +211,14 @@ compute_family_variance <- function(cliar_data, vars, type = "static", db_variab
   return(cliar_family_level)
 }
 
-
-
-
-#' Compute Country Transformation Factor (CTF)
+#' Compute Closeness to Frontier (CTF)
 #'
-#' CTF function to apply in wide format for static or dynamic panels.
+#' This is a function to compute the closeness to frontier (CTF) score for indicators.
 #'
 #' @param data Data frame containing `vars` and identifier columns in `id_cols`.
 #' @param vars Character vector of variable names to transform.
 #' @param min_max_tbl Data frame with columns `variable`, `min`, `max`.
-#' @param id_cols Character vector of identifier columns to keep (e.g., "country_code", "year").
+#' @param id_cols Character vector of identifier columns (e.g., "country_code", "year").
 #' @param zero_floor Numeric. Exact zeros are replaced with this value (default `0.01`). Use `NULL` to skip.
 #' @param exclude_pattern Optional regex to drop variables after computation (e.g., `"^gdp"`).
 #' @return Tibble in wide format keyed by `id_cols`.

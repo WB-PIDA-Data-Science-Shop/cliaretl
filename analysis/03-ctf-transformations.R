@@ -48,9 +48,7 @@ library(stringr)
 library(tidyr)
 library(janitor)
 
-
 devtools::load_all()
-
 
 # read-in data ------------------------------------------------------------
 db_variables <- db_variables
@@ -62,7 +60,6 @@ compiled_indicators <- readr::read_csv(
     "data-raw/output/compiled_indicators.csv.gz"
   )
 )
-
 
 # 1. Data Preparation & Rescaling ----------------------------------------------
 
@@ -148,7 +145,6 @@ country_last_year <-
   slice_tail() |>
   ungroup()
 
-
 # 2. CTF Score Calculations ----------------------------------------------------
 # Identify min and max values for each indicator to benchmark CTF scores
 # Static
@@ -216,7 +212,6 @@ ctf_dynamic <-
     min_max_dynamic,
     c("country_code","year"),
     zero_floor = 0.01)
-
 
 # 3. Group median aggregations -------------------------------------------------
 ## Calculate median per group
@@ -366,7 +361,6 @@ ctf_dynamic_long <-
     by = "country_code",
   )
 
-
 ctf_dynamic_long_clean <-
   ctf_dynamic_long |>
   group_by(family_name, family_var, country_name, country_code, country_group, group, year) |>
@@ -378,7 +372,6 @@ ctf_dynamic_long_clean <-
   ) |>
   bind_rows(ctf_dynamic_long) |>
   rename(group = group)
-
 
 # 4. Clusters aggregated data -----------------------------------------------
 
@@ -416,7 +409,6 @@ ctf_dynamic_clean <- ctf_dynamic |>
     ctf_dynamic_family,
     by = c("country_code", "year")
   )
-
 
 # Export Data -----
 write_csv(
