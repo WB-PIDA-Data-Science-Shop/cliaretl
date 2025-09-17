@@ -40,7 +40,7 @@
 #' @description This dataset contains indicators from the PEFA (Public Expenditure and Financial Accountability) assessments conducted using the 2016 PEFA framework. It provides scores on various dimensions of public financial management across countries and time periods. The indicators cover budget credibility, transparency, asset and debt management, internal controls, auditing, and more. The data are sourced from the PEFA bulk download page: \url{https://www.pefa.org/assessments/batch-downloads}.
 #' @format A data frame with one row per PEFA assessment and the following variables:
 #' \describe{
-#'   \item{country_code}{character A 3-letter ISO 3166-3 country code}
+#'   \item{country_code}{character A 3-letter World Bank 3166-3 country code}
 #'   \item{year}{Year}
 #'   \item{wb_pefa_pi_2016_05}{Budget Documentation — Quality and comprehensiveness of budget documentation provided to the legislature.}
 #'   \item{wb_pefa_pi_2016_07}{Transfers to subnational governments — Transparency and timeliness of transfers from central to subnational levels.}
@@ -86,7 +86,7 @@
 #'
 #' @format A tibble with 8,128 rows and 3 variables:
 #' \describe{
-#'   \item{country_code}{A 3-letter ISO country code (e.g., "USA", "FRA", "ARG").}
+#'   \item{country_code}{A 3-letter World Bank country code (e.g., "USA", "FRA", "ARG").}
 #'   \item{year}{The calendar year (numeric).}
 #'   \item{romelli_cbi_central_bank_independence}{Cukierman central bank independence index (scaled 0 to 1).}
 #' }
@@ -105,7 +105,7 @@
 #' @description A dataset containing World Development Indicators from the World Bank, providing time-series data for multiple countries.
 #' @format A data frame with 7,310 rows and 129 variables:
 #' \describe{
-#'   \item{\code{country_code}}{character The 3-letter ISO code for the country or region.}
+#'   \item{\code{country_code}}{character The 3-letter World Bank code for the country or region.}
 #'   \item{\code{year}}{integer The year of the observation.}
 #'   \item{\code{wdi_gcdodtotlgdzs}}{double Government Consumption, Domestic Defense, Total (percentage of GDP).}
 #'   \item{\code{wdi_enghgco2rtgdpppkd}}{double Carbon intensity of GDP (kg CO2e per 2021 PPP USD of GDP)}
@@ -234,7 +234,7 @@
 #' @description A country–year panel of 52 core indicators from the Varieties of Democracy (V‑Dem) 2025 release, processed for the CLIAR ETL pipeline.
 #' @format A data frame with 6,204 rows and 52 variables:
 #' \describe{
-#'   \item{country_code}{Three‑letter ISO3 country code.}
+#'   \item{country_code}{Three‑letter World Bank3 country code.}
 #'   \item{year}{Calendar year.}
 #'   \item{vdem_core_v2x_corr}{Political corruption index (`v2x_corr`). Higher values = less corruption.}
 #'   \item{vdem_core_v2exbribe}{Executive bribery & corrupt exchanges (`v2exbribe`).}
@@ -294,7 +294,7 @@
 #'
 #' @format A tibble with 2,381 rows and 5 variables:
 #' \describe{
-#'   \item{country_code}{A three-letter ISO 3166-1 alpha-3 country code identifying the country.}
+#'   \item{country_code}{A three-letter World Bank 3166-1 alpha-3 country code identifying the country.}
 #'   \item{year}{The year of the score, adjusted so that a given year's value reflects the conditions of the previous year.}
 #'   \item{heritage_business_freedom}{Score measuring the extent to which the regulatory and infrastructure environments constrain the efficient operation of businesses.
 #'   A higher score indicates fewer regulatory barriers and more ease in starting, operating, and closing a business.}
@@ -321,7 +321,7 @@
 #'
 #' @format A tibble with 6,848 rows and 4 variables:
 #' \describe{
-#'   \item{country_code}{A three-letter ISO 3166-1 alpha-3 country code.}
+#'   \item{country_code}{A three-letter World Bank 3166-1 alpha-3 country code.}
 #'   \item{year}{The calendar year of the observation.}
 #'   \item{wb_gfdb_oi_01}{Assets of the three largest commercial banks as a share of total commercial banking assets.
 #'   Total assets include earning assets, cash, due from banks, foreclosed real estate, fixed assets, goodwill, intangibles, tax assets, and other financial assets. A higher value indicates greater banking sector concentration.}
@@ -343,7 +343,7 @@
 #'
 #' @format A tibble with 49 rows and 10 variables:
 #' \describe{
-#'   \item{country_code}{Three-letter ISO country code.}
+#'   \item{country_code}{Three-letter World Bank country code.}
 #'   \item{year}{Year of observation (2018).}
 #'   \item{oecd_pmr_2018_1_1}{Government ownership in business sectors.}
 #'   \item{oecd_pmr_2018_1_2}{Government stake in the largest network firms.}
@@ -378,15 +378,13 @@
 #' @keywords datasets
 "pmr"
 
-
-
 #' OECD Employment Protection Legislation (EPL) Indicators
 #'
 #' This dataset includes composite indicators developed by the OECD to quantify the strength of employment protection legislation (EPL) for regular and temporary contracts. The indicators reflect rules and practices regarding individual dismissals and are part of the OECD Employment Protection Database.
 #'
 #' @format A tibble with 287 rows and 4 variables:
 #' \describe{
-#'   \item{country_code}{Three-letter ISO country code (e.g., "AUS", "FRA").}
+#'   \item{country_code}{Three-letter World Bank country code (e.g., "AUS", "FRA").}
 #'   \item{year}{Observation year (e.g., 2013).}
 #'   \item{oecd_epl_regular}{Composite indicator of employment protection legislation governing regular contracts (individual dismissals).}
 #'   \item{oecd_epl_temporary}{Composite indicator of employment protection legislation governing temporary contracts (individual dismissals).}
@@ -407,15 +405,13 @@
 #' @keywords datasets
 "epl"
 
-
-
 #' World Bank EFI Data 360 Indicators
 #'
 #' This dataset contains a cleaned slice of the World Bank EFI (Data 360) database.
 #'
 #' @format A data frame with 8878 rows and 223 variables:
 #' \describe{
-#'   \item{country_code}{The World Bank ISO-3166 country code}
+#'   \item{country_code}{The World Bank World Bank-3166 country code}
 #'   \item{year}{Year}
 #'   \item{idea_gsod_v_21_05}{Measures the extent to which citizens have a right to a fair trial in practice, are not subject to arbitrary arrest, the right to reocgnition as a person before the law, and other civil liberties.}
 #'   \item{idea_gsod_v_22_08}{Captures the extent to which freedoms of speech and press are affected by government censorship, including ownership of media outlets}
@@ -466,7 +462,7 @@
 #'   \item{imf_gfscofog_gepf_g14_gdp_pt}{Expenditure on fire protection services, Percent of GDP}
 #'   \item{imf_gfscofog_gepl_g14_gdp_pt}{Expenditure on law courts, Percent of GDP}
 #'   \item{imf_gfscofog_gepo_g14_gdp_pt}{Expenditure on public order & safety n.e.c., Percent of GDP}
-#'   \item{imf_gfscofog_gepp_g14_gdp_pt}{Expenditure on prisons, Percent of GDP}
+#'   \item{imf_gfscofog_gepp_g14_gdp_pt}{Expenditure on prWorld Bankns, Percent of GDP}
 #'   \item{imf_gfscofog_gepr_g14_gdp_pt}{Expenditure on public order & safety R&D, Percent of GDP}
 #'   \item{imf_gfscofog_geps_g14_gdp_pt}{Expenditure on police services, Percent of GDP}
 #'   \item{imf_gfscofog_gepto_g14_pt}{Expenditure on public order & safety, Percent of total expenditure}
@@ -548,7 +544,7 @@
 #'   \item{wjp_rol_2}{Captures the extent to which state officials in the executive branch, the judicial branch, the legislative branch, and the police/military use public office for private gain}
 #'   \item{wjp_rol_6}{Captures whether government regulations are effectively enforced without improper influence and unreasonable delays}
 #'   \item{wjp_rol_6_6}{Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated}
-#'   \item{bs_sgi_195}{Measures the existence of the following supervisory bodies (a) audit office, (b) ombuds office and (3) data protection authority}
+#'   \item{bs_sgi_195}{Measures the existence of the following supervWorld Bankry bodies (a) audit office, (b) ombuds office and (3) data protection authority}
 #'   \item{bs_sgi_196}{Measures whether there is an independent and effective audit office}
 #'   \item{bs_bti_q1_2}{Measures whether all relevant groups in society agree about citizenship and accept the nation-state as legitimate}
 #'   \item{bs_bti_q12_1}{Measures the extent to which environmental concerns effectively taken into account}
@@ -691,7 +687,7 @@
 #'   \item \strong{imf_gfscofog_gepf_g14_gdp_pt}: Expenditure on fire protection services (Percent of government expenditure on civil defense spending)
 #'   \item \strong{imf_gfscofog_gepl_g14_gdp_pt}: Expenditure on law courts, Percent of GDP
 #'   \item \strong{imf_gfscofog_gepo_g14_gdp_pt}: Expenditure on public order & safety n.e.c., Percent of GDP
-#'   \item \strong{imf_gfscofog_gepp_g14_gdp_pt}: Expenditure on prisons, Percent of GDP
+#'   \item \strong{imf_gfscofog_gepp_g14_gdp_pt}: Expenditure on prWorld Bankns, Percent of GDP
 #'   \item \strong{imf_gfscofog_gepr_g14_gdp_pt}: Government current expenditures: Public order and safety  R&D, Percent of GDP
 #'   \item \strong{imf_gfscofog_geps_g14_gdp_pt}: Expenditure on police services, Percent of GDP
 #'   \item \strong{imf_gfscofog_gepto_g14_pt}: Government expenditure on public order and safety, percent of total expenditure
@@ -773,7 +769,7 @@
 #'   \item \strong{wjp_rol_2}: It is an index of 4 items: Government officials in the executive branch do not use public office for private gain; Government officials in the judicial branch do not use public office for private gain; Government officials in the police & the military do not use public office for private gain; Government officials in the legislative branch do not use public office for private gain.
 #'   \item \strong{wjp_rol_6}: Government regulations are effectively enforced; Government regulations are applied & enforced without improper influence; Administrative proceedings are conducted without unreasonable delay; Due process is respected in administrative proceedings; The government does not expropriate without lawful process & adequate compensation.
 #'   \item \strong{wjp_rol_6_6}: Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated.
-#'   \item \strong{bs_sgi_195}: Measures the existence of the following supervisory bodies: (a) audit office, (b) ombuds office and (3) data protection authority.
+#'   \item \strong{bs_sgi_195}: Measures the existence of the following supervWorld Bankry bodies: (a) audit office, (b) ombuds office and (3) data protection authority.
 #'   \item \strong{bs_sgi_196}: Does there exist an independent and effective audit office?
 #'   \item \strong{bs_bti_q1_2}: To what extent do all relevant groups in society agree about citizenship and accept the nation-state as legitimate?
 #'   \item \strong{bs_bti_q12_1}: To what extent are environmental concerns effectively taken into account?
@@ -785,11 +781,11 @@
 #'   \item \strong{bs_bti_q15_1}: To what extent does the government make efficient use of available human, financial and organizational resources?
 #'   \item \strong{bs_bti_q15_2}: As many policies have conflicting objectives, reflect competing political interests and affect other policies, the government_x000D_ has to ensure that its overall policy is coherent._x000D_ Successful coordination should:_x000D_ · assure that trade-offs between policy goals are well balanced_x000D_ · introduce horizontal forms of coordination to mediate between different departments of the state administration_x000D_ · ascribe responsibilities in a transparent manner to avoid the negligence of tasks, redundancies or friction between_x000D_ different government branches._x000D_ Various coordination styles— hierarchic-bureaucratic, informal-network, personalist, centralized, decentralized_x000D_ etc. — are possible and may be functionally equivalent. What matters is their impact on policy coherence
 #'   \item \strong{bs_bti_q2_1}: This indicator assesses if: general elections are regularly conducted on the national level; universal suffrage with secret ballot is ensured; several parties with different platforms are able to run; and if political posts are filled according to election outcome. For this indicator evaluated the quality of elections considering if; the electoral management body is impartial and effective; registration procedures for voters, candidates and parties are transparent and fair; the polling procedures, including vote count, results verification and complaint resolution, are conducted in a transparent, impartial and correct manner; fair and equal media access is ensured for all candidates and parties; polling is accessible, secure and secret to ensure effective participation. This indicator is graded on a 1 to 10 scale, and a score over 6 is considered free and fair elections
-#'   \item \strong{bs_bti_q2_3}: This indicator assesses to what extent can individuals form and join independent political or civic groups? To what extent can these groups operate and assemble freely? This considers: if the constitution guarantees freedom of association and assembly, and if these laws are enforced; if there are severe restrictions on assembly and association for all citizens or for particular groups; if the government uses intimidation, harassment or threats of retaliation to prevent citizens from exercising the rights to association and assembly (e.g. by arbitrarily arresting, detaining and imprisoning peaceful demonstrators or using excessive force); if the government uses transparent and non-discriminatory criteria in evaluating requests for permits to associate and/or assemble; if groups are able to operate free from unwarranted state intrusion or interference in their affairs
+#'   \item \strong{bs_bti_q2_3}: This indicator assesses to what extent can individuals form and join independent political or civic groups? To what extent can these groups operate and assemble freely? This considers: if the constitution guarantees freedom of association and assembly, and if these laws are enforced; if there are severe restrictions on assembly and association for all citizens or for particular groups; if the government uses intimidation, harassment or threats of retaliation to prevent citizens from exercising the rights to association and assembly (e.g. by arbitrarily arresting, detaining and imprWorld Bankning peaceful demonstrators or using excessive force); if the government uses transparent and non-discriminatory criteria in evaluating requests for permits to associate and/or assemble; if groups are able to operate free from unwarranted state intrusion or interference in their affairs
 #'   \item \strong{bs_bti_q3_1}: To what extent is there a working separation of powers (checks and balances)?
 #'   \item \strong{bs_bti_q3_2}: An independent judiciary has the ability and autonomy to: interpret and review existing laws, legislation and policies, both public and civil, pursue its own reasoning, free from the influence of political decision-makers or powerful groups and individuals and from corruption, develop a differentiated organization, including legal education, jurisprudence, regulated appointment of the judiciary, rational proceedings, professionalism, channels of appeal and court administration
 #'   \item \strong{bs_bti_q7_2}: To what level have the fundamentals of market-based competition developed? The main focus of this question is to assess if free and fair competition is guaranteed by an institutional framework that ensures unrestricted participation in the market and a level playing field for all market participants. From "Market competition is present only in small segments of the economy and its institutional framework is rudimentary. Rules for market participants are unreliable and frequently set arbitrarily. The informal sector is large." to "Market competition is consistently defined and implemented both macroeconomically and microeconomically. There are state-guaranteed rules for market competition with equal opportunities for all market participants. The informal sector is very small."
-#'   \item \strong{bs_bti_q7_4}: International standards of banking systems are defined by the Basel Accords (www.bis.org). These standards require_x000D_ banks to hold a minimum share of capital equity in relation to their assets and to the risk the bank exposes itself to_x000D_ through its lending and investment practices. They also demand that banks undergo a supervisory review process,_x000D_ and that they disclose information about their economic activities._x000D_ A solid capital market is characterized by a past record of low shares of nonperforming loans, prudential requirements_x000D_ for bank transactions in foreign currency, enforcement of rules on disclosure, independence of financial regulators_x000D_ and hard budget constraints between companies, banks and the public sector._x000D_ Note: Please make sure you provide information on capital-adequacy ratios, disclosure rules, supervision, share of_x000D_ non-performing loans and hard budget constraints. You should also elaborate on reforms in the financial sector._x000D_ Quantitative Reference Indicators: Bank capital to assets ratio · Bank nonperforming loans
+#'   \item \strong{bs_bti_q7_4}: International standards of banking systems are defined by the Basel Accords (www.bis.org). These standards require_x000D_ banks to hold a minimum share of capital equity in relation to their assets and to the risk the bank exposes itself to_x000D_ through its lending and investment practices. They also demand that banks undergo a supervWorld Bankry review process,_x000D_ and that they disclose information about their economic activities._x000D_ A solid capital market is characterized by a past record of low shares of nonperforming loans, prudential requirements_x000D_ for bank transactions in foreign currency, enforcement of rules on disclosure, independence of financial regulators_x000D_ and hard budget constraints between companies, banks and the public sector._x000D_ Note: Please make sure you provide information on capital-adequacy ratios, disclosure rules, supervision, share of_x000D_ non-performing loans and hard budget constraints. You should also elaborate on reforms in the financial sector._x000D_ Quantitative Reference Indicators: Bank capital to assets ratio · Bank nonperforming loans
 #'   \item \strong{bs_bti_q8_1}: To what extent does the monetary authority pursue and communicate a consistent monetary stabilization policy?
 #'   \item \strong{bs_bti_q8_2}: To what extent do the government’s budgetary policies support fiscal stability?
 #'   \item \strong{bs_bti_si}: The democracy status is made up of five criterion: Stateness, measured by the normative statement "There is clarity about the nation's existence as a state with adequately established and differentiated power structures"; Political Participation, measured by the normative statement "The populace decides who rules and it has other political freedoms"; Rule of Law measured by the normative statement "State powers check and balance one another and ensure civil rights"; Stability of Democratic Institutions, measured by the normative statement "Democratic Institutions are capable of performing, and they are adequately accepted"; and Political and Social Integration, measured by the normative statement "Stable patterns of representation exist for mediating between society and the state; there is also a consolidated civic culture"
@@ -836,8 +832,8 @@
 #'   \item \strong{wb_wdi_ie_ppi_watr_cd}: Investment in water and sanitation projects with private participation refers to commitments to  infrastructure projects in water and sanitation that have reached financial closure and directly or indirectly serve the public. Movable assets, incinerators, standalone solid waste projects, and small projects are excluded. The types of projects included are management and lease contracts, operations and management contracts with major capital expenditure, greenfield projects (in which a private entity or a public-private joint venture builds and operates a new facility), and divestitures. Investment commitments are the sum of investments in facilities and investments in government assets. Investments in facilities are the resources the project company commits to invest during the contract period either in new facilities or in expansion and modernization of existing facilities. Investments in government assets are the resources the project company spends on acquiring government assets such as state-owned enterprises, rights to provide services in a specific area, or the use of specific radio spectrums. Data is presented based on investment year. Data are in current U.S. dollars.
 #'   \item \strong{wb_wdi_iq_spi_ovrl}: The SPI overall score is a composite score measuing country performance across five pillars: data use, data services, data products, data sources, and data infrastructure.  The new Statistical Performance Indicators (SPI) will replace the Statistical Capacity Index (SCI), which the World Bank has regularly published since 2004. Although the goals are the same, to offer a better tool to measure the statistical systems of countries, the new SPI framework has expanded into new areas including in the areas of data use, administrative data, geospatial data, data services, and data infrastructure. The SPI provides a framework that can help countries measure where they stand in several dimensions and offers an ambitious measurement agenda for the international community.
 #'   \item \strong{wb_wdi_iq_spi_pil1}: The data use overall score is a composite score measuring the demand side of the statistical system.  The data use  pillar is segmented by five types of users: (i) the legislature, (ii) the executive branch, (iii) civil society (including sub-national actors), (iv) academia and (v) international bodies.  Each dimension would have associated indicators to measure performance. A mature system would score well across all dimensions whereas a less mature one would have weaker scores along certain dimensions. The gaps would give insights into prioritization among user groups and help answer questions as to why the existing services are not resulting in higher use of national statistics in a particular segment.  Currently, the SPI only features indicators for one of the five dimensions of data use, which is data use by international organizations. Indicators on whether statistical systems are providing useful data to their national governments (legislature and executive branches), to civil society, and to academia are absent.  Thus the dashboard does not yet assess if national statistical systems are meeting the data needs of a large swathe of users.
-#'   \item \strong{wb_wdi_iq_spi_pil2}: The data services pillar overall score is a composite indicator based on four dimensions of data services: (i) the quality of data releases, (ii) the richness and openness of online access, (iii) the effectiveness of advisory and analytical services related to statistics, and (iv) the availability and use of data access services such as secure microdata access. Advisory and analytical services might incorporate elements related to data stewardship services including input to national data strategies, advice on data ethics and calling out misuse of data in accordance with the Fundamental Principles of Official Statistics.
-#'   \item \strong{wb_wdi_iq_spi_pil3}: The data products overall score is a composite score measureing whether the country is able to produce relevant indicators, primarily related to SDGs.  The data products (internal process) pillar is segmented by four topics and organized into (i) social, (ii) economic, (iii) environmental, and (iv) institutional dimensions using the typology of the Sustainable Development Goals (SDGs). This approach anchors the national statistical system’s performance around the essential data required to support the achievement of the 2030 global goals, and enables comparisons across countries so that a global view can be generated while enabling country specific emphasis to reflect the user needs of that country.
+#'   \item \strong{wb_wdi_iq_spi_pil2}: The data services pillar overall score is a composite indicator based on four dimensions of data services: (i) the quality of data releases, (ii) the richness and openness of online access, (iii) the effectiveness of advWorld Bankry and analytical services related to statistics, and (iv) the availability and use of data access services such as secure microdata access. AdvWorld Bankry and analytical services might incorporate elements related to data stewardship services including input to national data strategies, advice on data ethics and calling out misuse of data in accordance with the Fundamental Principles of Official Statistics.
+#'   \item \strong{wb_wdi_iq_spi_pil3}: The data products overall score is a composite score measureing whether the country is able to produce relevant indicators, primarily related to SDGs.  The data products (internal process) pillar is segmented by four topics and organized into (i) social, (ii) economic, (iii) environmental, and (iv) institutional dimensions using the typology of the Sustainable Development Goals (SDGs). This approach anchors the national statistical system’s performance around the essential data required to support the achievement of the 2030 global goals, and enables comparWorld Bankns across countries so that a global view can be generated while enabling country specific emphasis to reflect the user needs of that country.
 #'   \item \strong{wb_wdi_iq_spi_pil4}: The data sources overall score is a composity measure of whether countries have data available from the following sources: Censuses and surveys, administrative data, geospatial data, and private sector/citizen generated data.  The data sources (input) pillar is segmented by four types of sources generated by (i) the statistical office (censuses and surveys), and sources accessed from elsewhere such as (ii)  administrative data, (iii) geospatial data, and (iv) private sector data and citizen generated data. The appropriate balance between these source types will vary depending on a country’s institutional setting and the maturity of its statistical system. High scores should reflect the extent to which the sources being utilized enable the necessary statistical indicators to be generated. For example, a low score on environment statistics (in the data production pillar) may reflect a lack of use of (and low score for) geospatial data (in the data sources pillar). This type of linkage is inherent in the data cycle approach and can help highlight areas for investment required if country needs are to be met.
 #'   \item \strong{wb_wdi_iq_spi_pil5}: The data infrastructure  pillar  overall score measures the hard and soft infrastructure segments, itemizing essential cross cutting requirements for an effective statistical system.  The segments are: (i) legislation and governance covering the existence of laws and a functioning institutional framework for the statistical system; (ii) standards and methods addressing compliance with recognized frameworks and concepts; (iii) skills including level of skills within the statistical system and among users (statistical literacy); (iv) partnerships reflecting the need for the statistical system to be inclusive and coherent; and (v) finance mobilized both domestically and from donors.
 #'   \item \strong{wb_wdi_tm_val_fuel_zs_un}: Fuels comprise the commodities in SITC section 3 (mineral fuels, lubricants and related materials).
@@ -845,7 +841,7 @@
 #'   \item \strong{wjp_rol_3_1}: Measures whether basic laws and information on legal rights are publicly available, presented in plain language, and made accessible in all languages used in the country or jurisdiction. It also measures the quality and accessibility of information published by the government in print or online, and whetheradministrative regulations, drafts of legislation, and high court decisions are made accessible to the public in a timely manner
 #'   \item \strong{wjp_rol_3_2}: Measures whether requests for information held by a government agency are granted, whether these requests are granted within a reasonable time period, if the information provided is pertinent and complete, and if requests for information are granted at a reasonable cost and without having to pay a bribe. It also measures whether people are aware of their right to information, and whether relevant records are accessible to the public upon request. Coded from 0 to 1, with higher scores indicating stronger rights.
 #'   \item \strong{wjp_rol_3_4}: Measures whether people are able to bring specific complaints to the government about the provision of public services or the performance of government officers in carrying out their legal duties in practice, and how government officials respond to such complaints. Coded from 0 to 1, with higher scores indicating stronger mechanisms.
-#'   \item \strong{wjp_rol_4_3}: Measures whether the basic rights of criminal suspects are respected, including the presumption of innocence and the freedom from arbitrary arrest and unreasonable pre-trial detention. It also measures whether criminal suspects are able to access and challenge evidence used against them, whether they are subject to abusive treatment, and whether they are provided with adequate legal assistance. In addition, it measures whether the basic rights of prisoners are respected once they have been convicted of a crime.
+#'   \item \strong{wjp_rol_4_3}: Measures whether the basic rights of criminal suspects are respected, including the presumption of innocence and the freedom from arbitrary arrest and unreasonable pre-trial detention. It also measures whether criminal suspects are able to access and challenge evidence used against them, whether they are subject to abusive treatment, and whether they are provided with adequate legal assistance. In addition, it measures whether the basic rights of prWorld Bankners are respected once they have been convicted of a crime.
 #'   \item \strong{wjp_rol_4_4}: Measures whether an independent media, civil society organizations, political parties, and individuals are free to report and comment on government policies without fear of retaliation.
 #'   \item \strong{wjp_rol_4_5}: Measures whether members of religious minorities can worship and conduct religious practices freely and publicly, and whether non-adherents are protected from having to submit to religious laws.
 #'   \item \strong{wjp_rol_4_6}: Measures whether the police or other government officials conduct physical searches without warrants, or intercept electronic communications of private individuals without judicial authorization
@@ -876,11 +872,11 @@
 #' @title ASPIRE Social Protection Indicators
 #'
 #' @description
-#' The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized, cross-country indicators related to social protection and labor programs. It includes harmonized measures on adequacy and coverage of benefits, enabling regional and income-level comparisons over time.
+#' The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized, cross-country indicators related to social protection and labor programs. It includes harmonized measures on adequacy and coverage of benefits, enabling regional and income-level comparWorld Bankns over time.
 #'
 #' @format A data frame with 512 rows and 4 variables:
 #' \describe{
-#'   \item{\code{country_code}}{Character. ISO3 country code based on World Bank standards.}
+#'   \item{\code{country_code}}{Character. World Bank3 country code based on World Bank standards.}
 #'   \item{\code{year}}{Numeric. Year of the observation.}
 #'   \item{\code{wb_aspire_adequacy_benefits}}{Numeric. Average benefit received by beneficiaries as a percentage of the total welfare of the beneficiary population (proxy for adequacy).}
 #'   \item{\code{wb_aspire_coverage}}{Numeric. Percentage of the population participating in social protection and labor programs (proxy for coverage).}
@@ -896,7 +892,7 @@
 #'
 #' @format A data frame with 4,786 rows and 6 variables:
 #' \describe{
-#'   \item{\code{country_code}}{Character. The 3-letter ISO country code.}
+#'   \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
 #'   \item{\code{year}}{Numeric. The year of the observation.}
 #'   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
 #'   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
@@ -915,7 +911,7 @@
 #'
 #' @format A data frame with 4,786 rows and 6 variables:
 #' \describe{
-#'   \item{\code{country_code}}{Character. The 3-letter ISO country code.}
+#'   \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
 #'   \item{\code{year}}{Numeric. The year of the observation.}
 #'   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
 #'   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
@@ -979,7 +975,7 @@
 #'
 #' @format A tibble with 6,460 rows and 5 variables:
 #' \describe{
-#'   \item{country_code}{Character. ISO 3-letter country codes.}
+#'   \item{country_code}{Character. World Bank 3-letter country codes.}
 #'   \item{year}{Numeric. Year of observation.}
 #'   \item{wb_wbl_entrepreneurship}{Numeric. WBL Entrepreneurship sub-index score.}
 #'   \item{wb_wbl_social}{Numeric. WBL Social Protection sub-index score.}
@@ -998,8 +994,8 @@
 #'
 #' @format A tibble with 264 rows and 4 variables:
 #' \describe{
-#'   \item{country_code}{Character. Three-letter ISO country code.}
-#'   \item{country_name}{Character. Official country name.}
+#'   \item{country_code}{Character. Three-letter World Bank country code.}
+#'   \item{country_name}{Character. World Bank country name.}
 #'   \item{region}{Character. World Bank regional classification
 #'                 (e.g., "South Asia", "Europe & Central Asia").}
 #'   \item{income_group}{Character. World Bank income group classification
@@ -1017,3 +1013,28 @@
 #' @source World Bank Group — \url{https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755}
 "wb_income_and_region"
 
+
+#' @title Closeness to Frontier Scores, Static
+#' @description Closeness to frontier scores computed in a static time frame: 2019-2023. For a complete list of variable descriptions, please refer to the `db_variables` data frame.
+#' @format A data frame with 234 rows and 154 variables:
+#' \describe{
+#'   \item{\code{country_code}}{character Three-letter World Bank country code.}
+#'   \item{\code{country_name}}{character World Bank country name.}
+#'   \item{\code{income_group}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{region}}{character World Bank region.}
+#'}
+#' @details For additional details on how the closeness to frontier scores are computed, please refer to the CLIAR Methodology Note.
+"closeness_to_frontier_static"
+
+#' @title Closeness to Frontier (CTF) Scores, Dynamic
+#' @description Closeness to frontier scores computed in a dynamic time frame: every two years between 2014 and 2023. For a complete list of variable descriptions, please refer to the `db_variables` data frame.
+#' @format A data frame with 2592 rows and 116 variables:
+#' \describe{
+#'   \item{\code{country_code}}{character Three-letter World Bank country code.}
+#'   \item{\code{country_name}}{character World Bank country name.}
+#'   \item{\code{income_group}}{character COLUMN_DESCRIPTION}
+#'   \item{\code{region}}{character World Bank region.}
+#'   \item{\code{year}}{double Year.}
+#'}
+#' @details For additional details on how the closeness to frontier scores are computed, please refer to the CLIAR Methodology Note.
+"closeness_to_frontier_dynamic"

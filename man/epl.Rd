@@ -7,7 +7,7 @@
 \format{
 A tibble with 287 rows and 4 variables:
 \describe{
-  \item{country_code}{Three-letter ISO country code (e.g., "AUS", "FRA").}
+  \item{country_code}{Three-letter World Bank country code (e.g., "AUS", "FRA").}
   \item{year}{Observation year (e.g., 2013).}
   \item{oecd_epl_regular}{Composite indicator of employment protection legislation governing regular contracts (individual dismissals).}
   \item{oecd_epl_temporary}{Composite indicator of employment protection legislation governing temporary contracts (individual dismissals).}

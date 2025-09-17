@@ -7,7 +7,7 @@
 \format{
 A data frame with 512 rows and 4 variables:
 \describe{
-  \item{\code{country_code}}{Character. ISO3 country code based on World Bank standards.}
+  \item{\code{country_code}}{Character. World Bank3 country code based on World Bank standards.}
   \item{\code{year}}{Numeric. Year of the observation.}
   \item{\code{wb_aspire_adequacy_benefits}}{Numeric. Average benefit received by beneficiaries as a percentage of the total welfare of the beneficiary population (proxy for adequacy).}
   \item{\code{wb_aspire_coverage}}{Numeric. Percentage of the population participating in social protection and labor programs (proxy for coverage).}
@@ -17,7 +17,7 @@ A data frame with 512 rows and 4 variables:
 aspire
 }
 \description{
-The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized, cross-country indicators related to social protection and labor programs. It includes harmonized measures on adequacy and coverage of benefits, enabling regional and income-level comparisons over time.
+The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized, cross-country indicators related to social protection and labor programs. It includes harmonized measures on adequacy and coverage of benefits, enabling regional and income-level comparWorld Bankns over time.
 }
 \details{
 The ASPIRE indicators are derived from nationally representative household surveys and harmonized using consistent methodologies across countries. The dataset supports policy analysis, benchmarking, and global monitoring of social protection systems. For more information, see the [World Bank ASPIRE website](https://www.worldbank.org/en/data/datatopics/aspire).

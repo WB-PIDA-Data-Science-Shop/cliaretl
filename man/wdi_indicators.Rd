@@ -7,7 +7,7 @@
 \format{
 A data frame with 7,310 rows and 129 variables:
 \describe{
-  \item{\code{country_code}}{character The 3-letter ISO code for the country or region.}
+  \item{\code{country_code}}{character The 3-letter World Bank code for the country or region.}
   \item{\code{year}}{integer The year of the observation.}
   \item{\code{wdi_gcdodtotlgdzs}}{double Government Consumption, Domestic Defense, Total (percentage of GDP).}
   \item{\code{wdi_enghgco2rtgdpppkd}}{double Carbon intensity of GDP (kg CO2e per 2021 PPP USD of GDP)}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/ctf_funs.R
 \name{compute_ctf}
 \alias{compute_ctf}
-\title{Compute Country Transformation Factor (CTF)}
+\title{Compute Closeness to Frontier (CTF)}
 \usage{
 compute_ctf(
   data,
@@ -20,7 +20,7 @@ compute_ctf(
 
 \item{min_max_tbl}{Data frame with columns `variable`, `min`, `max`.}
 
-\item{id_cols}{Character vector of identifier columns to keep (e.g., "country_code", "year").}
+\item{id_cols}{Character vector of identifier columns (e.g., "country_code", "year").}
 
 \item{zero_floor}{Numeric. Exact zeros are replaced with this value (default `0.01`). Use `NULL` to skip.}
 
@@ -30,5 +30,5 @@ compute_ctf(
 Tibble in wide format keyed by `id_cols`.
 }
 \description{
-CTF function to apply in wide format for static or dynamic panels.
+This is a function to compute the closeness to frontier (CTF) score for indicators.
 }

@@ -7,7 +7,7 @@
 \format{
 A tibble with 6,460 rows and 5 variables:
 \describe{
-  \item{country_code}{Character. ISO 3-letter country codes.}
+  \item{country_code}{Character. World Bank 3-letter country codes.}
   \item{year}{Numeric. Year of observation.}
   \item{wb_wbl_entrepreneurship}{Numeric. WBL Entrepreneurship sub-index score.}
   \item{wb_wbl_social}{Numeric. WBL Social Protection sub-index score.}

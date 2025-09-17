@@ -7,7 +7,7 @@
 \format{
 A tibble with 6,848 rows and 4 variables:
 \describe{
-  \item{country_code}{A three-letter ISO 3166-1 alpha-3 country code.}
+  \item{country_code}{A three-letter World Bank 3166-1 alpha-3 country code.}
   \item{year}{The calendar year of the observation.}
   \item{wb_gfdb_oi_01}{Assets of the three largest commercial banks as a share of total commercial banking assets.
   Total assets include earning assets, cash, due from banks, foreclosed real estate, fixed assets, goodwill, intangibles, tax assets, and other financial assets. A higher value indicates greater banking sector concentration.}

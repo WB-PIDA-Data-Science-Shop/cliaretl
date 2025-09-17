@@ -65,8 +65,6 @@ vars_ctf <- db_variables |>
 
 var_lists <- get_variable_lists(db_variables)
 
-
-
 # 1. Regional Classification -------------------------------
 # Add income group and region classifications to static and dynamic CTF datasets
 ctf_static_complete <-
@@ -88,8 +86,6 @@ ctf_dynamic_complete <-
   select(
     country_code, country_name, income_group, region, year, everything()
   )
-
-
 
 # Create family-level variables
 family_level_vars <- db_variables |>
@@ -178,7 +174,6 @@ ctf_dynamic_variance <- ctf_dynamic_complete |>
 # of the static CTF by comparing:
 #   (a) Scores based on the 5-year average
 #   (b) Scores based on the latest available year
-
 
 # Rescale indicators again
 cliar_indicators_rescaled <-
@@ -275,7 +270,6 @@ ctf_static_long <- static_clean |>
     values_to = "ctf_year_average"
   )
 
-
 # merge datasets using country code and variable to compute correlation
 ctf_robustness <- ctf_static_last_year_long |>
   inner_join(
@@ -300,7 +294,6 @@ ctf_robustness |>
     "(2026) Correlation between CTF scores computed using (a) 5-Year Average and (b) Last-Year values for indicators"
   ) +
   theme_minimal()
-
 
 ## 3.2 Plot: Correlation Histogram----------
 #    - Unit of analysis: country–indicator pair
@@ -360,21 +353,16 @@ ctf_robustness |>
 # 4. Prepare final datasets ------------------------------------------------
 
 # Final static CTF scores and time stamp
-static_ctf_scores <- ctf_static_complete |>
+closeness_to_frontier_static <- ctf_static_complete |>
   add_plmetadata(source = "CLIAR database",
                  other_info = "")
 
 # Final dynamic CTF scores and time stamp
-dynamic_ctf_scores <- ctf_dynamic_complete |>
+closeness_to_frontier_dynamic <- ctf_dynamic_complete |>
   add_plmetadata(source = "CLIAR database",
                  other_info = "")
 
-
-
 # Export data ------------------------------------------------------------
 # Save the final datasets as RDS files for lazy loading
-usethis::use_data(static_ctf_scores, overwrite = TRUE)
-usethis::use_data(dynamic_ctf_scores, overwrite = TRUE)
-
-
-
+usethis::use_data(closeness_to_frontier_static, overwrite = TRUE)
+usethis::use_data(closeness_to_frontier_dynamic, overwrite = TRUE)
