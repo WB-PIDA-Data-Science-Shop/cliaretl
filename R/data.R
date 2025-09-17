@@ -1013,28 +1013,380 @@
 #' @source World Bank Group — \url{https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755}
 "wb_income_and_region"
 
-
-#' @title Closeness to Frontier Scores, Static
-#' @description Closeness to frontier scores computed in a static time frame: 2019-2023. For a complete list of variable descriptions, please refer to the `db_variables` data frame.
+#' Static CTF scores (5-year window, rescaled 0–1)
+#'
+#' Country-level *static* (five-year) Country Transformation Framework (CTF)
+#' scores used in CLIAR. Indicators are cleaned, directionally harmonized
+#' (higher = stronger institutions), and min–max rescaled to \[0, 1\] over the
+#' reference window. This data is *wide* (one row per country(or group)).
+#'
+#' @details
+#' - **Static window:** Scores are computed using a fixed multi-year window
+#'   (e.g., 2019–2023) and are stable with respect to year-to-year noise.
+#' - **Rescaling & direction:** Input indicators are flipped/reversed as needed
+#'   so that higher values imply stronger institutions, then min–max scaled.
+#' - **Coverage:** Includes WB territories and regional aggregates
+#'   (e.g., `AFE`, `AFW`) where applicable.
+#'
 #' @format A data frame with 234 rows and 154 variables:
 #' \describe{
-#'   \item{\code{country_code}}{character Three-letter World Bank country code.}
-#'   \item{\code{country_name}}{character World Bank country name.}
-#'   \item{\code{income_group}}{character COLUMN_DESCRIPTION}
-#'   \item{\code{region}}{character World Bank region.}
-#'}
-#' @details For additional details on how the closeness to frontier scores are computed, please refer to the CLIAR Methodology Note.
+#'   \item{country_code}{ISO3 economy code or aggregate code.}
+#'   \item{country_name}{Economy/aggregate name.}
+#'   \item{income_group}{World Bank income group.}
+#'   \item{region}{World Bank region.}
+#'   \item{country_group}{Indicator for regional/aggregate rows (1 = aggregate, 0 = country).}
+#'
+#'   \item{bs_bti_q12_1}{BTI: party system stability/capacity (Q12.1), rescaled.}
+#'   \item{bs_bti_q15_1}{BTI: anti-corruption policy (Q15.1), rescaled.}
+#'   \item{bs_bti_q2_1}{BTI: state identity (Q2.1), rescaled.}
+#'   \item{bs_bti_q2_3}{BTI: basic administration (Q2.3), rescaled.}
+#'   \item{bs_bti_q3_1}{BTI: free and fair elections (Q3.1), rescaled.}
+#'   \item{bs_bti_q3_2}{BTI: effective power to govern (Q3.2), rescaled.}
+#'   \item{bs_bti_q7_2}{BTI: policy learning/coordination (Q7.2), rescaled.}
+#'   \item{bs_bti_q8_2}{BTI: resource efficiency (Q8.2), rescaled.}
+#'   \item{bs_bti_si}{BTI Status Index (composite), rescaled.}
+#'
+#'   \item{fh_fiw_cl_rating}{Freedom House: Civil Liberties (reversed & rescaled where applicable).}
+#'   \item{fh_fiw_pr_rating}{Freedom House: Political Rights (reversed & rescaled where applicable).}
+#'
+#'   \item{ibp_obs_obi}{Open Budget Index (IBP/OBI), rescaled.}
+#'
+#'   \item{idea_gsod_v_21_05}{IDEA Global State of Democracy: representative government sub-index (v21.05), rescaled.}
+#'   \item{idea_gsod_v_22_16}{IDEA Global State of Democracy: impartial administration sub-index (v22.16), rescaled.}
+#'
+#'   \item{oecd_epl_regular}{OECD EPL: protection of regular contracts (0–6 original, reversed & rescaled).}
+#'   \item{oecd_epl_temporary}{OECD EPL: protection of temporary contracts (0–6 original, reversed & rescaled).}
+#'   \item{oecd_pmr_2018_1_1}{OECD PMR 2018: public ownership (1.1) component, reversed & rescaled.}
+#'   \item{oecd_pmr_2018_1_2}{OECD PMR 2018: involvement in business operations (1.2), reversed & rescaled.}
+#'   \item{oecd_pmr_2018_1_3}{OECD PMR 2018: simplification and evaluation of regulations (1.3), reversed & rescaled.}
+#'   \item{oecd_pmr_2018_1_4}{OECD PMR 2018: administrative burdens on start-ups (1.4), reversed & rescaled.}
+#'   \item{oecd_pmr_2018_2_1}{OECD PMR 2018: barriers to domestic/foreign entry (2.1), reversed & rescaled.}
+#'   \item{oecd_pmr_2018_2_2}{OECD PMR 2018: barriers in network sectors/professions (2.2), reversed & rescaled.}
+#'
+#'   \item{rise_ee_1}{RISE: education system enabling environment – dimension 1, rescaled.}
+#'   \item{rise_ee_2}{RISE: enabling environment – dimension 2, rescaled.}
+#'   \item{rise_ee_3}{RISE: enabling environment – dimension 3, rescaled.}
+#'   \item{rise_ee_4}{RISE: enabling environment – dimension 4, rescaled.}
+#'   \item{rise_ee_4_3}{RISE: enabling environment – sub-indicator 4.3, rescaled.}
+#'   \item{rise_ee_5}{RISE: enabling environment – dimension 5, rescaled.}
+#'   \item{rise_ee_6}{RISE: enabling environment – dimension 6, rescaled.}
+#'   \item{rise_ee_7}{RISE: enabling environment – dimension 7, rescaled.}
+#'   \item{rise_ee_8}{RISE: enabling environment – dimension 8, rescaled.}
+#'   \item{rise_ee_9}{RISE: enabling environment – dimension 9, rescaled.}
+#'   \item{rise_re_1}{RISE: regulatory environment – dimension 1, rescaled.}
+#'   \item{rise_re_2}{RISE: regulatory environment – dimension 2, rescaled.}
+#'   \item{rise_re_3}{RISE: regulatory environment – dimension 3, rescaled.}
+#'   \item{rise_re_4}{RISE: regulatory environment – dimension 4, rescaled.}
+#'   \item{rise_re_7}{RISE: regulatory environment – dimension 7, rescaled.}
+#'
+#'   \item{rwb_pfi_index}{Reporters Without Borders: Press Freedom Index (reversed & rescaled).}
+#'
+#'   \item{wb_spi_census_and_survey_index}{World Bank Statistical Performance: census/survey component, rescaled.}
+#'   \item{wb_spi_std_and_methods}{World Bank Statistical Performance: standards & methods, rescaled.}
+#'
+#'   \item{vdem_core_v2cacamps}{V-Dem: clean elections – campaign environment, rescaled.}
+#'   \item{vdem_core_v2clacfree}{V-Dem: academic freedom, rescaled.}
+#'   \item{vdem_core_v2clacjstm}{V-Dem: access to justice for men, rescaled.}
+#'   \item{vdem_core_v2clacjstw}{V-Dem: access to justice for women, rescaled.}
+#'   \item{vdem_core_v2cldiscm}{V-Dem: freedom from discrimination (men), rescaled.}
+#'   \item{vdem_core_v2cldiscw}{V-Dem: freedom from discrimination (women), rescaled.}
+#'   \item{vdem_core_v2clrspct}{V-Dem: respect for civil liberties, rescaled.}
+#'   \item{vdem_core_v2cseeorgs}{V-Dem: CSO entry/operation, rescaled.}
+#'   \item{vdem_core_v2csreprss}{V-Dem: CSO repression (reversed & rescaled).}
+#'   \item{vdem_core_v2dlengage}{V-Dem: direct popular vote engagement, rescaled.}
+#'   \item{vdem_core_v2juaccnt}{V-Dem: judicial accountability, rescaled.}
+#'   \item{vdem_core_v2juhcind}{V-Dem: high court independence, rescaled.}
+#'   \item{vdem_core_v2juncind}{V-Dem: lower court independence, rescaled.}
+#'   \item{vdem_core_v2lgcrrpt}{V-Dem: local government corruption (reversed & rescaled).}
+#'   \item{vdem_core_v2lgqugen}{V-Dem: local government quality (expert rating), rescaled.}
+#'   \item{vdem_core_v2peapsecon}{V-Dem: political equality – socioeconomic, rescaled.}
+#'   \item{vdem_core_v2peapsgen}{V-Dem: political equality – general, rescaled.}
+#'   \item{vdem_core_v2peapspol}{V-Dem: political equality – political power, rescaled.}
+#'   \item{vdem_core_v2peasjpol}{V-Dem: political equality – social justice in policy, rescaled.}
+#'   \item{vdem_core_v2peasjsoecon}{V-Dem: political equality – state/economic policy, rescaled.}
+#'   \item{vdem_core_v2pepwrgen}{V-Dem: power distributed by gender, rescaled.}
+#'   \item{vdem_core_v2pepwrses}{V-Dem: power distributed by socioeconomic position, rescaled.}
+#'   \item{vdem_core_v2pepwrsoc}{V-Dem: power distributed by social group, rescaled.}
+#'   \item{vdem_core_v2stcritrecadm}{V-Dem: state capacity – critical resources in administration, rescaled.}
+#'   \item{vdem_core_v2x_cspart}{V-Dem: civil society participation index, rescaled.}
+#'   \item{vdem_core_v2x_execorr}{V-Dem: executive corruption index (reversed & rescaled).}
+#'   \item{vdem_core_v2x_gender}{V-Dem: gender equality index, rescaled.}
+#'   \item{vdem_core_v2x_pubcorr}{V-Dem: public sector corruption (reversed & rescaled).}
+#'   \item{vdem_core_v2xcl_prpty}{V-Dem: property rights for civil liberties, rescaled.}
+#'   \item{vdem_core_v2xlg_legcon}{V-Dem: legislative constraints on executive, rescaled.}
+#'
+#'   \item{wb_aspire_adequacy_benefits}{ASPIRE: adequacy of social assistance benefits, rescaled.}
+#'   \item{wb_aspire_coverage}{ASPIRE: coverage of social assistance, rescaled.}
+#'
+#'   \item{wb_debt_transp_index}{World Bank/ID4D–Debt Transparency Index (reversed where needed & rescaled).}
+#'   \item{wb_gfdb_oi_01}{Global Financial Development Database: Openness/Information (OI_01) sub-indicator, rescaled.}
+#'
+#'   \item{wb_gtmi_cgsi}{GovTech Maturity Index: core government systems (CGSI), rescaled.}
+#'   \item{wb_gtmi_dcei}{GovTech Maturity Index: digital civil engagement (DCEI), rescaled.}
+#'   \item{wb_gtmi_gtei}{GovTech Maturity Index: government-to-enterprise (GTEI), rescaled.}
+#'   \item{wb_gtmi_pfm_mis}{GovTech Maturity: PFM/MIS availability, rescaled.}
+#'   \item{wb_gtmi_psdi}{GovTech Maturity Index: public service delivery (PSDI), rescaled.}
+#'
+#'   \item{wb_lpi_lp_lpi_cust_xq}{Logistics Performance Index: customs (survey), rescaled.}
+#'
+#'   \item{wb_pefa_pi_2016_05}{PEFA PI-5 (2016 framework): budget documentation, rescaled.}
+#'   \item{wb_pefa_pi_2016_07}{PEFA PI-7: reliability of aggregate revenue, rescaled.}
+#'   \item{wb_pefa_pi_2016_08}{PEFA PI-8: performance information for service delivery, rescaled.}
+#'   \item{wb_pefa_pi_2016_10}{PEFA PI-10: public access to fiscal information, rescaled.}
+#'   \item{wb_pefa_pi_2016_11}{PEFA PI-11: public investment management, rescaled.}
+#'   \item{wb_pefa_pi_2016_12}{PEFA PI-12: public asset management, rescaled.}
+#'   \item{wb_pefa_pi_2016_13}{PEFA PI-13: transparency of public finances, rescaled.}
+#'   \item{wb_pefa_pi_2016_14}{PEFA PI-14: macro-fiscal forecasting, rescaled.}
+#'   \item{wb_pefa_pi_2016_15}{PEFA PI-15: fiscal strategy, rescaled.}
+#'   \item{wb_pefa_pi_2016_16}{PEFA PI-16: medium-term perspective in expenditure budgeting, rescaled.}
+#'   \item{wb_pefa_pi_2016_17}{PEFA PI-17: aggregate expenditure out-turn, rescaled.}
+#'   \item{wb_pefa_pi_2016_18}{PEFA PI-18: effectiveness of payroll controls, rescaled.}
+#'   \item{wb_pefa_pi_2016_19}{PEFA PI-19: procurement, rescaled.}
+#'   \item{wb_pefa_pi_2016_20}{PEFA PI-20: internal controls for non-salary expenditure, rescaled.}
+#'   \item{wb_pefa_pi_2016_21}{PEFA PI-21: internal audit, rescaled.}
+#'   \item{wb_pefa_pi_2016_22}{PEFA PI-22: public investment projects, rescaled.}
+#'   \item{wb_pefa_pi_2016_23}{PEFA PI-23: taxation administration, rescaled.}
+#'   \item{wb_pefa_pi_2016_24}{PEFA PI-24: accounting and reporting, rescaled.}
+#'   \item{wb_pefa_pi_2016_25}{PEFA PI-25: external audit, rescaled.}
+#'   \item{wb_pefa_pi_2016_26}{PEFA PI-26: legislative scrutiny of audit reports, rescaled.}
+#'   \item{wb_pefa_pi_2016_27}{PEFA PI-27: debt management, rescaled.}
+#'   \item{wb_pefa_pi_2016_28}{PEFA PI-28: fiscal risk reporting, rescaled.}
+#'   \item{wb_pefa_pi_2016_29}{PEFA PI-29: annual financial reports, rescaled.}
+#'   \item{wb_pefa_pi_2016_30}{PEFA PI-30: financial data integrity, rescaled.}
+#'
+#'   \item{wb_wbl_entrepreneurship}{Women, Business & the Law: Entrepreneurship score, rescaled.}
+#'   \item{wb_wbl_labor}{WBL: Labor score, rescaled.}
+#'   \item{wb_wbl_social}{WBL: Parenthood/Social protection score, rescaled.}
+#'
+#'   \item{wdi_sepretcaqzs}{WDI: secondary education – trained teachers (quality), rescaled.}
+#'   \item{wdi_seprmenrltczs}{WDI: primary enrollment – net rate (male), rescaled.}
+#'   \item{wdi_seprmtcaqzs}{WDI: primary education – trained teachers (quality), rescaled.}
+#'   \item{wdi_sesecenrltczs}{WDI: secondary enrollment – net rate, rescaled.}
+#'   \item{wdi_sesectcaqzs}{WDI: secondary education – trained teachers (quality), rescaled.}
+#'   \item{wdi_shstaanvczs}{WDI: child immunization coverage (aggregate), rescaled.}
+#'   \item{wdi_shstabrtczs}{WDI: births attended by skilled staff, rescaled.}
+#'   \item{wdi_spregbrthzs}{WDI: birth registration completeness, rescaled.}
+#'
+#'   \item{wjp_rol_1}{WJP Rule of Law: constraints on government powers, rescaled.}
+#'   \item{wjp_rol_2}{WJP: absence of corruption (overall), rescaled.}
+#'   \item{wjp_rol_2_2}{WJP: absence of corruption – executive, rescaled.}
+#'   \item{wjp_rol_3_1}{WJP: open government – publicized laws/data, rescaled.}
+#'   \item{wjp_rol_3_2}{WJP: open government – right to information, rescaled.}
+#'   \item{wjp_rol_3_4}{WJP: open government – complaint mechanisms, rescaled.}
+#'   \item{wjp_rol_4_3}{WJP: fundamental rights – due process, rescaled.}
+#'   \item{wjp_rol_4_4}{WJP: fundamental rights – freedom of expression, rescaled.}
+#'   \item{wjp_rol_4_5}{WJP: fundamental rights – freedom of association, rescaled.}
+#'   \item{wjp_rol_4_6}{WJP: fundamental rights – labor rights, rescaled.}
+#'   \item{wjp_rol_4_7}{WJP: fundamental rights – non-discrimination, rescaled.}
+#'   \item{wjp_rol_4_8}{WJP: fundamental rights – due process in civil justice, rescaled.}
+#'   \item{wjp_rol_6}{WJP: regulatory enforcement (overall), rescaled.}
+#'   \item{wjp_rol_6_2}{WJP: regulatory enforcement – no improper influence, rescaled.}
+#'   \item{wjp_rol_6_6}{WJP: regulatory enforcement – sanctions/penalties, rescaled.}
+#'   \item{wjp_rol_7_1}{WJP: civil justice – accessibility/affordability, rescaled.}
+#'   \item{wjp_rol_7_5}{WJP: civil justice – impartiality, rescaled.}
+#'   \item{wjp_rol_7_6}{WJP: civil justice – effective enforcement, rescaled.}
+#'   \item{wjp_rol_7_7}{WJP: civil justice – ADR/mediation, rescaled.}
+#'   \item{wjp_rol_8_1}{WJP: criminal justice – effective investigations, rescaled.}
+#'   \item{wjp_rol_8_2}{WJP: criminal justice – timely/independent adjudication, rescaled.}
+#'   \item{wjp_rol_8_4}{WJP: criminal justice – due process rights, rescaled.}
+#'
+#'   \item{wdi_nygdppcapppkd}{GDP per capita, PPP (constant, log used downstream) – raw level (not rescaled).}
+#'   \item{log_gdp}{Natural log of GDP per capita (PPP).}
+#'
+#'   \item{vars_anticorruption_avg}{Family average: anti-corruption.}
+#'   \item{vars_climate_avg}{Family average: climate.}
+#'   \item{vars_digital_avg}{Family average: digital government.}
+#'   \item{vars_hrm_avg}{Family average: public employment/HRM.}
+#'   \item{vars_leg_avg}{Family average: legislative & legal institutions.}
+#'   \item{vars_mkt_avg}{Family average: market regulation/competition.}
+#'   \item{vars_pfm_avg}{Family average: public financial management.}
+#'   \item{vars_pol_avg}{Family average: political institutions/participation.}
+#'   \item{vars_social_avg}{Family average: social outcomes/inclusion.}
+#'   \item{vars_transp_avg}{Family average: transparency/open government.}
+#' }
+#'
+#' @source
+#' CLIAR ETL pipeline (WB EGVPI). Underlying sources include BTI, Freedom House,
+#' IDEA GSOD, OECD PMR/EPL, RISE, RWB, WB SPI/ASPIRE/LPI/PEFA/WBL/GFDB/GTMI,
+#' V-Dem, WDI, and WJP—see the 'db_variables' for per-indicator provenance.
+#'
+#' @seealso [dynamic_ctf_scores], [db_variables]
+#'
+#' @docType data
+#' @name static_ctf_scores
+#' @usage data(static_ctf_scores)
+#' @keywords datasets
 "closeness_to_frontier_static"
 
-#' @title Closeness to Frontier (CTF) Scores, Dynamic
-#' @description Closeness to frontier scores computed in a dynamic time frame: every two years between 2014 and 2023. For a complete list of variable descriptions, please refer to the `db_variables` data frame.
-#' @format A data frame with 2592 rows and 116 variables:
+
+#' Dynamic CTF scores (annual panel, rescaled 0–1)
+#'
+#' Country-year *dynamic* Country Transformation Framework (CTF) scores used in
+#' CLIAR. Indicators are cleaned, directionally harmonized (higher = stronger
+#' institutions), and min–max rescaled to \[0, 1\] for the dynamic panel. This
+#' table is *long* by year (one row per country-or-group per year).
+#'
+#' @details
+#' - **Dynamic (annual) panel:** Scores are computed for each year using the
+#'   harmonized input indicators. Rescaling follows the package’s reference
+#'   min–max ranges to ensure comparability across years (see internal helpers
+#'   such as `compute_ctf_range()`).
+#' - **Direction & scaling:** Inputs are flipped/reversed as needed so that
+#'   higher values indicate stronger institutions, then min–max scaled to \[0,1\].
+#' - **Coverage:** Includes WB territories and regional aggregates
+#'   (e.g., `AFE`, `AFW`) where applicable.
+#' - **Provenance:** Per-indicator source, label, and construction are recorded
+#'   in `db_variables` and in the CTF variable documentation.
+#'
+#' @format A data frame with 2,808 rows and 118 variables:
 #' \describe{
-#'   \item{\code{country_code}}{character Three-letter World Bank country code.}
-#'   \item{\code{country_name}}{character World Bank country name.}
-#'   \item{\code{income_group}}{character COLUMN_DESCRIPTION}
-#'   \item{\code{region}}{character World Bank region.}
-#'   \item{\code{year}}{double Year.}
-#'}
-#' @details For additional details on how the closeness to frontier scores are computed, please refer to the CLIAR Methodology Note.
+#'   \item{country_code}{ISO3 economy code or aggregate code.}
+#'   \item{country_name}{Economy/aggregate name.}
+#'   \item{income_group}{World Bank income group.}
+#'   \item{region}{World Bank region.}
+#'   \item{year}{Calendar year of observation.}
+#'   \item{country_group}{Indicator for regional/aggregate rows (1 = aggregate, 0 = country).}
+#'
+#'   \item{bs_bti_q12_1}{BTI: party system stability/capacity (Q12.1), rescaled.}
+#'   \item{bs_bti_q15_1}{BTI: anti-corruption policy (Q15.1), rescaled.}
+#'   \item{bs_bti_q2_1}{BTI: state identity (Q2.1), rescaled.}
+#'   \item{bs_bti_q2_3}{BTI: basic administration (Q2.3), rescaled.}
+#'   \item{bs_bti_q3_1}{BTI: free and fair elections (Q3.1), rescaled.}
+#'   \item{bs_bti_q3_2}{BTI: effective power to govern (Q3.2), rescaled.}
+#'   \item{bs_bti_q7_2}{BTI: policy learning/coordination (Q7.2), rescaled.}
+#'   \item{bs_bti_si}{BTI Status Index (composite), rescaled.}
+#'
+#'   \item{fh_fiw_cl_rating}{Freedom House: Civil Liberties (reversed & rescaled where applicable).}
+#'   \item{fh_fiw_pr_rating}{Freedom House: Political Rights (reversed & rescaled where applicable).}
+#'
+#'   \item{ibp_obs_obi}{Open Budget Index (IBP/OBI), original scale where available; harmonized in composites.}
+#'
+#'   \item{idea_gsod_v_21_05}{IDEA Global State of Democracy: representative government sub-index (v21.05), rescaled.}
+#'   \item{idea_gsod_v_22_16}{IDEA Global State of Democracy: impartial administration sub-index (v22.16), rescaled.}
+#'
+#'   \item{oecd_epl_regular}{OECD EPL: protection of regular contracts (0–6 original, reversed & rescaled).}
+#'   \item{oecd_epl_temporary}{OECD EPL: protection of temporary contracts (0–6 original, reversed & rescaled).}
+#'
+#'   \item{rise_ee_1}{RISE: education system enabling environment – dimension 1, rescaled.}
+#'   \item{rise_ee_2}{RISE: enabling environment – dimension 2, rescaled.}
+#'   \item{rise_ee_3}{RISE: enabling environment – dimension 3, rescaled.}
+#'   \item{rise_ee_4}{RISE: enabling environment – dimension 4, rescaled.}
+#'   \item{rise_ee_5}{RISE: enabling environment – dimension 5, rescaled.}
+#'   \item{rise_ee_6}{RISE: enabling environment – dimension 6, rescaled.}
+#'   \item{rise_ee_7}{RISE: enabling environment – dimension 7, rescaled.}
+#'   \item{rise_ee_8}{RISE: enabling environment – dimension 8, rescaled.}
+#'   \item{rise_ee_9}{RISE: enabling environment – dimension 9, rescaled.}
+#'   \item{rise_re_1}{RISE: regulatory environment – dimension 1, rescaled.}
+#'   \item{rise_re_2}{RISE: regulatory environment – dimension 2, rescaled.}
+#'   \item{rise_re_3}{RISE: regulatory environment – dimension 3, rescaled.}
+#'   \item{rise_re_4}{RISE: regulatory environment – dimension 4, rescaled.}
+#'   \item{rise_re_7}{RISE: regulatory environment – dimension 7, rescaled.}
+#'
+#'   \item{rwb_pfi_index}{Reporters Without Borders: Press Freedom Index (reversed & rescaled).}
+#'
+#'   \item{wb_spi_census_and_survey_index}{World Bank Statistical Performance: census/survey component, rescaled.}
+#'   \item{wb_spi_std_and_methods}{World Bank Statistical Performance: standards & methods, rescaled.}
+#'
+#'   \item{vdem_core_v2cacamps}{V-Dem: clean elections – campaign environment, rescaled.}
+#'   \item{vdem_core_v2clacfree}{V-Dem: academic freedom, rescaled.}
+#'   \item{vdem_core_v2clacjstm}{V-Dem: access to justice for men, rescaled.}
+#'   \item{vdem_core_v2clacjstw}{V-Dem: access to justice for women, rescaled.}
+#'   \item{vdem_core_v2cldiscm}{V-Dem: freedom from discrimination (men), rescaled.}
+#'   \item{vdem_core_v2cldiscw}{V-Dem: freedom from discrimination (women), rescaled.}
+#'   \item{vdem_core_v2clrspct}{V-Dem: respect for civil liberties, rescaled.}
+#'   \item{vdem_core_v2cseeorgs}{V-Dem: CSO entry/operation, rescaled.}
+#'   \item{vdem_core_v2csreprss}{V-Dem: CSO repression (reversed & rescaled).}
+#'   \item{vdem_core_v2dlengage}{V-Dem: direct popular vote engagement, rescaled.}
+#'   \item{vdem_core_v2juaccnt}{V-Dem: judicial accountability, rescaled.}
+#'   \item{vdem_core_v2juhcind}{V-Dem: high court independence, rescaled.}
+#'   \item{vdem_core_v2juncind}{V-Dem: lower court independence, rescaled.}
+#'   \item{vdem_core_v2lgcrrpt}{V-Dem: local government corruption (reversed & rescaled).}
+#'   \item{vdem_core_v2lgqugen}{V-Dem: local government quality (expert rating), rescaled.}
+#'   \item{vdem_core_v2peapsecon}{V-Dem: political equality – socioeconomic, rescaled.}
+#'   \item{vdem_core_v2peapsgen}{V-Dem: political equality – general, rescaled.}
+#'   \item{vdem_core_v2peapspol}{V-Dem: political equality – political power, rescaled.}
+#'   \item{vdem_core_v2peasjpol}{V-Dem: political equality – social justice in policy, rescaled.}
+#'   \item{vdem_core_v2peasjsoecon}{V-Dem: political equality – state/economic policy, rescaled.}
+#'   \item{vdem_core_v2pepwrgen}{V-Dem: power distributed by gender, rescaled.}
+#'   \item{vdem_core_v2pepwrses}{V-Dem: power distributed by socioeconomic position, rescaled.}
+#'   \item{vdem_core_v2pepwrsoc}{V-Dem: power distributed by social group, rescaled.}
+#'   \item{vdem_core_v2stcritrecadm}{V-Dem: state capacity – critical resources in administration, rescaled.}
+#'   \item{vdem_core_v2x_cspart}{V-Dem: civil society participation index, rescaled.}
+#'   \item{vdem_core_v2x_execorr}{V-Dem: executive corruption index (reversed & rescaled).}
+#'   \item{vdem_core_v2x_gender}{V-Dem: gender equality index, rescaled.}
+#'   \item{vdem_core_v2x_pubcorr}{V-Dem: public sector corruption (reversed & rescaled).}
+#'   \item{vdem_core_v2xcl_prpty}{V-Dem: property rights for civil liberties, rescaled.}
+#'   \item{vdem_core_v2xlg_legcon}{V-Dem: legislative constraints on executive, rescaled.}
+#'
+#'   \item{wb_aspire_adequacy_benefits}{ASPIRE: adequacy of social assistance benefits, rescaled.}
+#'   \item{wb_aspire_coverage}{ASPIRE: coverage of social assistance, rescaled.}
+#'
+#'   \item{wb_gfdb_oi_01}{Global Financial Development Database: Openness/Information (OI_01) sub-indicator, rescaled.}
+#'
+#'   \item{wb_gtmi_cgsi}{GovTech Maturity Index: core government systems (CGSI), rescaled.}
+#'   \item{wb_gtmi_dcei}{GovTech Maturity Index: digital civil engagement (DCEI), rescaled.}
+#'   \item{wb_gtmi_gtei}{GovTech Maturity Index: government-to-enterprise (GTEI), rescaled.}
+#'   \item{wb_gtmi_psdi}{GovTech Maturity Index: public service delivery (PSDI), rescaled.}
+#'
+#'   \item{wb_lpi_lp_lpi_cust_xq}{Logistics Performance Index: customs (survey), rescaled.}
+#'
+#'   \item{wb_wbl_entrepreneurship}{Women, Business & the Law: Entrepreneurship score, rescaled.}
+#'   \item{wb_wbl_labor}{WBL: Labor score, rescaled.}
+#'   \item{wb_wbl_social}{WBL: Parenthood/Social protection score, rescaled.}
+#'
+#'   \item{wdi_sepretcaqzs}{WDI: secondary education – trained teachers (quality), rescaled.}
+#'   \item{wdi_seprmenrltczs}{WDI: primary enrollment – net rate (male), rescaled.}
+#'   \item{wdi_seprmtcaqzs}{WDI: primary education – trained teachers (quality), rescaled.}
+#'   \item{wdi_sesecenrltczs}{WDI: secondary enrollment – net rate, rescaled.}
+#'   \item{wdi_sesectcaqzs}{WDI: secondary education – trained teachers (quality), rescaled.}
+#'   \item{wdi_shstaanvczs}{WDI: child immunization coverage (aggregate), rescaled.}
+#'   \item{wdi_shstabrtczs}{WDI: births attended by skilled staff, rescaled.}
+#'   \item{wdi_spregbrthzs}{WDI: birth registration completeness, rescaled.}
+#'
+#'   \item{wjp_rol_1}{WJP Rule of Law: constraints on government powers, rescaled.}
+#'   \item{wjp_rol_2}{WJP: absence of corruption (overall), rescaled.}
+#'   \item{wjp_rol_2_2}{WJP: absence of corruption – executive, rescaled.}
+#'   \item{wjp_rol_3_1}{WJP: open government – publicized laws/data, rescaled.}
+#'   \item{wjp_rol_3_2}{WJP: open government – right to information, rescaled.}
+#'   \item{wjp_rol_3_4}{WJP: open government – complaint mechanisms, rescaled.}
+#'   \item{wjp_rol_4_3}{WJP: fundamental rights – due process, rescaled.}
+#'   \item{wjp_rol_4_4}{WJP: fundamental rights – freedom of expression, rescaled.}
+#'   \item{wjp_rol_4_5}{WJP: fundamental rights – freedom of association, rescaled.}
+#'   \item{wjp_rol_4_6}{WJP: fundamental rights – labor rights, rescaled.}
+#'   \item{wjp_rol_4_7}{WJP: fundamental rights – non-discrimination, rescaled.}
+#'   \item{wjp_rol_4_8}{WJP: fundamental rights – due process in civil justice, rescaled.}
+#'   \item{wjp_rol_6}{WJP: regulatory enforcement (overall), rescaled.}
+#'   \item{wjp_rol_6_2}{WJP: regulatory enforcement – no improper influence, rescaled.}
+#'   \item{wjp_rol_6_6}{WJP: regulatory enforcement – sanctions/penalties, rescaled.}
+#'   \item{wjp_rol_7_1}{WJP: civil justice – accessibility/affordability, rescaled.}
+#'   \item{wjp_rol_7_5}{WJP: civil justice – impartiality, rescaled.}
+#'   \item{wjp_rol_7_6}{WJP: civil justice – effective enforcement, rescaled.}
+#'   \item{wjp_rol_7_7}{WJP: civil justice – ADR/mediation, rescaled.}
+#'   \item{wjp_rol_8_1}{WJP: criminal justice – effective investigations, rescaled.}
+#'   \item{wjp_rol_8_2}{WJP: criminal justice – timely/independent adjudication, rescaled.}
+#'   \item{wjp_rol_8_4}{WJP: criminal justice – due process rights, rescaled.}
+#'
+#'   \item{wdi_nygdppcapppkd}{GDP per capita, PPP (constant; raw level, not rescaled).}
+#'   \item{log_gdp}{Natural log of GDP per capita (PPP).}
+#'
+#'   \item{vars_anticorruption_avg}{Family average: anti-corruption (dynamic).}
+#'   \item{vars_climate_avg}{Family average: climate (dynamic).}
+#'   \item{vars_hrm_avg}{Family average: public employment/HRM (dynamic).}
+#'   \item{vars_leg_avg}{Family average: legislative & legal institutions (dynamic).}
+#'   \item{vars_pol_avg}{Family average: political institutions/participation (dynamic).}
+#'   \item{vars_social_avg}{Family average: social outcomes/inclusion (dynamic).}
+#'   \item{vars_transp_avg}{Family average: transparency/open government (dynamic).}
+#' }
+#'
+#' @source
+#' CLIAR ETL pipeline (WB EGVPI). Underlying sources include BTI, Freedom House,
+#' IBP, IDEA GSOD, OECD EPL/PMR, RISE, RWB, WB SPI/ASPIRE/LPI/WBL/GFDB/GTMI,
+#' PEFA, V-Dem, WDI, and WJP — see `db_variables` for per-indicator provenance.
+#'
+#' @seealso [static_ctf_scores], [db_variables]
+#'
+#' @docType data
+#' @name dynamic_ctf_scores
+#' @usage data(dynamic_ctf_scores)
+#' @keywords datasets
 "closeness_to_frontier_dynamic"

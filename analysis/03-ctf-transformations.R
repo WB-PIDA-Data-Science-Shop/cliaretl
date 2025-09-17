@@ -310,7 +310,7 @@ ctf_static <-
   )
 
 # Convert to long-form
-ctf_long <-
+ctf_static_long <-
   ctf_static |>
   pivot_longer(
     all_of(var_lists$vars_static_ctf),
@@ -331,7 +331,7 @@ ctf_long <-
 
 # Add group medians to long data
 ctf_long_clean <-
-  ctf_long |>
+  ctf_static_long |>
   group_by(family_name, family_var, country_name, country_code, group, country_group) |>
   summarise(value = median(value, na.rm = TRUE)) |>
   ungroup() |>
@@ -343,6 +343,32 @@ ctf_long_clean <-
 
 ## 3.2 Prepare dynamic data ----
 # Clean CTF dynamic data and incorporate logged GDP per capita
+ctf_dynamic <-
+  ctf_dynamic |>
+  # add country codes and names
+  left_join(
+    country_list |> distinct(country_code, country_name),
+    by = "country_code"
+  ) |>
+  # add gdp per capita (PPP) data
+  left_join(
+    cliar_indicators |> select(country_code, year, wdi_nygdppcapppkd),
+    by = c("country_code", "year")
+  ) |>
+  # rename and transform gdp per capita to log
+  mutate(
+    log_gdp = log(wdi_nygdppcapppkd)
+  ) |>
+  bind_rows(group_ctf_dynamic) |>
+  ungroup() |>
+  arrange(country_name) |>
+  select(
+    country_code,
+    country_name,
+    everything()
+  )
+
+# Convert to long-form
 ctf_dynamic_long <-
   ctf_dynamic |>
   pivot_longer(
@@ -356,22 +382,20 @@ ctf_dynamic_long <-
   ) |>
   left_join(
     country_list |>
-      select(country_code, country_name, group),
+      select(country_code, group),
     relationship = "many-to-many",
     by = "country_code",
   )
 
 ctf_dynamic_long_clean <-
   ctf_dynamic_long |>
-  group_by(family_name, family_var, country_name, country_code, country_group, group, year) |>
+  group_by(family_name, family_var, country_code, country_group, group, year) |>
   summarise(value = median(value, na.rm = TRUE)) |>
   ungroup() |>
   mutate(
     variable = family_var,
     var_name = family_name
-  ) |>
-  bind_rows(ctf_dynamic_long) |>
-  rename(group = group)
+  )
 
 # 4. Clusters aggregated data -----------------------------------------------
 

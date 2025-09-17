@@ -148,7 +148,7 @@ db_variables_indicators <- db_variables |>
     variable
   )
 
-# labell indicators with country codes
+# label indicators with country codes
 cliar_indicators <- cliar_indicators |>
   left_join(
     wb_countries |> distinct(country_code, country_name),
@@ -162,7 +162,7 @@ cliar_indicators <- cliar_indicators |>
              pull(variable))  # Changed from all_of to any_of
   )
 
-# this object allows to track all indicators that are landing
+# this object tracks all indicators that are landing
 cliar_indicators_id <- cliar_indicators |>
   colnames()|>
   tibble(
@@ -234,8 +234,6 @@ cliar_indicators_clean <- cliar_indicators |>
     by = c("country_code", "year")
   ) |>
   filter(!country_code %in% c("DDR", "YMD"))
-
-
 
 ## QC: Country code consistency ------------------------------------------------
 # Define the list of regional/aggregate codes to exclude
@@ -404,7 +402,6 @@ cliar_indicators_diagnostic <- cliar_indicators_clean |>
     Indicator
   )
 
-
 # 4. Incorporate income and region class -------------------------------------
 
 # We incorporate the country income group and region.
@@ -423,7 +420,6 @@ cliar_indicators_classified_complete <- cliar_indicators_clean |>
   select(
     country_code, country_name, income_group, region, year, everything()
   )
-
 
 # 5. Save the compiled indicators panel -------------------------------------
 
