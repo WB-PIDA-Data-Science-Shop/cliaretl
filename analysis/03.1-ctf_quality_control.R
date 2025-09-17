@@ -187,7 +187,7 @@ country_average_last_year <-
   #this groups countries together so average can be taken by country
   group_by(country_code) |>
   select(
-    all_of(c(var_lists$vars_static_ctf))
+    all_of(c("country_code", var_lists$vars_static_ctf))
   ) |>
   # Run "?fill" to see how it works. Essentially it helps to fill in
   # missing observations for each indicator with the latest available data
@@ -331,7 +331,6 @@ ctf_robustness |>
   theme_minimal()
 # Finding: [ADD THE COEF FOR THE CORR]
 
-
 # 4. Missingness Detection ------------------------------------------------------
 # Use dlookr package to diagnose missingness and outliers in static and dynamic CTFs
 diagnostic_s <- ctf_static_complete |>
@@ -371,7 +370,6 @@ diagnostics_s_outlier <- ctf_static_complete |>
   filter(
     outliers_ratio > 5
   )
-
 
 diagnostics_d_outlier <- ctf_dynamic_complete |>
   diagnose_outlier() |>

@@ -1210,14 +1210,13 @@
 #' IDEA GSOD, OECD PMR/EPL, RISE, RWB, WB SPI/ASPIRE/LPI/PEFA/WBL/GFDB/GTMI,
 #' V-Dem, WDI, and WJP—see the 'db_variables' for per-indicator provenance.
 #'
-#' @seealso [dynamic_ctf_scores], [db_variables]
+#' @seealso [closeness_to_frontier_dynamic], [db_variables]
 #'
 #' @docType data
-#' @name static_ctf_scores
-#' @usage data(static_ctf_scores)
+#' @name closeness_to_frontier_static
+#' @usage data(closeness_to_frontier_static)
 #' @keywords datasets
 "closeness_to_frontier_static"
-
 
 #' Dynamic CTF scores (annual panel, rescaled 0–1)
 #'
@@ -1372,8 +1371,8 @@
 #'   \item{vars_anticorruption_avg}{Family average: anti-corruption (dynamic).}
 #'   \item{vars_climate_avg}{Family average: climate (dynamic).}
 #'   \item{vars_hrm_avg}{Family average: public employment/HRM (dynamic).}
-#'   \item{vars_leg_avg}{Family average: legislative & legal institutions (dynamic).}
 #'   \item{vars_pol_avg}{Family average: political institutions/participation (dynamic).}
+#'   \item{vars_leg_avg}{Family average: legislative & legal institutions (dynamic).}
 #'   \item{vars_social_avg}{Family average: social outcomes/inclusion (dynamic).}
 #'   \item{vars_transp_avg}{Family average: transparency/open government (dynamic).}
 #' }
@@ -1383,10 +1382,10 @@
 #' IBP, IDEA GSOD, OECD EPL/PMR, RISE, RWB, WB SPI/ASPIRE/LPI/WBL/GFDB/GTMI,
 #' PEFA, V-Dem, WDI, and WJP — see `db_variables` for per-indicator provenance.
 #'
-#' @seealso [static_ctf_scores], [db_variables]
+#' @seealso [closeness_to_frontier_static], [db_variables]
 #'
 #' @docType data
-#' @name dynamic_ctf_scores
-#' @usage data(dynamic_ctf_scores)
+#' @name closeness_to_frontier_dynamic
+#' @usage data(closeness_to_frontier_dynamic)
 #' @keywords datasets
 "closeness_to_frontier_dynamic"
