@@ -45,8 +45,20 @@ wbl_indicators <- wbl_data
 # Dictionary df
 db_variables_2024 <-  read_xlsx(here("data-raw", "input", "cliar", "db_variables.xlsx"))
 
+# Generate vars_lists object
+vars_ctf <- db_variables |>
+  filter(
+    benchmarked_ctf == "Yes"
+  ) |>
+  pull(variable)
+
+var_lists <- get_variable_lists(db_variables)
+
+
 # 1. Update db_variables -----------------------------------------------------
 
+
+## 1.1 Renaming variables ----------
 # Documenting variable changes in our dictionary
 # Use `update_db_variables` function to update the `db_variables` dataframe.
 
@@ -64,6 +76,7 @@ db_variables_2024 <- update_db_variables(
   column_name = "variable"
 )
 
+
 # Documenting var_names changes in our dictionary
 # Cite: https://www.v-dem.net/documents/55/codebook.pdf
 
@@ -72,7 +85,21 @@ db_variables_2024 <- update_db_variables(
 # vdem_core_v2caassemb       Freedom of peaceful assembly
 # vdem_core_v2peasjgen       Access to state jobs by gender
 
-# 2. Conflicting indicators analysis ---------------------------------------------
+
+## 1.2 Renaming SOE vars ---------
+
+### Fix internal labeling for SOE Corporate Governance #34
+
+rename_family <- c(
+  "vars_soe" = "vars_service_del"
+)
+
+db_variables_2024 <- update_db_variables(db_variables_2024,
+                                         rename_map = rename_family,
+                                         column_name = "family_var")
+
+
+# 2. Conflicting indicators analysis -------------------------------------------
 
 # a. Mismatching -------------------------------------------------------------
 
@@ -154,9 +181,9 @@ fraser_missing_df <- flag_missing_indicators(db_variables_2024, fraser_indicator
 
 aspire_missing_df <- flag_missing_indicators(db_variables_2024, aspire_indicators, source_type = "ASPIRE")
 
-# wbl_missing_df <- flag_missing_indicators(db_variables_2024,
-#                                              wbl_indicators,
-#                                              source_type = "CLIAR")
+wbl_missing_df <- flag_missing_indicators(db_variables_2024,
+                                          wbl_indicators,
+                                          source_type = "CLIAR")
 
 
 # Combine them into a single dataframe
@@ -169,8 +196,8 @@ all_missing_vars <- bind_rows(
   gfdb_missing_df,
   heritage_missing_df,
   fraser_missing_df,
-  aspire_missing_df
-  # wbl_missing_df
+  aspire_missing_df,
+  wbl_missing_df
 )
 
 
@@ -264,7 +291,7 @@ db_variables_2025 <- db_variables_2024 |>
     source = case_when(
       source == "CLIAR" & str_detect(variable, "^wb_debt") ~ "CLIAR (Debt Transparency)",
       source == "CLIAR" & str_detect(variable, "^wb_wbl") ~ "CLIAR (WBL)",
-      source == "CLIAR" & str_detect(variable, "^wb_gtmi") ~ "CLIAR (WB Data 360)",
+      source == "CLIAR" & str_detect(variable, "^wb_gtmi") ~ "CLIAR (WB API)",
       T ~ source
     )
   ) |>
@@ -280,10 +307,8 @@ api_missing_indicators <- flag_missing_indicators(
 
 print(api_missing_indicators)
 
-db_variables <- db_variables_2025 |>
-  add_plmetadata(source = "metadata dictionary", other_info = "")
 
-# 3. clean db_variables ---------------------------------------------------
+# 3. Add important attributes to db_variables ---------------------------------------------------
 
 ## Create the Family Order dataframe:
 family_order <- tibble(
@@ -306,12 +331,56 @@ family_order <- tibble(
 )
 
 # Clean and prepare db_variables
-db_variables <- db_variables |>
+db_variables <- db_variables_2025 |>
   clean_names() |>
   mutate(
     variable = make_clean_names(variable),
     var_name = str_to_sentence(var_name, locale = "en") # To Sentence
   )
+
+
+# Add family-level variables to db_variables: ranks and names
+db_variables <- db_variables |>
+  mutate(
+    across(where(is.character), str_squish)
+  ) |>
+  rename(
+    rank_id = indicator_order
+  ) |>
+  mutate(
+    rank_id = rank_id + 1
+  )
+
+
+
+# Create a family_var column to link family-level vars
+family_level_vars <- db_variables |>
+  distinct(family_var, family_name) |>
+  rowwise() |>
+  mutate(
+    variable = paste0(family_var, "_avg"),
+    var_name = paste0(family_name, " Average"),
+    var_level = "indicator",
+    description = "The cluster-level average is an unweighted average of the corresponding and included indicators of this cluster. See Methodological note for details on the inclusion criteria.",
+    description_short = "The cluster-level average is an unweighted average of the corresponding and included indicators for this cluster.",
+    source = "CLIAR",
+    benchmarked_ctf = "Yes",
+    rank_id = 1
+  )
+
+
+
+# Create final db_variables with family-level vars included
+db_variables_final <- db_variables |>
+  bind_rows(family_level_vars) |>
+  arrange(family_var, rank_id)
+
+
+# Add time stamp
+db_variables <- db_variables |>
+  add_plmetadata(source = "metadata dictionary",
+                 other_info = "")
+
 
 # Add year attribute
 attr(db_variables, "ref_year") <- 2025
@@ -319,6 +388,7 @@ attr(db_variables, "ref_year") <- 2025
 
 db_variables <- db_variables |>
   add_plmetadata(source = "Own dictionary", other_info = "Version 2025, updated with indicators extracted from various sources and cleaned.")
+
 
 
 # export data -----------------------------------------------------

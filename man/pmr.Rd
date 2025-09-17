@@ -7,7 +7,7 @@
 \format{
 A tibble with 49 rows and 10 variables:
 \describe{
-  \item{country_code}{Three-letter ISO country code.}
+  \item{country_code}{Three-letter World Bank country code.}
   \item{year}{Year of observation (2018).}
   \item{oecd_pmr_2018_1_1}{Government ownership in business sectors.}
   \item{oecd_pmr_2018_1_2}{Government stake in the largest network firms.}

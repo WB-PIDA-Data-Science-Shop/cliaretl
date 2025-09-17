@@ -7,7 +7,7 @@
 \format{
 A tibble with 8,128 rows and 3 variables:
 \describe{
-  \item{country_code}{A 3-letter ISO country code (e.g., "USA", "FRA", "ARG").}
+  \item{country_code}{A 3-letter World Bank country code (e.g., "USA", "FRA", "ARG").}
   \item{year}{The calendar year (numeric).}
   \item{romelli_cbi_central_bank_independence}{Cukierman central bank independence index (scaled 0 to 1).}
 }

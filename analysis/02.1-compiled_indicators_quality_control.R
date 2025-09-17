@@ -9,6 +9,7 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(here)
+library(tidyr)
 
 compiled_indicators <- read_csv(
   here("data-raw", "output", "compiled_indicators.csv.gz")
@@ -21,6 +22,8 @@ compiled_indicators_legacy <- read_rds(
 theme_set(
   theme_classic()
 )
+
+devtools::load_all()
 
 # statistical assessment --------------------------------------------------
 diagnostics <- compiled_indicators |>

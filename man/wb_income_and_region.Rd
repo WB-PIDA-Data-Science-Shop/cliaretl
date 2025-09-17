@@ -7,8 +7,8 @@
 \format{
 A tibble with 264 rows and 4 variables:
 \describe{
-  \item{country_code}{Character. Three-letter ISO country code.}
-  \item{country_name}{Character. Official country name.}
+  \item{country_code}{Character. Three-letter World Bank country code.}
+  \item{country_name}{Character. World Bank country name.}
   \item{region}{Character. World Bank regional classification
                 (e.g., "South Asia", "Europe & Central Asia").}
   \item{income_group}{Character. World Bank income group classification

@@ -7,7 +7,7 @@
 \format{
 A data frame with 4,786 rows and 6 variables:
 \describe{
-  \item{\code{country_code}}{Character. The 3-letter ISO country code.}
+  \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
   \item{\code{year}}{Numeric. The year of the observation.}
   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
@@ -17,7 +17,7 @@ A data frame with 4,786 rows and 6 variables:
 
 A data frame with 4,786 rows and 6 variables:
 \describe{
-  \item{\code{country_code}}{Character. The 3-letter ISO country code.}
+  \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
   \item{\code{year}}{Numeric. The year of the observation.}
   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}

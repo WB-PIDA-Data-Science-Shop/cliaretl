@@ -22,7 +22,7 @@ A data frame with 427 rows and 17 variables:
   \item{\code{benchmark_static_family_aggregate_download}}{Character. Static family aggregate download flag.}
   \item{\code{benchmark_dynamic_indicator}}{Character. Dynamic indicator benchmark flag.}
   \item{\code{benchmark_dynamic_family_aggregate}}{Character. Dynamic family aggregate benchmark flag.}
-  \item{\code{indicator_order}}{Numeric. Order of the indicator within its family.}
+  \item{\code{rank_id}}{Numeric. Reference to order of the indicator within its family.}
   \item{\code{etl_source}}{Character. Cliaretl pipeline source.}
 }
 }

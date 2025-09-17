@@ -7,7 +7,7 @@
 \format{
 A tibble with 2,381 rows and 5 variables:
 \describe{
-  \item{country_code}{A three-letter ISO 3166-1 alpha-3 country code identifying the country.}
+  \item{country_code}{A three-letter World Bank 3166-1 alpha-3 country code identifying the country.}
   \item{year}{The year of the score, adjusted so that a given year's value reflects the conditions of the previous year.}
   \item{heritage_business_freedom}{Score measuring the extent to which the regulatory and infrastructure environments constrain the efficient operation of businesses.
   A higher score indicates fewer regulatory barriers and more ease in starting, operating, and closing a business.}

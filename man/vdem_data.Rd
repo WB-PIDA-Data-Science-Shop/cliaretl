@@ -7,7 +7,7 @@
 \format{
 A data frame with 6,204 rows and 52 variables:
 \describe{
-  \item{country_code}{Three‑letter ISO3 country code.}
+  \item{country_code}{Three‑letter World Bank3 country code.}
   \item{year}{Calendar year.}
   \item{vdem_core_v2x_corr}{Political corruption index (`v2x_corr`). Higher values = less corruption.}
   \item{vdem_core_v2exbribe}{Executive bribery & corrupt exchanges (`v2exbribe`).}
