@@ -55,9 +55,9 @@ db_variables <- db_variables
 country_list <- wb_country_list
 income_and_region_class <- wb_income_and_region
 
-compiled_indicators <- readr::read_csv(
+compiled_indicators <- read_rds(
   here(
-    "data-raw/output/compiled_indicators.csv.gz"
+    "data-raw/output/compiled_indicators.rds"
   )
 )
 
@@ -434,12 +434,13 @@ ctf_dynamic_clean <- ctf_dynamic |>
   )
 
 # Export Data -----
-write_csv(
+saveRDS(
   ctf_static_clean,
-    here("data-raw", "output", "static_ctf_pre_quality.csv")
+    here("data-raw", "output", "static_ctf_pre_quality.rds")
 )
 
-write_csv(
+saveRDS(
   ctf_dynamic_clean,
-    here("data-raw", "output", "dynamic_ctf_pre_quality.csv")
+    here("data-raw", "output", "dynamic_ctf_pre_quality.rds")
 )
+

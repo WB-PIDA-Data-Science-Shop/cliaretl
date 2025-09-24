@@ -35,25 +35,18 @@ country_list <- wb_country_list
 db_variables <- db_variables
 income_and_region_class <- wb_income_and_region
 
-compiled_indicators <- readr::read_csv(
-  here(
-    "data-raw/output/compiled_indicators.csv.gz"
-  )
+compiled_indicators <- readRDS(
+  here("data-raw/output/compiled_indicators.rds")
 )
 
-static_clean <- read_csv(
-  here(
-    "data-raw/output/static_ctf_pre_quality.csv"
-  )
+static_clean <- readRDS(
+  here("data-raw/output/static_ctf_pre_quality.rds")
 )
 
-dynamic_clean <- read_csv(
-  here("data-raw/output/dynamic_ctf_pre_quality.csv"),
-  na = c("", "NA", "N/A", "n/a", ".", "-", "--"),
-  guess_max = 100000, # scan more
-  show_col_types = FALSE
-) |>
-  mutate(across(where(is.logical), as.integer))  # 1/0 for logical flags
+dynamic_clean <- readRDS(
+  here("data-raw/output/dynamic_ctf_pre_quality.rds")
+)
+
 
 
 ### Pre-pare data

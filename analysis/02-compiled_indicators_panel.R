@@ -21,6 +21,7 @@ library(tidyr)
 library(testthat)
 library(janitor)
 
+
 # Load custom functions
 devtools::load_all()
 
@@ -423,11 +424,9 @@ cliar_indicators_classified_complete <- cliar_indicators_clean |>
 
 # 5. Save the compiled indicators panel -------------------------------------
 
-write.csv(
+saveRDS(
   cliar_indicators_classified_complete,
-  here("data-raw", "output", "compiled_indicators.csv.gz"),
-  row.names = FALSE,
-  fileEncoding = "UTF-8"
+  here("data-raw", "output", "compiled_indicators.rds")
 )
 
 
