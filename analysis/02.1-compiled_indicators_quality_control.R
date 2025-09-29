@@ -11,11 +11,11 @@ library(ggplot2)
 library(here)
 library(tidyr)
 
-compiled_indicators <- read_csv(
-  here("data-raw", "output", "compiled_indicators.csv.gz")
+compiled_indicators <- read_csv(#Generated in 02-compiled_indicators.R
+  here("data-raw", "output", "compiled_indicators.rds")
 )
 
-compiled_indicators_legacy <- read_rds(
+compiled_indicators_legacy <- read_rds( # Previous version of the compiled indicators
   here("data-raw", "input", "cliar", "compiled_indicators.rds")
 )
 

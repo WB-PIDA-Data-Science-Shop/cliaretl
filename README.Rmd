@@ -64,18 +64,23 @@ cliaretl/
 ├── README.md            # Project documentation (rendered version).
 ├── README.Rmd           # Source file for README.md.
 ├── renv.lock            # Lockfile for reproducible package versions.
-
 ```
 
-## Installation
+## Package Installation
 
-The package is still very early in development. However, you will be able to install the development version of cliaretl from [GitHub](https://github.com/) with:
+Install the cliaretl package with:
 
 ``` r
+# Step 1. Install the packages 'pak' or 'remotes' if you don't have them:
+
 # install.packages("pak")
-# pak::pak("WB-PIDA-Data-Science-Shop/cliaretl")
+# install.packages("remotes")
+
+
+# Step 2. Install cliaretl from GitHub:
+remotes::install_github("WB-PIDA-Data-Science-Shop/cliaretl")
 ```
 
-## Access to the data
+## Reproducibility
 
-The complete list of raw data sources and to-dos is available [here](https://worldbankgroup-my.sharepoint.com/:x:/g/personal/earias1_worldbank_org/EUmJLnSAxFlOpirD9fjkVCUBDCuC9kKU58yzYpIWjdDosw?CID=af6fb8a3-cb6e-1db1-27d4-7b6958825f9d)
+The cliaretl package uses `renv` to lock package versions, ensuring consistent results across environments and dependencies management. To set up the project environment for package development, run `renv::restore()`.
