@@ -17,105 +17,69 @@ library(here)
 library(readr)
 library(janitor)
 library(sf)
+library(rmapshaper)
 
-
-
-# read-in -----------------------------------------------------------------
 
 devtools::load_all()
 
+# ---- data inputs ---------------------------------------------------------
 ctf <- closeness_to_frontier_static
-
-avg_columns = names(ctf)[grep("_avg", names(ctf))]
-
+avg_columns <- names(ctf)[grep("_avg", names(ctf))]
 var_lists <- get_variable_lists(db_variables)
 
-db_variables <- db_variables
+raw_indicators <- readRDS(here("data-raw", "output", "compiled_indicators.rds"))
 
-raw_indicators <-
-  readRDS(
-    here("data-raw",
-         "output",
-         "compiled_indicators.rds")
-  )
+world_map <- read_sf(
+  here("data-raw","input","wb","World Bank Official Boundaries - Admin 0.geojson")
+)
 
+disputed_areas <- read_sf(
+  here("data-raw","input","wb","World Bank Official Boundaries - Admin 0_all_layers.geojson")
+)
 
-world_map <-
-  read_sf(
-    here(
-      "data-raw",
-      "input",
-      "wb",
-      "World Bank Official Boundaries - Admin 0.geojson"
-    )
-  )
-
-disputed_areas <-
-  read_sf(
-    here(
-      "data-raw",
-      "input",
-      "wb",
-      "World Bank Official Boundaries - Admin 0_all_layers.geojson"
-    )
-  )
-
-
-
-# cleaning ----------------------------------------------------------------
-# In this section, we combine the world map data with disputed areas,
-# in order to address potential boundary conflicts.
-
-disputed_areas_renamed <-
-  disputed_areas |>
+# ---- merge base + disputed layers ----------------------------------------
+disputed_areas_renamed <- disputed_areas |>
   transmute(country_code = str_trim(WB_A3)) |>
-  filter(
-    !is.na(country_code),
-    country_code != ""
-  )
+  filter(!is.na(country_code), country_code != "")
 
-world_map_renamed <-
-  world_map |>
+world_map_renamed <- world_map |>
   select(country_code = WB_A3)
 
-world_map_full_picture <-
-  world_map_renamed |>
-  bind_rows(
-    disputed_areas_renamed
-  )
+world_map_full_picture <- bind_rows(world_map_renamed, disputed_areas_renamed)
 
-# Here is necessary to simplify the world map to improve loading performance on our Shiny App.
-simplified_world_map <-
-  world_map_full_picture |>
-  # fix wrapping of dateline to avoid spurious ribbon
-  # source: https://github.com/r-spatial/sf/issues/1046
+# ---- geometry prep + simplification --------------------------------------
+world_map_wrapped <- world_map_full_picture |>
   st_transform(4326) |>
   st_wrap_dateline() |>
-  # project into robinson coordinate system
-  st_transform(crs = '+proj=robin') |>
-  # simplify polygons to improve rendering
-  st_simplify(
-    dTolerance = 0.05
+  st_transform(crs = "+proj=robin")
+
+# Use rmapshaper if available, else fallback to st_simplify
+if (requireNamespace("rmapshaper", quietly = TRUE)) {
+  simplified_world_map <- rmapshaper::ms_simplify(
+    world_map_wrapped,
+    keep = 0.05,         # keep 5% of vertices → very light
+    keep_shapes = TRUE
   )
+} else {
+  message("rmapshaper not installed; using st_simplify() fallback.")
+  simplified_world_map <- st_simplify(
+    world_map_wrapped,
+    dTolerance = 0.2,
+    preserveTopology = TRUE
+  )
+}
 
-# prepare indicators ------------------------------------------------------
+# round coordinate precision to reduce file size (~3 decimal places)
+simplified_world_map <- st_set_precision(simplified_world_map, 1e3)
 
-# keep only columns that actually exist in `ctf`
+# ---- indicator binning ---------------------------------------------------
 long_cols <- intersect(c(var_lists$vars_static_ctf, var_lists$avg_columns), names(ctf))
 
-# desired bins: [0.0,0.2) [0.2,0.4) [0.4,0.6) [0.6,0.8) [0.8,1.0]
-# Use cut() for clarity and stability (inclusive on the right for last bin)
 breaks <- c(0, 0.2, 0.4, 0.6, 0.8, 1.0)
 labels <- c("0.0 - 0.2", "0.2 - 0.4", "0.4 - 0.6", "0.6 - 0.8", "0.8 - 1.0")
 
-# generate the bins and reshape to long format
-ctf_bins <-
-  ctf |>
-  pivot_longer(
-    cols = all_of(long_cols),
-    names_to = "indicator",
-    values_to = "ctf"
-  ) |>
+ctf_bins <- ctf |>
+  pivot_longer(cols = all_of(long_cols), names_to = "indicator", values_to = "ctf") |>
   mutate(
     bin = cut(ctf, breaks = breaks, labels = labels, include.lowest = TRUE, right = TRUE),
     bin = as.character(bin),
@@ -127,52 +91,41 @@ ctf_bins <-
     values_from = c(bin, ctf)
   )
 
-# join everything ---------------------------------------------------------
-compiled_raw_for_joining <-
-  raw_indicators |>
-  # drop non-measure fields you don't want in the long step
+# ---- latest available values per indicator -------------------------------
+compiled_raw_for_joining <- raw_indicators |>
   select(-income_group, -region) |>
-  # pivot *all* columns except identifiers you want to keep as id
   pivot_longer(
     cols = -c(country_code, country_name, year),
     names_to = "name",
     values_to = "value"
   ) |>
-  # keep rows with data
   filter(!is.na(value)) |>
-  # keep most recent year per country & indicator
   group_by(country_code, name) |>
   slice_max(year, n = 1, with_ties = FALSE) |>
   ungroup() |>
-  # widen to value_<indicator> and year_<indicator>
   pivot_wider(
     id_cols = country_code,
     names_from = name,
     values_from = c(value, year)
   )
 
-# join raw indicators and ctf bins to the world map
-complete_world_map <-
-  simplified_world_map |>
-  left_join(
-    compiled_raw_for_joining
-  ) |>
-  left_join(
-    ctf_bins
-  )
+# ---- join everything -----------------------------------------------------
+complete_world_map_lowres <- simplified_world_map |>
+  left_join(compiled_raw_for_joining, by = "country_code") |>
+  left_join(ctf_bins, by = dplyr::join_by(country_code == country_code))
 
-# save output -------------------------------------------------------------
+# ---- size check ----------------------------------------------------------
+orig_size <- utils::object.size(world_map_full_picture)
+lowr_size <- utils::object.size(complete_world_map_lowres)
+cat(
+  "\nSize (original geometries):", format(orig_size, units = "MB"),
+  "\nSize (LOW-RES complete map):", format(lowr_size, units = "MB"), "\n"
+)
 
-complete_world_map |>
-  write_rds(
-    here(
-      "data-raw",
-      "output",
-      "indicators_map.rds"
-    )
-  )
-
-
-
+# ---- save ----------------------------------------------------------------
+write_rds(
+  complete_world_map_lowres,
+  here("data-raw","output","indicators_map.rds")
+)
 
 
