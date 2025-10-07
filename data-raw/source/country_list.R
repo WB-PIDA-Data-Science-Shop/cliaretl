@@ -108,6 +108,13 @@ wb_country_list <- wb_country_list |>
   inner_join(
     wb_country_groups |> select(group = group_name),
     by = "group"
+  ) |>
+  mutate(
+    country_name = if_else(
+      country_name == "Vietnam",
+      "Viet Nam",
+      country_name
+    )
   )
 
 # these are the countries that have had their income classification modified

@@ -122,6 +122,11 @@ cat(
   "\nSize (LOW-RES complete map):", format(lowr_size, units = "MB"), "\n"
 )
 
+### one additional check
+
+complete_world_map_lowres <-
+  st_make_valid(complete_world_map_lowres)
+
 # ---- save ----------------------------------------------------------------
 write_rds(
   complete_world_map_lowres,
