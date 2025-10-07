@@ -5,40 +5,67 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/r.yml/badge.svg)](https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
-The goal of cliaretl is to be the central data pipeline responsible for
-sourcing, processing and delivering the data to the CLIAR dashboard. Its
-primary function is to execute a robust Extract, Transform and Load
-(ETL) process, ensuring the dashboard always has access to accurate and
-harmonized data. It provides the following features:
+The goal of cliaretl is to be the central data pipeline responsible for sourcing, processing and delivering the data to the CLIAR dashboard. Its primary function is to execute a robust Extract, Transform and Load (ETL) process, ensuring the dashboard always has access to accurate and harmonized data. It provides the following features:
 
--   Automated Data Extraction: Programmatically pulls raw data from
-    various external services through efficient API calls.
+-   Automated Data Extraction: Programmatically pulls raw data from various external services through efficient API calls.
 
--   Data Harmonization: Merges and standardizes data originating from
-    both API endpoints and manual input sources. This ensures data
-    consistency and reliability, regardless of its origin.
+-   Data Harmonization: Merges and standardizes data originating from both API endpoints and manual input sources. This ensures data consistency and reliability, regardless of its origin.
 
--   Data Preparation: Transforms raw and harmonized data into a clean,
-    structured, and optimized format, making it available to use in the
-    CLIAR dashboard. This process also facilitates version control for
-    the data, ensuring traceability and reproducibility.
+-   Data Preparation: Transforms raw and harmonized data into a clean, structured, and optimized format, making it available to use in the CLIAR dashboard. This process also facilitates version control for the data, ensuring traceability and reproducibility.
 
--   Data Quality Testing: Implements a modular testing approach to
-    verify data quality at various stages of the ETL pipeline, ensuring
-    data integrity and reliability before it reaches the dashboard.
+-   Data Quality Testing: Implements a modular testing approach to verify data quality at various stages of the ETL pipeline, ensuring data integrity and reliability before it reaches the dashboard.
 
-## Installation
+## Project Structure
 
-The package is still very early in development. However, you will be
-able to install the development version of cliaretl from
-[GitHub](https://github.com/) with:
+The Package is structured to facilitate the ETL process, with the following key components:
 
-    # install.packages("pak")
-    # pak::pak("WB-PIDA-Data-Science-Shop/cliaretl")
+```         
+cliaretl/
+├── .github/             # GitHub configuration files (e.g., actions, workflows).
+├── analysis/            # Data Transformation and quality control scripts.
+├── data/                # Clean indicators datasets ready to be Loaded.
+├── data-raw/            # Data extraction scripts.
+│   ├── input/           # Original raw data (from external sources).
+│   ├── source/          # Scripts to transform raw data.
+│   └── output/          # Intermediate datasets for checks or ad-hoc use.
+├── inst/                # Package resources (e.g., extdata, templates).
+├── man/                 # Auto-generated R documentation (via roxygen2).
+├── R/                   # Core R functions of the package.
+├── renv/                # R environment and dependency management (via renv).
+├── spielplatz/          # Sandbox/experimentation area.
+├── tests/               # Unit tests and testthat framework scripts.
+├── .gitignore           # Files and folders ignored by Git.
+├── .Rbuildignore        # Files excluded from package build.
+├── .Renviron            # Environment variables for the project.
+├── .Rprofile            # Project-specific R startup settings.
+├── cliaretl.Rproj       # RStudio project file.
+├── DESCRIPTION          # R package metadata and dependencies.
+├── LICENSE              # License (standard CRAN format).
+├── LICENSE.md           # License (Markdown format).
+├── NAMESPACE            # Package namespace (functions to export/import).
+├── README.md            # Project documentation (rendered version).
+├── README.Rmd           # Source file for README.md.
+├── renv.lock            # Lockfile for reproducible package versions.
+```
 
-## Access to the data
+## Package Installation
 
-The complete list of raw data sources and to-dos is available
-[here](https://worldbankgroup-my.sharepoint.com/:x:/g/personal/earias1_worldbank_org/EUmJLnSAxFlOpirD9fjkVCUBDCuC9kKU58yzYpIWjdDosw?CID=af6fb8a3-cb6e-1db1-27d4-7b6958825f9d)
+Install the cliaretl package with:
+
+``` r
+# Step 1. Install the packages 'pak' or 'remotes' if you don't have them:
+
+# install.packages("pak")
+# install.packages("remotes")
+
+
+# Step 2. Install cliaretl from GitHub:
+remotes::install_github("WB-PIDA-Data-Science-Shop/cliaretl")
+```
+
+## Reproducibility
+
+The cliaretl package uses `renv` to lock package versions, ensuring consistent results across environments and dependencies management. To set up the project environment for package development, run `renv::restore()`.
