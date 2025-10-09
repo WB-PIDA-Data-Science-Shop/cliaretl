@@ -106,7 +106,7 @@ for (row_index in 1:nrow(dbv_df)) {
     if (current_row$Process == "Data360") {
       row_counter <- row_counter + 1
 
-      indicator_id <- if (grepl("WB.GTMI.I", current_row$Indicator_ID)) {
+      indicator_id <- if (grepl("WB.GTMI.I||WB.GTI.I", current_row$Indicator_ID)) {
         gsub("-", ".", current_row$Indicator_ID)
       } else {
         current_row$Indicator_ID
@@ -266,6 +266,26 @@ d360_merged_df <- left_join(key_df, d360_final_df, by = c("ISO3", "Year"))
 d360_efi_data <- full_join(efi_merged_df, d360_merged_df, by = c("ISO3", "Year")) %>%
   filter(ISO3 != "AGGREGATE")
 
+
+# Get all GTMI column names
+gtmi_cols <- grep("WB_GTMI", names(d360_efi_data), value = TRUE)
+
+# Loop through each GTMI column and find its matching GTI column
+for (gtmi_col in gtmi_cols) {
+  gti_col <- sub("GTMI", "GTI", gtmi_col)  # Replace 'gtmi' with 'gti'
+
+  if (gti_col %in% names(d360_efi_data)) {
+    # Combine values, preserving NA if both are missing
+    d360_efi_data[[gtmi_col]] <- ifelse(
+      is.na(d360_efi_data[[gtmi_col]]) & is.na(d360_efi_data[[gti_col]]),
+      NA,
+      rowSums(cbind(as.numeric(d360_efi_data[[gtmi_col]]), as.numeric(d360_efi_data[[gti_col]])), na.rm = TRUE)
+    )
+
+    # Drop the GTI column
+    d360_efi_data[[gti_col]] <- NULL
+  }
+}
 
 d360_efi_data_pre_clean <- d360_efi_data %>%
   mutate(across(
