@@ -146,23 +146,25 @@ country_last_year <-
   ungroup()
 
 # 2. CTF Score Calculations ----------------------------------------------------
+# helper fns that don't warn on all-NA
+safe_min <- function(x) if (all(is.na(x))) NA_real_ else min(x, na.rm = TRUE)
+safe_max <- function(x) if (all(is.na(x))) NA_real_ else max(x, na.rm = TRUE)
+
+
 # Identify min and max values for each indicator to benchmark CTF scores
 # Static
 min_max_static <-
   cliar_indicators_rescaled |>
-  filter(between(year,2019,2023)) |>
-  summarise(
-    across(
-      all_of(var_lists$vars_static_ctf),
-      list(
-        min = ~ min(., na.rm = TRUE),
-        max = ~ max(., na.rm = TRUE)
-      ),
+  filter(dplyr::between(year, 2019, 2023)) |>
+  dplyr::summarise(
+    dplyr::across(
+      dplyr::all_of(var_lists$vars_static_ctf),
+      list(min = safe_min, max = safe_max),
       .names = "{.col}-{.fn}"
     )
   ) |>
-  pivot_longer(
-    everything(),
+  tidyr::pivot_longer(
+    dplyr::everything(),
     names_to = c("variable", ".value"),
     names_pattern = "(.*)-(.*)"
   )
