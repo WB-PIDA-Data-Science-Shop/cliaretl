@@ -1,11 +1,31 @@
 Package: cliaretl
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Data Extraction, Transformation and Loading Tools for CLIAR Shiny Dashboard (cliarapp)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: c(
+    person("Ifeanyi", "Nzegwu Edochie",
+           email = "iedochie@worldbank.org",
+           role = c("aut", "cre"),
+    person("Galileu", "Kim",
+           email = "galileukim@worldbank.org",
+           role = "aut"),
+    person("Ileana Beatriz", "Marroquín Martínez", 
+           email = "imarroquinmartin@worldbank.org", 
+           role = "aut")),
+    person("Kannan", "Venkataramanan",
+           email = "kvenkataramanan1@worldbank.org",
+           role = "ctb")
+)
+Maintainer: EGVPI Team <CLIAR@worldbank.org>
+Description: Provides a set of reproducible, modular functions to support the 
+    ETL processing of the Country-Level Institutional Assessment and 
+    Review (CLIAR) data. The package standardizes data cleaning, 
+    metadata alignment, data quality controls, global benchmarking 
+    (closeness-to-frontier CTF calculations), and coverage calculations 
+    to ensure methodological consistency across institutional clusters 
+    (PFM, HRM, Digital & Data, etc.). Functions integrate 
+    external datasets (e.g., OECD, IMF, WDI, V-Dem) with World Bank metadata 
+    standards, supporting downstream Shiny dashboards (cliarapp) and analytical workflows.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
