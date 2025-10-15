@@ -1,31 +1,18 @@
 Package: cliaretl
 Type: Package
-Title: Data Extraction, Transformation and Loading Tools for CLIAR Shiny Dashboard (cliarapp)
+Title: An ETL Framework Supporting the World Bank’s CLIAR Dashboard
 Version: 0.1.0
 Authors@R: c(
-    person("Ifeanyi", "Nzegwu Edochie",
-           email = "iedochie@worldbank.org",
-           role = c("aut", "cre"),
-    person("Galileu", "Kim",
-           email = "galileukim@worldbank.org",
-           role = "aut"),
-    person("Ileana Beatriz", "Marroquín Martínez", 
-           email = "imarroquinmartin@worldbank.org", 
-           role = "aut")),
-    person("Kannan", "Venkataramanan",
-           email = "kvenkataramanan1@worldbank.org",
-           role = "ctb")
-)
-Maintainer: EGVPI Team <CLIAR@worldbank.org>
-Description: Provides a set of reproducible, modular functions to support the 
-    ETL processing of the Country-Level Institutional Assessment and 
-    Review (CLIAR) data. The package standardizes data cleaning, 
-    metadata alignment, data quality controls, global benchmarking 
-    (closeness-to-frontier CTF calculations), and coverage calculations 
-    to ensure methodological consistency across institutional clusters 
-    (PFM, HRM, Digital & Data, etc.). Functions integrate 
-    external datasets (e.g., OECD, IMF, WDI, V-Dem) with World Bank metadata 
-    standards, supporting downstream Shiny dashboards (cliarapp) and analytical workflows.
+    person("Ifeanyi", "Edochie", email = "iedochie@worldbank.org", role = "aut"),
+    person("Galileu", "Kim", email = "galileukim@worldbank.org", role = "aut"),
+    person("Ileana", "Marroquin", email = "imarroquinmartin@worldbank.org", role = c("aut", "cre")))
+Description: Provides a modular and reproducible ETL toolkit for the 
+    Country-Level Institutional Assessment and Review (CLIAR) data. 
+    It integrates external datasets (e.g., OECD, IMF, WDI, V-Dem) with metadata
+    standards to support Shiny dashboards (cliarapp) and analytical workflows.
+    The package standardizes data cleaning, metadata alignment, quality checks,
+    global benchmarking (closeness-to-frontier CTF calculations) and coverage
+    calculations across the CLIAR institutional clusters.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
