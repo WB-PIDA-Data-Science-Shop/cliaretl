@@ -1,11 +1,18 @@
 Package: cliaretl
 Type: Package
-Title: What the Package Does (Title Case)
+Title: An ETL Framework Supporting the World Bank’s CLIAR Dashboard
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Authors@R: c(
+    person("Ifeanyi", "Edochie", email = "iedochie@worldbank.org", role = "aut"),
+    person("Galileu", "Kim", email = "galileukim@worldbank.org", role = "aut"),
+    person("Ileana", "Marroquin", email = "imarroquinmartin@worldbank.org", role = c("aut", "cre")))
+Description: Provides a modular and reproducible ETL toolkit for the 
+    Country-Level Institutional Assessment and Review (CLIAR) data. 
+    It integrates external datasets (e.g., OECD, IMF, WDI, V-Dem) with metadata
+    standards to support Shiny dashboards (cliarapp) and analytical workflows.
+    The package standardizes data cleaning, metadata alignment, quality checks,
+    global benchmarking (closeness-to-frontier CTF calculations) and coverage
+    calculations across the CLIAR institutional clusters.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
