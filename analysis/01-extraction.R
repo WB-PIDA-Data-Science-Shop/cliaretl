@@ -98,6 +98,44 @@ db_variables_2024 <- update_db_variables(db_variables_2024,
                                          rename_map = rename_family,
                                          column_name = "family_var")
 
+## 1.3 Including the new pmr variables and deleting those we have removed
+
+newpmr_tbl <-
+  tibble::tibble(var_name = c("Involvement in Business Operations in Services Sectors",
+                              "Involvement in Business Operations in Network Sectors"),
+                 api_id = NA_character_,
+                 variable = c("oecd_pmr_2018_2_2_2", "oecd_pmr_2018_2_2_1"),
+                 var_level = "indicator",
+                 family_var = "vars_soe",
+                 family_name = rep("SOE Corporate Governance", 2),
+                 family_order = 10,
+                 processing = NA_character_,
+                 description = c("measures the extent to which the government imposes restrictions on the conduct of firms in key service sectors (e.g., restrictions on the ownership and legal form of professional firms, restrictions on the geographic location of pharmacies, regulation of retail shop opening hours)",
+                                 "measures the extent to which the government imposes restrictions on the conduct of firms in key network sectors (e.g., regulation of fixed and mobile number portability, constraints on airline route and frequency choices)"),
+                 description_short = c("measure how much government imposes restrictions on key service sector firms",
+                                       "measure how much government imposes restrictions on key network sector firms"),
+                 source = rep("OECD Product Market Regulation Database", 2),
+                 benchmarked_ctf = rep("Yes", 2),
+                 benchmark_static_family_aggregate_download = rep("No", 2),
+                 benchmark_dynamic_indicator = rep("No", 2),
+                 benchmark_dynamic_family_aggregate = rep("No", 2),
+                 etl_source = rep("oecd_pmr", 2),
+                 indicator_order = c(7, 8))
+
+## add new pmr variables
+db_variables_2024 <-
+  addnew_db_variables(db_variables = db_variables_2024,
+                      new_rows = newpmr_tbl) |>
+  arrange(variable)
+
+## remove the 2018 version that is no longer being used
+dbpmr_varlist <- db_variables_2024$variable[grepl("oecd_pmr", db_variables_2024$variable)]
+
+dropvars_list <- dbpmr_varlist[!dbpmr_varlist %in% colnames(pmr)]
+
+db_variables_2024 <- db_variables_2024 |> dplyr::filter(!variable %in% dropvars_list)
+
+
 
 # 2. Conflicting indicators analysis -------------------------------------------
 
