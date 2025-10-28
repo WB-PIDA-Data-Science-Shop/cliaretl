@@ -335,48 +335,6 @@
 "gfdb"
 
 
-#' OECD PMR Dataset - 2018 Edition
-#'
-#' This dataset contains a selection of indicators from the 2018 OECD Product Market Regulation (PMR)
-#' database for 49 countries. These indicators measure various aspects of government involvement in
-#' business, market openness, and regulatory quality.
-#'
-#' @format A tibble with 49 rows and 10 variables:
-#' \describe{
-#'   \item{country_code}{Three-letter World Bank country code.}
-#'   \item{year}{Year of observation (2018).}
-#'   \item{oecd_pmr_2018_1_1}{Government ownership in business sectors.}
-#'   \item{oecd_pmr_2018_1_2}{Government stake in the largest network firms.}
-#'   \item{oecd_pmr_2018_1_3}{Government special rights in private firms.}
-#'   \item{oecd_pmr_2018_1_4}{Stakeholder engagement in regulatory processes.}
-#'   \item{oecd_pmr_2018_2_1}{Tariff regulation and competition-limiting rules.}
-#'   \item{oecd_pmr_2018_2_2}{Autonomy and transparency of state-owned enterprises.}
-#'   \item{oecd_pmr_2018_3_3}{Administrative simplification and communication.}
-#'   \item{oecd_pmr_2018_6}{FDI restrictiveness and trade barriers.}
-#' }
-#'
-#' @description
-#' This dataset provides numeric scores for eight OECD PMR indicators, which assess the extent of
-#' product market regulation across key domains. Higher scores generally indicate more restrictive
-#' or interventionist policy environments.
-#'
-#' @details
-#' \itemize{
-#'   \item \strong{oecd_pmr_2018_1_1:} Measures whether the government controls at least one firm in a number of business sectors, with a higher weight given to key network sectors.
-#'   \item \strong{oecd_pmr_2018_1_2:} Measures the size of the government’s stake in the largest firm in key network sectors.
-#'   \item \strong{oecd_pmr_2018_1_3:} Measures the existence of special voting rights by the government in privately owned firms and constraints on the sale of government stakes.
-#'   \item \strong{oecd_pmr_2018_1_4:} Captures how policymakers interact with stakeholders when shaping business regulations. Considers forward planning, consultation, feedback, RIA, and transparency.
-#'   \item \strong{oecd_pmr_2018_2_1:} Measures whether tariffs are regulated and whether laws limit competition. Higher values imply worse performance.
-#'   \item \strong{oecd_pmr_2018_2_2:} Measures SOE autonomy in market decisions (e.g. operating hours, routes), and whether utilities disclose tariff and usage info. Higher values are worse.
-#'   \item \strong{oecd_pmr_2018_3_3:} Simple average of (i) use of one-stop shops/silence-is-consent rule and (ii) government communication to reduce administrative burden.
-#'   \item \strong{oecd_pmr_2018_6:} Simple average of (i) restrictiveness of FDI rules (equity limits, approvals, staffing, operations) and (ii) average applied tariffs.
-#' }
-#'
-#' @source OECD Product Market Regulation (PMR) Indicators, 2018. \url{https://www.oecd.org/economy/reform/oecdproductmarketregulationindicators.htm}
-#'
-#' @usage data(pmr)
-#' @keywords datasets
-"pmr"
 
 #' OECD Employment Protection Legislation (EPL) Indicators
 #'
@@ -1389,3 +1347,45 @@
 #' @usage data(closeness_to_frontier_dynamic)
 #' @keywords datasets
 "closeness_to_frontier_dynamic"
+
+#' OECD Product Market Regulation (PMR) Indicators (Renamed for CLIAR Dashboard)
+#'
+#' A tidy dataset containing the key 2018 and 2023 OECD Product Market Regulation
+#' (PMR) indicators, standardized for the CLIAR dashboard. These indicators measure
+#' the degree to which policies promote or inhibit competition in areas of the economy
+#' where competition is viable. The dataset includes multiple low-level components
+#' of the PMR framework, focusing on barriers to entry, state control, and regulatory
+#' burdens.
+#'
+#' @format A tibble with 94 rows and 9 variables:
+#' \describe{
+#'   \item{year}{Year of observation (e.g., 2018 or 2023).}
+#'   \item{country_code}{ISO3 country code.}
+#'   \item{oecd_pmr_2018_2_1}{\strong{Retail Price Controls and Regulation} — measures the extent and type of retail price controls in key network and service sectors, as well as in the retail distribution of certain goods and services.}
+#'   \item{oecd_pmr_2018_3_3}{\strong{Communication and Simplification of Administrative and Regulatory Burden} — measures the existence of an online database of all laws and regulations and regulatory agenda, the requirement of plain language drafting of laws and regulations, the principle of risk proportionality for new licensing requirements, and the application of a ‘silence is consent’ rule for issuing new licenses.}
+#'   \item{oecd_pmr_2018_2_2_2}{\strong{Involvement in Business Operations in Services Sectors} — measures the extent to which the government imposes restrictions on the conduct of firms in key service sectors (e.g., restrictions on the ownership and legal form of professional firms, restrictions on the geographic location of pharmacies, regulation of retail shop opening hours).}
+#'   \item{oecd_pmr_2018_2_2_1}{\strong{Involvement in Business Operations in Network Sectors} — measures the extent to which the government imposes restrictions on the conduct of firms in key network sectors (e.g., regulation of fixed and mobile number portability, constraints on airline route and frequency choices).}
+#'   \item{oecd_pmr_2018_1_4}{\strong{Governance of State-Owned Enterprises (SOEs)} — measures the rationale for public ownership, the degree of insulation from market discipline, the degree of political interference in SOE operations, and the arrangement of public service obligations.}
+#'   \item{oecd_pmr_2018_6}{\strong{Barriers to Trade and Investment (Composite Index)} — captures barriers that could limit the access of foreign firms and investors to domestic markets. In this dataset, it is calculated as the average of the FDI and tariff barriers subcomponents.}
+#'   \item{oecd_pmr_2018_1_3}{\strong{Scope of Direct and Indirect Control of Firms by the State} — measures whether the government controls directly or indirectly, via special voting rights, at least one firm in 24 sectors (including seven network sectors). This indicator is combined with \code{oecd_pmr_2018_1_4} to form the low-level indicator on the Quality and Scope of Public Ownership.}
+#' }
+#'
+#' @details
+#' The PMR indicators form part of the OECD’s broader effort to assess the regulatory
+#' environment for product markets and its implications for economic performance.
+#' These indicators are organized under three high-level components:
+#' \enumerate{
+#'   \item \emph{Barriers to Domestic and Foreign Entry} — includes administrative burdens, barriers in service and network sectors, and barriers to trade and investment.
+#'   \item \emph{Public Ownership} — includes measures of state control and governance of SOEs.
+#'   \item \emph{Administrative and Regulatory Burdens} — includes measures of communication, simplification, and transparency in the regulatory process.
+#' }
+#'
+#'@source OECD (2023), \emph{Product Market Regulation (PMR) Indicators Database},
+#'available at \url{https://www.oecd.org/economy/reform/indicators-of-product-market-regulation/}
+#'
+#'
+#' @examples
+#' data(pmr)
+#' head(pmr)
+#'
+"pmr"

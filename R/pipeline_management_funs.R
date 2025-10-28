@@ -227,6 +227,111 @@ update_db_variables <- function(data,
   return(data) # Return the modified data frame by default
 }
 
+#' Add New Rows to db_variables Metadata (with feedback)
+#'
+#' Appends new variable metadata rows to an existing `db_variables`
+#' data frame after checking column compatibility and reports which
+#' new unique values were introduced in each column.
+#'
+#' @param db_variables A data frame representing the existing metadata.
+#' @param new_rows A data frame or tibble with the same column names
+#'   as `db_variables`, representing new entries to append.
+#' @param validate Logical; if TRUE (default), checks that `new_rows`
+#'   columns match `db_variables` columns before binding.
+#' @param order_by character; a variable name inside `db_variables` to
+#' order the final output, default set to the `variable` column (as is
+#' the existing norm)
+#'
+#' @return An updated `db_variables` data frame containing the new rows.
+#'
+#' @importFrom dplyr bind_rows arrange all_of
+#' @importFrom purrr map keep walk
+#' @importFrom glue glue
+#'
+#' @examples
+#' new_entries <- tibble::tibble(
+#'   var_name = "New indicator example",
+#'   api_id = NA_character_,
+#'   variable = "bs_new_001",
+#'   var_level = "indicator",
+#'   family_var = "vars_newfamily",
+#'   family_name = "New Family",
+#'   family_order = 20,
+#'   processing = NA_character_,
+#'   description = "A newly added test indicator",
+#'   description_short = "Short description",
+#'   source = "Internal",
+#'   benchmarked_ctf = "No",
+#'   benchmark_static_family_aggregate_download = NA_character_,
+#'   benchmark_dynamic_indicator = NA_character_,
+#'   benchmark_dynamic_family_aggregate = NA_character_,
+#'   rank_id = NA_real_,
+#'   etl_source = "manual"
+#' )
+#'
+#' db_variables <- addnew_db_variables(db_variables, new_entries)
+#' @export
+addnew_db_variables <- function(db_variables,
+                                new_rows,
+                                validate = TRUE,
+                                order_by = "variable") {
+
+  ## ensure both db_variables and new_rows are dataframes
+  stopifnot(is.data.frame(db_variables), is.data.frame(new_rows))
+
+  if (validate) {
+    ## ensure we dont have missing variables and warn about extra columns
+    missing_cols <- setdiff(names(db_variables), names(new_rows))
+    extra_cols <- setdiff(names(new_rows), names(db_variables))
+
+    if (length(missing_cols) > 0) {
+      stop(glue::glue(
+        "Missing columns in new_rows: {paste(missing_cols, collapse = ', ')}"
+      ), call. = FALSE)
+    }
+
+    if (length(extra_cols) > 0) {
+      warning(glue::glue(
+        "Extra columns in new_rows ignored: {paste(extra_cols, collapse = ', ')}"
+      ))
+      new_rows <- new_rows[names(db_variables)]
+    }
+
+    new_rows <- new_rows[names(db_variables)]
+  }
+
+  # ---- Identify newly introduced values ----
+  col_diffs <- purrr::map(names(db_variables), function(col) {
+    old_vals <- unique(stats::na.omit(db_variables[[col]]))
+    new_vals <- unique(stats::na.omit(new_rows[[col]]))
+    setdiff(new_vals, old_vals)
+  })
+  names(col_diffs) <- names(db_variables)
+
+  new_info <- purrr::keep(col_diffs, ~ length(.x) > 0)
+
+  if (length(new_info) > 0) {
+    message(glue::glue("New unique values introduced in:"))
+    purrr::walk(names(new_info), function(col) {
+      vals <- paste(new_info[[col]], collapse = ", ")
+      message(glue::glue("{col}: {vals}"))
+    })
+  } else {
+    message("No new unique values introduced; all entries align with existing metadata.")
+  }
+
+
+  result_tbl <-
+    dplyr::bind_rows(db_variables, new_rows) |>
+    dplyr::arrange(dplyr::all_of(order_by)) |>
+    unique()
+
+  # ---- Bind and return ----
+  return(result_tbl)
+
+}
+
+
 
 #' Scale Values to [0, 1] Range
 #'
