@@ -431,4 +431,5 @@ db_variables <- db_variables |>
 
 # export data -----------------------------------------------------
 usethis::use_data(db_variables, overwrite = TRUE)
+usethis::use_data(db_variables_final, overwrite = TRUE)
 usethis::use_data(family_order, overwrite = TRUE)
