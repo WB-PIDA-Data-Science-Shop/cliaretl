@@ -908,6 +908,35 @@
 #' @source Internal project documentation and data sources.
 "db_variables"
 
+
+#' Database Variable Metadata with Dimension Averages for CLIARAPP Deployment
+#'
+#' A dataset containing metadata for variables used in the database, including indicator names, codes, families, and benchmarking information.
+#'
+#' @format A data frame with 427 rows and 17 variables:
+#' \describe{
+#'   \item{\code{var_name}}{Character. Name of the indicator or variable.}
+#'   \item{\code{api_id}}{Character. API identifier or note.}
+#'   \item{\code{variable}}{Character. Internal variable code.}
+#'   \item{\code{var_level}}{Character. Level of the variable.}
+#'   \item{\code{family_var}}{Character. Thematic cluster variable code.}
+#'   \item{\code{family_name}}{Character. Name of the variable thematic cluster.}
+#'   \item{\code{family_order}}{Numeric. Order for sorting or grouping.}
+#'   \item{\code{processing}}{Character. Processing notes or flags.}
+#'   \item{\code{description}}{Character. Full description of the variable.}
+#'   \item{\code{description_short}}{Character. Short description of the variable.}
+#'   \item{\code{source}}{Character. Original data source.}
+#'   \item{\code{benchmarked_ctf}}{Character. Whether the variable is benchmarked in CTF (\"Yes\"/\"No\").}
+#'   \item{\code{benchmark_static_family_aggregate_download}}{Character. Static family aggregate download flag.}
+#'   \item{\code{benchmark_dynamic_indicator}}{Character. Dynamic indicator benchmark flag.}
+#'   \item{\code{benchmark_dynamic_family_aggregate}}{Character. Dynamic family aggregate benchmark flag.}
+#'   \item{\code{rank_id}}{Numeric. Reference to order of the indicator within its family.}
+#'   \item{\code{etl_source}}{Character. Cliaretl pipeline source.}
+#' }
+#' @source Internal project documentation and data sources.
+"db_variables_final"
+
+
 #' Family Order and Names
 #'
 #' A tibble mapping numeric family order codes to their corresponding

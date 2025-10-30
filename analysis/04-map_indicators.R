@@ -18,6 +18,7 @@ library(readr)
 library(janitor)
 library(sf)
 library(rmapshaper)
+library(geojsonio)
 
 
 devtools::load_all()
@@ -29,13 +30,25 @@ var_lists <- get_variable_lists(db_variables)
 
 raw_indicators <- readRDS(here("data-raw", "output", "compiled_indicators.rds"))
 
-world_map <- read_sf(
-  here("data-raw","input","wb","World Bank Official Boundaries - Admin 0.geojson")
-)
+# world_map <- read_sf(
+#   here("data-raw","input","wb","World Bank Official Boundaries - Admin 0.geojson")
+# )
+#
+# disputed_areas <- read_sf(
+#   here("data-raw","input","wb","World Bank Official Boundaries - Admin 0_all_layers.geojson")
+# )
 
-disputed_areas <- read_sf(
-  here("data-raw","input","wb","World Bank Official Boundaries - Admin 0_all_layers.geojson")
-)
+options(timeout = 600)
+
+world_map <-
+  geojsonio::geojson_read(readLines("data-raw/input/wb/worldmap_url.txt")[[1]],
+                          what  = "sp") |>
+  st_as_sf()
+
+disputed_areas <-
+  geojsonio::geojson_read(readLines("data-raw/input/wb/disputedareas_url.txt")[[1]],
+                          what = "sp") |>
+  st_as_sf()
 
 # ---- merge base + disputed layers ----------------------------------------
 disputed_areas_renamed <- disputed_areas |>

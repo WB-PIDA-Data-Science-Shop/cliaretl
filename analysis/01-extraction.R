@@ -348,23 +348,31 @@ print(api_missing_indicators)
 
 # 3. Add important attributes to db_variables ---------------------------------------------------
 
-## Create the Family Order dataframe:
 family_order <- tibble(
   family_order = c(13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1),
   family_name = c(
     "Political Institutions",
     "Social Institutions",
-    "Absence of Corruption",
+    "Degree of Integrity",
     "Transparency and Accountability Institutions",
     "Justice Institutions",
-    "Public Financial Management Institutions",
+    "Public Finance Institutions",
     "Public Human Resource Management Institutions",
     "Digital and Data Institutions",
     "Business Environment",
     "SOE Corporate Governance",
     "Labor and Social Protection Institutions",
     "Service Delivery Institutions",
-    "Climate Change and Environment Institutions"
+    "Energy and Environment Institutions"
+  ),
+  Benchmark_static_family_aggregate_download = c(
+    "Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","Yes","No","No","No","Yes"
+  ),
+  Benchmark_dynamic_indicator = c(
+    "Yes","Yes","Yes","Yes","Yes","No","Yes","Yes","Yes","No","No","Yes","Yes"
+  ),
+  Benchmark_dynamic_family_aggregate = c(
+    "Partial","Partial","Partial","Partial","Partial","No","Partial","No","No","No","No","No","Partial"
   )
 )
 
@@ -431,4 +439,5 @@ db_variables <- db_variables |>
 
 # export data -----------------------------------------------------
 usethis::use_data(db_variables, overwrite = TRUE)
+usethis::use_data(db_variables_final, overwrite = TRUE)
 usethis::use_data(family_order, overwrite = TRUE)
