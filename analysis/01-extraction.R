@@ -69,6 +69,20 @@ rename_variable <- c(
   "wb_spi_census_and_survey_index" = "spi_census_and_survey_index"
 )
 
+
+# fix six variables that are incorrectly classified as `var_level` = NA
+db_variables_2024 <- db_variables_2024 |>
+  mutate(
+    var_level = if_else(
+      variable %in% c(
+        "vdem_core_v2lgcrrpt", "vdem_core_v2x_execorr", "vdem_core_v2x_pubcorr",
+        "wb_gtmi_i_12", "wb_pefa_pi_2016_07", "wb_pefa_pi_2016_08"
+      ),
+      "indicator",
+      var_level
+    )
+  )
+
 # Apply the renaming to the db_variables dataframe
 db_variables_2024 <- update_db_variables(
   db_variables_2024,
@@ -434,8 +448,6 @@ attr(db_variables, "ref_year") <- 2025
 
 db_variables <- db_variables |>
   add_plmetadata(source = "Own dictionary", other_info = "Version 2025, updated with indicators extracted from various sources and cleaned.")
-
-
 
 # export data -----------------------------------------------------
 usethis::use_data(db_variables, overwrite = TRUE)
