@@ -449,8 +449,6 @@ attr(db_variables, "ref_year") <- 2025
 db_variables <- db_variables |>
   add_plmetadata(source = "Own dictionary", other_info = "Version 2025, updated with indicators extracted from various sources and cleaned.")
 
-
-
 # export data -----------------------------------------------------
 usethis::use_data(db_variables, overwrite = TRUE)
 usethis::use_data(db_variables_final, overwrite = TRUE)

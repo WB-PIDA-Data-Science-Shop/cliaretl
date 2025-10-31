@@ -7444,7 +7444,7 @@
       "BugReports": "https://github.com/Ironholds/triebeard/issues",
       "Date": "2023-03-04",
       "NeedsCompilation": "yes",
-      "Repository": "https://packagemanager.posit.co/cran/latest"
+      "Repository": "RSPM"
     },
     "tzdb": {
       "Package": "tzdb",
@@ -7604,7 +7604,7 @@
         "R (>= 2.10)"
       ],
       "NeedsCompilation": "yes",
-      "Repository": "https://packagemanager.posit.co/cran/latest",
+      "Repository": "RSPM",
       "Author": "Os Keyes [aut, cre], Jay Jacobs [aut], Drew Schmidt [aut], Mark Greenaway [ctb], Bob Rudis [ctb], Alex Pinto [ctb], Maryam Khezrzadeh [ctb], Peter Meilstrup [ctb], Adam M. Costello [cph], Jeff Bezanson [cph], Peter Meilstrup [ctb], Xueyuan Jiang [ctb]",
       "Maintainer": "Os Keyes <ironholds@gmail.com>"
     },
