@@ -32,7 +32,6 @@ A data frame with 234 rows and 154 variables:
 
   \item{oecd_epl_regular}{OECD EPL: protection of regular contracts (0–6 original, reversed & rescaled).}
   \item{oecd_epl_temporary}{OECD EPL: protection of temporary contracts (0–6 original, reversed & rescaled).}
-  \item{oecd_pmr_2018_1_2}{OECD PMR 2018: involvement in business operations (1.2), reversed & rescaled.}
   \item{oecd_pmr_2018_1_3}{OECD PMR 2018: simplification and evaluation of regulations (1.3), reversed & rescaled.}
   \item{oecd_pmr_2018_1_4}{OECD PMR 2018: administrative burdens on start-ups (1.4), reversed & rescaled.}
   \item{oecd_pmr_2018_2_1}{OECD PMR 2018: barriers to domestic/foreign entry (2.1), reversed & rescaled.}
