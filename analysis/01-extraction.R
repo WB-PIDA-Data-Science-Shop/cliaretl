@@ -149,7 +149,22 @@ dropvars_list <- dbpmr_varlist[!dbpmr_varlist %in% colnames(pmr)]
 
 db_variables_2024 <- db_variables_2024 |> dplyr::filter(!variable %in% dropvars_list)
 
-
+## 1.4 Fix benchmarking status of Democracy Status in the Political Institutions family
+db_variables_2024 <- db_variables_2024 |>
+  mutate(
+    across(
+      c(
+        starts_with("benchmark")
+      ),
+      .fns = \(col) if_else(variable == "bs_bti_si", "No", col)
+    ),
+    # fix indicator order
+    indicator_order = case_when(
+      family_var == "vars_pol" & variable == "bs_bti_si" ~ NA_real_,
+      family_var == "vars_pol" ~ indicator_order - 1,
+      T ~ indicator_order
+    )
+  )
 
 # 2. Conflicting indicators analysis -------------------------------------------
 

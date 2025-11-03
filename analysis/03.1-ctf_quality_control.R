@@ -297,10 +297,9 @@ ctf_robustness |>
   ) |>
   ggplot() +
   geom_histogram(
-    aes(correlation, y = stat(width*density),
-        binwidth = 0.01,
-        boundary = 0,  # for nicer bin alignment
-        closed = "left") # control bin edges
+    aes(correlation, y = stat(width*density)),
+        binwidth = 0.005,
+        closed = "left" # control bin edges
   ) +
   geom_vline(
     xintercept = 0.95,
