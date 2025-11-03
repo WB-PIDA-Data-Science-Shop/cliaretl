@@ -21,7 +21,6 @@ A data frame with 234 rows and 154 variables:
   \item{bs_bti_q3_2}{BTI: effective power to govern (Q3.2), rescaled.}
   \item{bs_bti_q7_2}{BTI: policy learning/coordination (Q7.2), rescaled.}
   \item{bs_bti_q8_2}{BTI: resource efficiency (Q8.2), rescaled.}
-  \item{bs_bti_si}{BTI Status Index (composite), rescaled.}
 
   \item{fh_fiw_cl_rating}{Freedom House: Civil Liberties (reversed & rescaled where applicable).}
   \item{fh_fiw_pr_rating}{Freedom House: Political Rights (reversed & rescaled where applicable).}
@@ -33,12 +32,11 @@ A data frame with 234 rows and 154 variables:
 
   \item{oecd_epl_regular}{OECD EPL: protection of regular contracts (0–6 original, reversed & rescaled).}
   \item{oecd_epl_temporary}{OECD EPL: protection of temporary contracts (0–6 original, reversed & rescaled).}
-  \item{oecd_pmr_2018_1_1}{OECD PMR 2018: public ownership (1.1) component, reversed & rescaled.}
-  \item{oecd_pmr_2018_1_2}{OECD PMR 2018: involvement in business operations (1.2), reversed & rescaled.}
   \item{oecd_pmr_2018_1_3}{OECD PMR 2018: simplification and evaluation of regulations (1.3), reversed & rescaled.}
   \item{oecd_pmr_2018_1_4}{OECD PMR 2018: administrative burdens on start-ups (1.4), reversed & rescaled.}
   \item{oecd_pmr_2018_2_1}{OECD PMR 2018: barriers to domestic/foreign entry (2.1), reversed & rescaled.}
-  \item{oecd_pmr_2018_2_2}{OECD PMR 2018: barriers in network sectors/professions (2.2), reversed & rescaled.}
+  \item{oecd_pmr_2018_2_2_1}{OECD PMR 2018: involvement in business operations in services sectors, reversed & rescaled.}
+  \item{oecd_pmr_2018_2_2_2}{OECD PMR 2018: involvement in business operations in network sectors, reversed & rescaled.}
 
   \item{rise_ee_1}{RISE: education system enabling environment – dimension 1, rescaled.}
   \item{rise_ee_2}{RISE: enabling environment – dimension 2, rescaled.}
