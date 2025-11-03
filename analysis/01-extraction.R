@@ -54,9 +54,7 @@ vars_ctf <- db_variables |>
 
 var_lists <- get_variable_lists(db_variables)
 
-
 # 1. Update db_variables -----------------------------------------------------
-
 
 ## 1.1 Renaming variables ----------
 # Documenting variable changes in our dictionary
@@ -68,7 +66,6 @@ rename_variable <- c(
   "wb_spi_std_and_methods" = "spi_std_and_methods",
   "wb_spi_census_and_survey_index" = "spi_census_and_survey_index"
 )
-
 
 # fix six variables that are incorrectly classified as `var_level` = NA
 db_variables_2024 <- db_variables_2024 |>
@@ -142,12 +139,15 @@ db_variables_2024 <-
                       new_rows = newpmr_tbl) |>
   arrange(variable)
 
-## remove the 2018 version that is no longer being used
+## remove the 2018 variable that was agreed to be dropped
 dbpmr_varlist <- db_variables_2024$variable[grepl("oecd_pmr", db_variables_2024$variable)]
 
 dropvars_list <- dbpmr_varlist[!dbpmr_varlist %in% colnames(pmr)]
 
-db_variables_2024 <- db_variables_2024 |> dplyr::filter(!variable %in% dropvars_list)
+db_variables_2024 <- db_variables_2024 |>
+  dplyr::filter(
+    !variable %in% c("oecd_pmr_2018_1_1", "oecd_pmr_2018_1_2", "oecd_pmr_2018_2_2")
+  )
 
 ## 1.4 Fix benchmarking status of Democracy Status in the Political Institutions family
 db_variables_2024 <- db_variables_2024 |>
