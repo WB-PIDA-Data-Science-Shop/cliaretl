@@ -21,7 +21,6 @@ A data frame with 2,808 rows and 118 variables:
   \item{bs_bti_q3_1}{BTI: free and fair elections (Q3.1), rescaled.}
   \item{bs_bti_q3_2}{BTI: effective power to govern (Q3.2), rescaled.}
   \item{bs_bti_q7_2}{BTI: policy learning/coordination (Q7.2), rescaled.}
-  \item{bs_bti_si}{BTI Status Index (composite), rescaled.}
 
   \item{fh_fiw_cl_rating}{Freedom House: Civil Liberties (reversed & rescaled where applicable).}
   \item{fh_fiw_pr_rating}{Freedom House: Political Rights (reversed & rescaled where applicable).}

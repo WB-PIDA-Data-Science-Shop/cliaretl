@@ -11,7 +11,7 @@ library(ggplot2)
 library(here)
 library(tidyr)
 
-compiled_indicators <- read_csv(#Generated in 02-compiled_indicators.R
+compiled_indicators <- read_rds(#Generated in 02-compiled_indicators.R
   here("data-raw", "output", "compiled_indicators.rds")
 )
 

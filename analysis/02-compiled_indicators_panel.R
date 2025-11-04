@@ -20,7 +20,7 @@ library(stringr)
 library(tidyr)
 library(testthat)
 library(janitor)
-
+library(readr)
 
 # Load custom functions
 devtools::load_all()
@@ -424,7 +424,7 @@ cliar_indicators_classified_complete <- cliar_indicators_clean |>
 
 # 5. Save the compiled indicators panel -------------------------------------
 
-saveRDS(
+write_rds(
   cliar_indicators_classified_complete,
   here("data-raw", "output", "compiled_indicators.rds")
 )
