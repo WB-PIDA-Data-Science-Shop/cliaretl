@@ -110,7 +110,8 @@ cliar_indicators_rescaled <- cliar_indicators |>
 country_average <-
   #filter only data from years we are using
   cliar_indicators_rescaled |>
-  filter(between(year,2019,2023)) |>
+  # 2025 relase: use 2020-2024 average for static indicators
+  filter(between(year,2020,2024)) |>
   #this groups countries together so average can be taken
   group_by(
     country_code
@@ -121,7 +122,7 @@ country_average <-
   ) |>
   left_join(
     cliar_indicators_rescaled |>
-      filter(year == 2023) |>
+      filter(year == 2024) |> # 2025 release: use 2024 value for gdp per capita
       select(country_code, wdi_nygdppcapppkd),
     by = "country_code"
   )
@@ -130,7 +131,8 @@ country_average <-
 country_last_year <-
   #filter only data from years we are using
   cliar_indicators_rescaled |>
-  filter(between(year,2019,2023)) |>
+  # 2025 relase: use 2020-2024 average for static indicators
+  filter(between(year,2020,2024)) |>
   arrange(country_code, year) |>
   #this groups countries together so average can be taken
   group_by(
@@ -155,7 +157,8 @@ safe_max <- function(x) if (all(is.na(x))) NA_real_ else max(x, na.rm = TRUE)
 # Static
 min_max_static <-
   cliar_indicators_rescaled |>
-  filter(dplyr::between(year, 2019, 2023)) |>
+  # 2025 relase: use 2020-2024 average for static indicators
+  filter(dplyr::between(year, 2020, 2024)) |>
   dplyr::summarise(
     dplyr::across(
       dplyr::all_of(var_lists$vars_static_ctf),

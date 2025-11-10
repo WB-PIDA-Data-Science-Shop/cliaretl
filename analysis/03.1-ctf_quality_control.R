@@ -30,6 +30,15 @@ library(dlookr)
 
 devtools::load_all()
 
+
+ggsave <- partial(
+  ggplot2::ggsave,
+  bg = "white",
+  width = 8,
+  height = 5
+)
+
+
 # read-in data ------------------------------------------------------------
 country_list <- wb_country_list
 db_variables <- db_variables
@@ -265,9 +274,14 @@ ctf_robustness |>
     caption = "The unit of analysis is at the country-indicator level. Please note that indicators for which either value were missing are not plotted."
   ) +
   ggtitle(
-    "(2026) Correlation between CTF scores computed using (a) 5-Year Average and (b) Last-Year values for indicators"
+    "(2025) Correlation between CTF scores computed using (a) 5-Year Average and (b) Last-Year values for indicators"
   ) +
   theme_minimal()
+
+
+ggsave(
+  here("data-raw", "output", "figures", "ctf_static_5year_vs_lastyear_scatter.png")
+)
 
 ## 3.2 Plot: Correlation Histogram----------
 #    - Unit of analysis: country–indicator pair
@@ -297,7 +311,7 @@ ctf_robustness |>
   ) |>
   ggplot() +
   geom_histogram(
-    aes(correlation, y = stat(width*density)),
+    aes(correlation, y = after_stat(width*density)),
         binwidth = 0.005,
         closed = "left" # control bin edges
   ) +
@@ -318,10 +332,14 @@ ctf_robustness |>
     caption = "Dashed red line indicators a correlation above 0.95. 5 out of 137 (3.6%) indicators have a correlation below 0.95. No indicators have a correlation between 0.9."
   ) +
   ggtitle(
-    "(2026) Distribution of indicator-level correlations of CTF scores"
+    "(2025) Distribution of indicator-level correlations of CTF scores"
   ) +
   theme_minimal()
-# Finding: [ADD THE COEF FOR THE CORR]
+
+
+ggsave(
+  here("data-raw", "output", "figures", "indicator_ctf_scores_corr_distribution.png")
+)
 
 # 4. Missingness Detection ------------------------------------------------------
 # Use dlookr package to diagnose missingness and outliers in static and dynamic CTFs
