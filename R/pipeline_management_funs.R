@@ -610,15 +610,12 @@ compare_pipeline_indicators <- function(old_df, new_df, plot_save_path = NULL) {
   # -------------------------------------------------------------------
   avg_diff_df <-
   compare_df %>%
-  dplyr::filter(
-    !is.na(old_value),
-    !is.na(new_value),
-    old_value != 0   # prevent division-by-zero
-  ) %>%
-  dplyr::mutate(abs_diff = 100 * abs((new_value - old_value) / old_value)) %>%
+  dplyr::filter(!is.na(old_value), !is.na(new_value)) %>%  # only comparable rows
   dplyr::group_by(indicator, year) %>%
+  dplyr::mutate(group_mean = mean(old_value, na.rm = TRUE),
+                abs_diff_pct = abs((new_value - old_value) / group_mean)) %>%
   dplyr::summarise(
-    avg_abs_diff = mean(abs_diff, na.rm = TRUE),
+    avg_abs_diff = mean(abs_diff_pct, na.rm = TRUE),
     n_countries = dplyr::n(),
     .groups = "drop"
   )
