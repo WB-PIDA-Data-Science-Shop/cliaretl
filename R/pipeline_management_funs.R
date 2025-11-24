@@ -491,94 +491,205 @@ qualitycheck_plvalue <- function(old_df,
 
 
 
-#' Compare CLIAR Pipeline Indicator Values Across Versions
+#' Compare Indicators Between Pipeline Versions and Generate Diagnostics
 #'
-#' This function compares the indicator values between an old (published) and a new (updated)
-#' version of a CLIAR pipeline dataset. It identifies changes in values for matching country-year-indicator
-#' combinations, as well as any new data entries (e.g. new country-year combinations).
-#' A [pointblank](https://rich-iannone.github.io/pointblank/) agent report is generated to summarize changes.
+#' This function compares two versions of harmonized pipeline outputs and
+#' generates:
+#' \itemize{
+#'   \item a pointblank validation audit,
+#'   \item a table of rows where indicator values changed or were newly added,
+#'   \item a year–by–indicator heatmap of \strong{average absolute percentage differences}
+#'         across all countries.
+#' }
+#' It also optionally saves the heatmap to disk.
 #'
-#' @param old_df A data frame representing the old CLIAR dataset (e.g., already published).
-#' Must include `country_code`, `year`, and indicator columns.
+#' @param old_df A data frame containing the previous pipeline results.
+#' @param new_df A data frame containing the new pipeline results.
+#' @param plot_save_path Optional file path (including filename) for saving
+#'   the heatmap as a PNG. If \code{NULL}, the heatmap is not saved.
 #'
-#' @param new_df A data frame representing the new CLIAR dataset (e.g., updated data for new release).
-#' Must include `country_code`, `year`, and indicator columns.
+#' @return A list with:
+#' \itemize{
+#'   \item \code{agent} — pointblank validation agent summary
+#'   \item \code{difference_table} — rows where indicator values changed or were updated
+#'   \item \code{avg_abs_diff} — a data frame of mean absolute percent differences
+#'         by indicator and year, averaged across countries
+#'   \item \code{heatmap} — the ggplot2 heatmap of average absolute differences
+#' }
 #'
-#' @return A data frame (tibble) showing rows where indicator values have changed, mismatched, or are newly introduced.
-#' Also prints a `pointblank` interrogation report to the console.
-#'
-#' @details
-#' - Only compares indicators common to both `old_df` and `new_df`.
-#' - Assumes both data frames are in wide format, with indicator variables as columns.
-#' - Indicator values are compared for all shared `(country_code, year, indicator)` triples.
-#' - Differences due to `NA` mismatches are also reported.
-#' - New `country_code-year-indicator` combinations in the updated pipeline are flagged.
+#' @importFrom dplyr select mutate filter if_all case_when all_of vars group_by summarise n
+#' @importFrom tidyr pivot_longer
+#' @importFrom pointblank create_agent col_vals_equal col_vals_not_equal interrogate
+#' @importFrom ggplot2 ggplot aes geom_tile scale_fill_gradient labs theme_minimal
+#' @importFrom ggplot2 theme element_text ggsave scale_y_discrete expansion margin
 #'
 #' @export
-#'
-#' @import dplyr tidyr pointblank rlang
-compare_pipeline_indicators <- function(old_df, new_df) {
+compare_pipeline_indicators <- function(old_df, new_df, plot_save_path = NULL) {
 
   # Identify common columns
-  common_indicators <- setdiff(intersect(names(old_df), names(new_df)),
-                               c("country_code", "year"))
+  common_indicators <- setdiff(
+    intersect(names(old_df), names(new_df)),
+    c("country_code", "year")
+  )
 
-  # Reshape both to long format
+  # Reshape both datasets to long
   old_long <-
     old_df %>%
-    select(country_code, year, all_of(common_indicators)) |>
-    pivot_longer(cols = all_of(common_indicators),
-                 names_to = "indicator", values_to = "old_value")
+    dplyr::select(country_code, year, dplyr::all_of(common_indicators)) %>%
+    tidyr::pivot_longer(
+      cols = dplyr::all_of(common_indicators),
+      names_to = "indicator",
+      values_to = "old_value"
+    )
 
   new_long <-
     new_df %>%
-    select(country_code, year, all_of(common_indicators)) |>
-    pivot_longer(cols = all_of(common_indicators),
-                 names_to = "indicator", values_to = "new_value")
+    dplyr::select(country_code, year, dplyr::all_of(common_indicators)) %>%
+    tidyr::pivot_longer(
+      cols = dplyr::all_of(common_indicators),
+      names_to = "indicator",
+      values_to = "new_value"
+    )
 
-  # Full outer join to keep all combinations
+  # Full outer join
   compare_df <-
-    merge(old_long,
-          new_long,
+    merge(old_long, new_long,
           by = c("country_code", "year", "indicator"),
-          all = TRUE) |>
-    mutate(value_equal = old_value == new_value,
-           is_update = is.na(old_value) & !is.na(new_value)) |>
-    mutate(over_1pct_change =
-             case_when(!is.na(old_value) & !is.na(new_value) & old_value != 0 ~
-                        abs((new_value - old_value) / old_value) > 0.01,
-        TRUE ~ NA))
+          all = TRUE) %>%
+    dplyr::mutate(
+      value_equal = old_value == new_value,
+      is_update = is.na(old_value) & !is.na(new_value),
+      over_1pct_change = dplyr::case_when(
+        !is.na(old_value) & !is.na(new_value) & old_value != 0 ~
+          abs((new_value - old_value) / old_value) > 0.01,
+        TRUE ~ NA
+      )
+    )
 
-  # Create pointblank agent
+  # -------------------------------------------------------------------
+  # POINTBLANK agent
+  # -------------------------------------------------------------------
   agent <-
     compare_df %>%
-    create_agent() %>%
-    col_vals_equal(vars(value_equal), value = TRUE,
-                   preconditions = ~ . %>% filter(!is.na(old_value) & !is.na(new_value)),
-                   brief = "Check if indicator values changed") |>
-    col_vals_not_equal(over_1pct_change, value = TRUE,
-                       preconditions = ~ . %>% filter(!is.na(over_1pct_change)),
-                       brief = "Check if changed values are more than 1% abs difference") |>
-    col_vals_equal(vars(is_update), value = FALSE,
-                   preconditions = ~ . %>% filter(!is.na(new_value)),
-                   brief = "Check for new data not in previous pipeline") |>
-    interrogate()
+    pointblank::create_agent() %>%
+    pointblank::col_vals_equal(
+      dplyr::vars(value_equal),
+      value = TRUE,
+      preconditions = ~ . %>% dplyr::filter(!is.na(old_value) & !is.na(new_value)),
+      label = "Check if indicator values changed"
+    ) %>%
+    pointblank::col_vals_not_equal(
+      over_1pct_change, value = TRUE,
+      preconditions = ~ . %>% dplyr::filter(!is.na(over_1pct_change)),
+      label = "Check if changed values exceed 1% absolute difference"
+    ) %>%
+    pointblank::col_vals_equal(
+      dplyr::vars(is_update),
+      value = FALSE,
+      preconditions = ~ . %>% dplyr::filter(!is.na(new_value)),
+      label = "Check for new data not present in previous pipeline"
+    ) %>%
+    pointblank::interrogate()
 
-  # Print the agent report
   print(agent)
 
-  # Rows that changed or are newly added
+  # -------------------------------------------------------------------
+  # Difference table
+  # -------------------------------------------------------------------
   diff_df <-
-    compare_df |>
-    filter(is_update | !value_equal | is.na(value_equal)) |>
-    filter(!if_all(c(old_value, new_value, value_equal), is.na))
+    compare_df %>%
+    dplyr::filter(is_update | !value_equal | is.na(value_equal)) %>%
+    dplyr::filter(!dplyr::if_all(c(old_value, new_value, value_equal), is.na))
 
-  # Message if no updates or changes
   if (nrow(diff_df) == 0) {
     message("No indicator updates or changes detected between versions.")
   }
 
-  return(list(agent = agent, difference_table = diff_df))
+  # -------------------------------------------------------------------
+  # NEW: COUNTRY-LEVEL AVERAGE ABSOLUTE DIFFERENCE
+  # -------------------------------------------------------------------
+  avg_diff_df <-
+  compare_df %>%
+  dplyr::filter(
+    !is.na(old_value),
+    !is.na(new_value),
+    old_value != 0   # prevent division-by-zero
+  ) %>%
+  dplyr::mutate(abs_diff = 100 * abs((new_value - old_value) / old_value)) %>%
+  dplyr::group_by(indicator, year) %>%
+  dplyr::summarise(
+    avg_abs_diff = mean(abs_diff, na.rm = TRUE),
+    n_countries = dplyr::n(),
+    .groups = "drop"
+  )
+
+  # -------------------------------------------------------------------
+  # NEW: HEATMAP OF AVG ABS DIFF
+  # -------------------------------------------------------------------
+  # -------------------------------------------------------------------
+  # NEW: HEATMAP — INDICATOR × YEAR (AVG ACROSS COUNTRIES)
+  # -------------------------------------------------------------------
+ # -------------------------------------------------------------------
+# NEW: HEATMAP — INDICATOR × YEAR (AVG ACROSS COUNTRIES)
+# -------------------------------------------------------------------
+heatmap_plot <-
+  ggplot2::ggplot(
+    avg_diff_df,
+    ggplot2::aes(
+      x = factor(year),
+      y = indicator,
+      fill = avg_abs_diff
+    )
+  ) +
+  ggplot2::geom_tile(
+    color = "grey20",       # <<< border around tiles
+    linewidth = 0.3
+  ) +
+  ggplot2::scale_fill_gradient(
+    low = "white",
+    high = "red",
+    na.value = "grey90"
+  ) +
+  ggplot2::scale_y_discrete(
+    expand = ggplot2::expansion(mult = 0.15)  
+    # <<< dynamically increases vertical spacing
+  ) +
+  ggplot2::labs(
+    title = "Average Absolute % Difference Across Countries",
+    x = "Year",
+    y = "Indicator",
+    fill = "Avg Abs % Diff"
+  ) +
+  ggplot2::theme_minimal(base_size = 12) +
+  ggplot2::theme(
+    axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),
+    plot.margin = ggplot2::margin(15, 15, 15, 25),  
+    # <<< prevents clipping of wide y-axis labels
+    panel.grid = ggplot2::element_blank(),
+    axis.text.y = ggplot2::element_text(size = 9)  
+    # <<< slightly smaller text for readability
+  )
+
+
+  # Save plot if path provided
+  if (!is.null(plot_save_path)) {
+    ggplot2::ggsave(
+      plot_save_path,
+      heatmap_plot,
+      width = 14,
+      height = 16
+    )
+  }
+
+  # -------------------------------------------------------------------
+  # Return results
+  # -------------------------------------------------------------------
+  return(list(
+    agent = agent,
+    difference_table = diff_df,
+    avg_abs_diff = avg_diff_df,
+    heatmap = heatmap_plot
+  ))
 }
 
 #' This quick function will generate the comparison report using the

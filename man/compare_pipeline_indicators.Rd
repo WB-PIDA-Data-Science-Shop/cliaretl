@@ -2,31 +2,36 @@
 % Please edit documentation in R/pipeline_management_funs.R
 \name{compare_pipeline_indicators}
 \alias{compare_pipeline_indicators}
-\title{Compare CLIAR Pipeline Indicator Values Across Versions}
+\title{Compare Indicators Between Pipeline Versions and Generate Diagnostics}
 \usage{
-compare_pipeline_indicators(old_df, new_df)
+compare_pipeline_indicators(old_df, new_df, plot_save_path = NULL)
 }
 \arguments{
-\item{old_df}{A data frame representing the old CLIAR dataset (e.g., already published).
-Must include `country_code`, `year`, and indicator columns.}
+\item{old_df}{A data frame containing the previous pipeline results.}
 
-\item{new_df}{A data frame representing the new CLIAR dataset (e.g., updated data for new release).
-Must include `country_code`, `year`, and indicator columns.}
+\item{new_df}{A data frame containing the new pipeline results.}
+
+\item{plot_save_path}{Optional file path (including filename) for saving
+the heatmap as a PNG. If \code{NULL}, the heatmap is not saved.}
 }
 \value{
-A data frame (tibble) showing rows where indicator values have changed, mismatched, or are newly introduced.
-Also prints a `pointblank` interrogation report to the console.
+A list with:
+\itemize{
+  \item \code{agent} — pointblank validation agent summary
+  \item \code{difference_table} — rows where indicator values changed or were updated
+  \item \code{avg_abs_diff} — a data frame of mean absolute percent differences
+        by indicator and year, averaged across countries
+  \item \code{heatmap} — the ggplot2 heatmap of average absolute differences
+}
 }
 \description{
-This function compares the indicator values between an old (published) and a new (updated)
-version of a CLIAR pipeline dataset. It identifies changes in values for matching country-year-indicator
-combinations, as well as any new data entries (e.g. new country-year combinations).
-A [pointblank](https://rich-iannone.github.io/pointblank/) agent report is generated to summarize changes.
+This function compares two versions of harmonized pipeline outputs and
+generates:
+\itemize{
+  \item a pointblank validation audit,
+  \item a table of rows where indicator values changed or were newly added,
+  \item a year–by–indicator heatmap of \strong{average absolute percentage differences}
+        across all countries.
 }
-\details{
-- Only compares indicators common to both `old_df` and `new_df`.
-- Assumes both data frames are in wide format, with indicator variables as columns.
-- Indicator values are compared for all shared `(country_code, year, indicator)` triples.
-- Differences due to `NA` mismatches are also reported.
-- New `country_code-year-indicator` combinations in the updated pipeline are flagged.
+It also optionally saves the heatmap to disk.
 }

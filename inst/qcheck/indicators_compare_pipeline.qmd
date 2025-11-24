@@ -5,29 +5,31 @@ format: html
 editor: visual
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 devtools::load_all()
 
-library(here)
+# library(here)
 library(purrr)
 library(flextable)
 library(DT)
 
-source(here("analysis/indicators_compare_pipeline.R"))
+# source(here("analysis/indicators_compare_pipeline.R"))
+
+source(system.file("analysis", "indicators_compare_pipeline.R"))
 
 ```
 
 # Comparison of Previous Published Pipeline vs Latest Update
 
 ## Introduction
+
 The purpose of this report is to compare the results of the latest data pipeline updates (FY26) to the pipeline used in the FY25 version of the CLIAR dashboard. This data pipeline comparison serves two purposes:
 
-* First, to understand which indicator values (by `country_code` and `year`) changed between the baseline pipeline (FY25) and our latest update (FY26). The goal is to flag significant changes to already published estimates perhaps due to methodological changes from the source or perhaps API retrieval errors from either source or our team. 
+-   First, to understand which indicator values (by `country_code` and `year`) changed between the baseline pipeline (FY25) and our latest update (FY26). The goal is to flag significant changes to already published estimates perhaps due to methodological changes from the source or perhaps API retrieval errors from either source or our team.
 
-* Next, to also detect new data points as a result of the updates which could be part of any release notes included with the CLIAR publication. 
+-   Next, to also detect new data points as a result of the updates which could be part of any release notes included with the CLIAR publication.
 
 ### Dataset-by-Dataset Change Summary Table
 
@@ -76,12 +78,9 @@ flextable() %>%
 
 ```
 
-
-
 ### Pointblank Validation Reports
 
-The pointblank agent summarizes the results for each dataset quality check. There are three tests completed on each dataset below. The first checks if each indicator value (for each `country_code` and `year` pair) for each pipeline dataset that went into the published CLAIR dashboard (FY25) is equal to the estimate sourced into the pipeline in the latest round. The values could be different as a result of methodological changes to indicator estimation from the author. Differences may also occur as a result of our own handling, for instance rounding error. In this case, the second test we perform flags indicator value changes that are over 1% different between the pipeline versions under quality control. The final check shows how many new estimates are being introduced in this latest pipeline, i.e. indicator in `country_code` and `year` that were not published in the previous pipeline vintage (`is_update`). `is_update` likely overestimates the number of new estimates as some pipeline datasets may have included years of data outside of the temporal range of the CLIAR dataset for all/specific indicators. 
-
+The pointblank agent summarizes the results for each dataset quality check. There are three tests completed on each dataset below. The first checks if each indicator value (for each `country_code` and `year` pair) for each pipeline dataset that went into the published CLAIR dashboard (FY25) is equal to the estimate sourced into the pipeline in the latest round. The values could be different as a result of methodological changes to indicator estimation from the author. Differences may also occur as a result of our own handling, for instance rounding error. In this case, the second test we perform flags indicator value changes that are over 1% different between the pipeline versions under quality control. The final check shows how many new estimates are being introduced in this latest pipeline, i.e. indicator in `country_code` and `year` that were not published in the previous pipeline vintage (`is_update`). `is_update` likely overestimates the number of new estimates as some pipeline datasets may have included years of data outside of the temporal range of the CLIAR dataset for all/specific indicators.
 
 ```{r, results = "asis"}
 
@@ -100,11 +99,9 @@ for (ds_name in names(check_list)) {
 
 ```
 
-
 ### Flagged Data Point Table
 
 Below, we show the data which violates each of the tests in the aforementioned point blank reports.
-
 
 ```{r, results = "asis"}
 
@@ -127,4 +124,3 @@ for (ds_name in names(check_list)) {
 }
 
 ```
-
