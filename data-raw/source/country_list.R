@@ -128,15 +128,15 @@ wb_country_list |>
 # add metadata ------------------------------------------------------------
 
 wb_country_list |>
-  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+  add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
                  other_info = "2025 CLASSIFICATION")
 
 wb_country_groups <- wb_country_groups |>
-  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+  add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
                  other_info = "2025 CLASSIFICATION")
 
 wb_income_and_region <- wb_country_income_and_region |>
-  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+  add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
                  other_info = "2025 CLASSIFICATION")
 
 # write-out ---------------------------------------------------------------
