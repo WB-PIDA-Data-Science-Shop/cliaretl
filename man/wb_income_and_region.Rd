@@ -17,7 +17,7 @@ A tibble with 264 rows and 4 variables:
 }
 }
 \source{
-World Bank Group — \url{https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755}
+World Bank Group — \url{https://ddh-openapi.worldbank.org/resources/DR0095333/download}
 }
 \usage{
 wb_income_and_region

@@ -23,7 +23,7 @@
 #'   \item{\code{group}}{character Country group}
 #'   \item{\code{group_code}}{character Country group code}
 #'}
-#' @source https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755
+#' @source https://ddh-openapi.worldbank.org/resources/DR0095333/download
 "wb_country_list"
 
 #' @title World Bank Country Group
@@ -33,7 +33,7 @@
 #'   \item{\code{group_name}}{character Group name}
 #'   \item{\code{group_category}}{character Group category (e.g., Economic, Region)}
 #'}
-#' @source https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755
+#' @source https://ddh-openapi.worldbank.org/resources/DR0095333/download
 "wb_country_groups"
 
 #' @title PEFA Assessment Dataset (2016 Framework Indicators)
@@ -997,7 +997,7 @@
 #' stratifying analyses, and comparing outcomes across different
 #' development levels.
 #'
-#' @source World Bank Group — \url{https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755}
+#' @source World Bank Group — \url{https://ddh-openapi.worldbank.org/resources/DR0095333/download}
 "wb_income_and_region"
 
 #' Static CTF scores (5-year window, rescaled 0–1)

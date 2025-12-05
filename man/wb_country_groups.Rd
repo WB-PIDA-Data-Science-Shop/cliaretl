@@ -12,7 +12,7 @@ A data frame with 18 rows and 2 variables:
 }
 }
 \source{
-https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755
+https://ddh-openapi.worldbank.org/resources/DR0095333/download
 }
 \usage{
 wb_country_groups

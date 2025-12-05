@@ -5,6 +5,7 @@ library(dplyr)
 library(readr)
 library(stringr)
 
+devtools::load_all()
 
 # read-in -----------------------------------------------------------------
 # read in world bank standard country codes and mutate them to be compatible
@@ -12,16 +13,16 @@ library(stringr)
 wb_country_list_temp <- tempfile(fileext = ".xlsx")
 
 # Download the file
-# last updated: 6/12/2025
+# last updated: 12/4/2025
 download.file(
-  "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+  "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
   destfile = wb_country_list_temp,
   mode = "wb"
   )
 
 wb_country_list <- read_xlsx(
   wb_country_list_temp,
-  sheet = "compositions"
+  sheet = "composition"
 ) %>%
   transmute(
     country_code = WB_Country_Code,
@@ -124,22 +125,19 @@ wb_country_list |>
     wb_country_list_original |> distinct(country_code, group_name) |> rename(group = group_name)
   )
 
-
 # add metadata ------------------------------------------------------------
 
 wb_country_list |>
-  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+  add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
                  other_info = "2025 CLASSIFICATION")
 
 wb_country_groups <- wb_country_groups |>
-  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+  add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
                  other_info = "2025 CLASSIFICATION")
 
 wb_income_and_region <- wb_country_income_and_region |>
-  add_plmetadata(source = "https://datacatalogapi.worldbank.org/ddhxext/ResourceDownload?resource_unique_id=DR0090755",
+  add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
                  other_info = "2025 CLASSIFICATION")
-
-
 
 # write-out ---------------------------------------------------------------
 usethis::use_data(wb_country_list, overwrite = TRUE)
