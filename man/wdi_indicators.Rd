@@ -23,8 +23,8 @@ A data frame with 7,310 rows and 129 variables:
   \item{\code{wdi_nygdpmktpkdzg}}{double GDP growth (annual percentage).}
   \item{\code{wdi_nygdppcapkd}}{double GDP per capita (constant LCU).}
   \item{\code{wdi_nygdppcapkdzg}}{double GDP per capita growth (annual percentage).}
-  \item{\code{wdi_nygdppcapppkd}}{double GDP per capita, PPP (constant 2017 international USD).}
-  \item{\code{wdi_nygdpmktpppkd}}{double GDP, PPP (constant 2017 international USD).}
+  \item{\code{wdi_nygdppcapppkd}}{double GDP per capita, PPP (constant 2021 international USD).}
+  \item{\code{wdi_nygdpmktpppkd}}{double GDP, PPP (constant 2021 international USD).}
   \item{\code{wdi_necongovtzs}}{double General government final consumption expenditure (percentage of GDP).}
   \item{\code{wdi_negditotlzs}}{double Gross capital formation (percentage of GDP).}
   \item{\code{wdi_nygdstotlzs}}{double Gross domestic savings (percentage of GDP).}
@@ -49,8 +49,8 @@ A data frame with 7,310 rows and 129 variables:
   \item{\code{wdi_nygnpmktpkdzg}}{double GNI growth (annual percentage).}
   \item{\code{wdi_nygnppcapkd}}{double GNI per capita (constant LCU).}
   \item{\code{wdi_nygnppcapkdzg}}{double GNI per capita growth (annual percentage).}
-  \item{\code{wdi_nygnppcapppkd}}{double GNI per capita, PPP (constant 2017 international USD).}
-  \item{\code{wdi_nygnpmktpppkd}}{double GNI, PPP (constant 2017 international USD).}
+  \item{\code{wdi_nygnppcapppkd}}{double GNI per capita, PPP (constant 2021 international USD).}
+  \item{\code{wdi_nygnpmktpppkd}}{double GNI, PPP (constant 2021 international USD).}
   \item{\code{wdi_dtodaodatgnzs}}{double Net ODA received (percentage of GNI).}
   \item{\code{wdi_dttdsdppggnzs}}{double Debt service on external debt (percentage of exports of goods, services and primary income).}
   \item{\code{wdi_dttdsdectgnzs}}{double Debt service on external debt (percentage of GNI).}
@@ -94,11 +94,11 @@ A data frame with 7,310 rows and 129 variables:
   \item{\code{wdi_shxpdoopcchzs}}{double Out-of-pocket health expenditure (percentage of current health expenditure).}
   \item{\code{wdi_shxpdoopcppcd}}{double Out-of-pocket health expenditure per capita (current USD).}
   \item{\code{wdi_sipovgaps}}{double Poverty gap at national poverty line (percentage of poverty line).}
-  \item{\code{wdi_sipovlmicgp}}{double Poverty gap at USD2.15 a day (2017 PPP) (percentage of poverty line).}
-  \item{\code{wdi_sipovumicgp}}{double Poverty gap at USD3.65 a day (2017 PPP) (percentage of poverty line).}
-  \item{\code{wdi_sipovdday}}{double Poverty headcount ratio at USD2.15 a day (2017 PPP) (percentage of population).}
-  \item{\code{wdi_sipovlmic}}{double Poverty headcount ratio at USD3.65 a day (2017 PPP) (percentage of population).}
-  \item{\code{wdi_sipovumic}}{double Poverty headcount ratio at USD6.85 a day (2017 PPP) (percentage of population).}
+  \item{\code{wdi_sipovlmicgp}}{double Poverty gap at USD2.15 a day (2021 PPP) (percentage of poverty line).}
+  \item{\code{wdi_sipovumicgp}}{double Poverty gap at USD3.65 a day (2021 PPP) (percentage of poverty line).}
+  \item{\code{wdi_sipovdday}}{double Poverty headcount ratio at USD2.15 a day (2021 PPP) (percentage of population).}
+  \item{\code{wdi_sipovlmic}}{double Poverty headcount ratio at USD3.65 a day (2021 PPP) (percentage of population).}
+  \item{\code{wdi_sipovumic}}{double Poverty headcount ratio at USD6.85 a day (2021 PPP) (percentage of population).}
   \item{\code{wdi_sipovnahc}}{double Poverty headcount ratio at national poverty lines (percentage of population).}
   \item{\code{wdi_seprmenrltczs}}{double Primary school enrollment, total (percentage gross).}
   \item{\code{wdi_sesecenrltczs}}{double Secondary school enrollment, total (percentage gross).}
