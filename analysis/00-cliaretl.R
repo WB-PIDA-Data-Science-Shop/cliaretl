@@ -6,3 +6,8 @@ source(here::here("analysis", "02.1-compiled_indicators_quality_control.R"), loc
 source(here::here("analysis", "03-ctf_transformations.R"), local = TRUE)
 source(here::here("analysis", "03.1-ctf_quality_control.R"), local = TRUE)
 source(here::here("analysis", "04-map_indicators.R"), local = TRUE)
+
+# Documentation for versioning:
+# https://r-pkgs.org/lifecycle.html#sec-lifecycle-version-number
+
+usethis::use_version("minor")
