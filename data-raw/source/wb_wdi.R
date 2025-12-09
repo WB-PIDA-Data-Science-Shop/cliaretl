@@ -1,6 +1,6 @@
 ## code to prepare `wdi_indicators` dataset goes here
 # source: WDI Package https://cran.r-project.org/web/packages/WDI/WDI.pdf
-# access date: 6/10/2025
+# access date: 12/08/2025
 library(here)
 library(dplyr)
 library(readr)
@@ -14,7 +14,7 @@ library(countrycode)
 # Download indicators
 # Define the start and end years for data retrieval
 start_year <- 1990
-end_year <- 2023
+end_year <- 2024 # CLIAR 3.0 cutoff year
 
 # Define a comprehensive list of World Bank Development Indicators
 # Grouped for better readability and easier management.
