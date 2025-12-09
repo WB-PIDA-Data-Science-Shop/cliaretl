@@ -1,7 +1,7 @@
 Package: cliaretl
 Type: Package
 Title: An ETL Framework Supporting the World Bank’s CLIAR Dashboard
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
     person("Ifeanyi", "Edochie", email = "iedochie@worldbank.org", role = "aut"),
     person("Galileu", "Kim", email = "galileukim@worldbank.org", role = "aut"),
