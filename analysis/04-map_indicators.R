@@ -86,7 +86,7 @@ if (requireNamespace("rmapshaper", quietly = TRUE)) {
 simplified_world_map <- st_set_precision(simplified_world_map, 1e3)
 
 # ---- indicator binning ---------------------------------------------------
-long_cols <- intersect(c(var_lists$vars_static_ctf, var_lists$avg_columns), names(ctf))
+long_cols <- intersect(c(var_lists$vars_static_ctf, avg_columns), names(ctf))
 
 breaks <- c(0, 0.2, 0.4, 0.6, 0.8, 1.0)
 labels <- c("0.0 - 0.2", "0.2 - 0.4", "0.4 - 0.6", "0.6 - 0.8", "0.8 - 1.0")
@@ -145,5 +145,3 @@ write_rds(
   complete_world_map_lowres,
   here("data-raw","output","indicators_map.rds")
 )
-
-
