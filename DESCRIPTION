@@ -31,7 +31,9 @@ Imports:
     pointblank,
     tidyr,
     rmarkdown,
-    glue
+    glue,
+    janitor,
+    jsonlite
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
