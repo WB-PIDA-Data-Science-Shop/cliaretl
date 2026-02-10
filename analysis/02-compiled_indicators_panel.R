@@ -426,7 +426,6 @@ cliar_indicators_classified_complete <- cliar_indicators_clean |>
 
 write_rds(
   cliar_indicators_classified_complete,
-  here("data-raw", "output", "compiled_indicators.rds")
+  here("inst", "extdata", "compiled_indicators.rds"),
+  compress = "gz"
 )
-
-

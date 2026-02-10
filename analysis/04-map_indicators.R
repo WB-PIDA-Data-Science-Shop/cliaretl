@@ -143,7 +143,8 @@ complete_world_map_lowres <-
 # ---- save ----------------------------------------------------------------
 write_rds(
   complete_world_map_lowres,
-  here("data-raw","output","indicators_map.rds")
+  here("inst","extdata","indicators_map.rds"),
+  compress = "gz"
 )
 
 
