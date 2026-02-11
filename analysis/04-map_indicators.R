@@ -28,7 +28,7 @@ ctf <- closeness_to_frontier_static
 avg_columns <- names(ctf)[grep("_avg", names(ctf))]
 var_lists <- get_variable_lists(db_variables)
 
-raw_indicators <- readRDS(here("data-raw", "output", "compiled_indicators.rds"))
+raw_indicators <- readRDS(here("inst", "extdata", "compiled_indicators.rds"))
 
 # world_map <- read_sf(
 #   here("data-raw","input","wb","World Bank Official Boundaries - Admin 0.geojson")
