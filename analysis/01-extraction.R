@@ -111,6 +111,16 @@ db_variables_2024 <- update_db_variables(db_variables_2024,
 
 ## 1.3 Including the new pmr variables and deleting those we have removed
 
+## remove the 2018 variable that was agreed to be dropped
+dbpmr_varlist <- db_variables_2024$variable[grepl("oecd_pmr", db_variables_2024$variable)]
+
+dropvars_list <- dbpmr_varlist[!dbpmr_varlist %in% colnames(pmr)]
+
+db_variables_2024 <- db_variables_2024 |>
+  dplyr::filter(
+    !variable %in% c("oecd_pmr_2018_1_1", "oecd_pmr_2018_1_2", "oecd_pmr_2018_2_2")
+  )
+
 newpmr_tbl <-
   tibble::tibble(var_name = c("Involvement in Business Operations in Services Sectors",
                               "Involvement in Business Operations in Network Sectors"),
@@ -139,15 +149,7 @@ db_variables_2024 <-
                       new_rows = newpmr_tbl) |>
   arrange(variable)
 
-## remove the 2018 variable that was agreed to be dropped
-dbpmr_varlist <- db_variables_2024$variable[grepl("oecd_pmr", db_variables_2024$variable)]
 
-dropvars_list <- dbpmr_varlist[!dbpmr_varlist %in% colnames(pmr)]
-
-db_variables_2024 <- db_variables_2024 |>
-  dplyr::filter(
-    !variable %in% c("oecd_pmr_2018_1_1", "oecd_pmr_2018_1_2", "oecd_pmr_2018_2_2")
-  )
 
 ## 1.4 Fix benchmarking status of Democracy Status in the Political Institutions family
 db_variables_2024 <- db_variables_2024 |>
@@ -156,7 +158,7 @@ db_variables_2024 <- db_variables_2024 |>
       c(
         starts_with("benchmark")
       ),
-      .fns = \(col) if_else(variable == "bs_bti_si", "No", col)
+      .fns = \(col) if_else(variable == "bs_bti_si", "Yes", col)
     ),
     # fix indicator order
     indicator_order = case_when(
