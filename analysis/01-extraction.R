@@ -158,7 +158,7 @@ db_variables_2024 <- db_variables_2024 |>
       c(
         starts_with("benchmark")
       ),
-      .fns = \(col) if_else(variable == "bs_bti_si", "Yes", col)
+      .fns = \(col) if_else(variable == "bs_bti_si", "Yes", col) # Adjusted benchmark status to "Yes" for that variable
     ),
     # fix indicator order
     indicator_order = case_when(

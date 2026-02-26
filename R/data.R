@@ -1031,6 +1031,7 @@
 #'   \item{bs_bti_q3_2}{BTI: effective power to govern (Q3.2), rescaled.}
 #'   \item{bs_bti_q7_2}{BTI: policy learning/coordination (Q7.2), rescaled.}
 #'   \item{bs_bti_q8_2}{BTI: resource efficiency (Q8.2), rescaled.}
+#'   \item{bs_bti_si}{BTI: Democracy Status index (Political Institutions family), rescaled.}
 #'
 #'   \item{fh_fiw_cl_rating}{Freedom House: Civil Liberties (reversed & rescaled where applicable).}
 #'   \item{fh_fiw_pr_rating}{Freedom House: Political Rights (reversed & rescaled where applicable).}
@@ -1238,6 +1239,7 @@
 #'   \item{bs_bti_q3_1}{BTI: free and fair elections (Q3.1), rescaled.}
 #'   \item{bs_bti_q3_2}{BTI: effective power to govern (Q3.2), rescaled.}
 #'   \item{bs_bti_q7_2}{BTI: policy learning/coordination (Q7.2), rescaled.}
+#'   \item{bs_bti_si}{BTI: Democracy Status index (Political Institutions family), rescaled.}
 #'
 #'   \item{fh_fiw_cl_rating}{Freedom House: Civil Liberties (reversed & rescaled where applicable).}
 #'   \item{fh_fiw_pr_rating}{Freedom House: Political Rights (reversed & rescaled where applicable).}
