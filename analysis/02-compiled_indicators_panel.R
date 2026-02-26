@@ -52,7 +52,7 @@ fraser_indicators <- fraser
 aspire_indicators <- aspire
 wbl_indicators <- wbl_data
 
-# NOTE: PRM OECD data indicators is from 2018 methodology to 2022 dropped/renamed indicators.
+# NOTE: PMR OECD data indicators is from 2018 methodology to 2022 dropped/renamed indicators.
 # We drop these indicators to avoid confusion with the 2022 methodology indicators, 
 # which are included in the panel so the mapping is consistent with the 2022 methodology. The dropped indicators are:
 
