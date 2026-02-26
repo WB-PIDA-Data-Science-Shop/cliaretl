@@ -52,6 +52,14 @@ fraser_indicators <- fraser
 aspire_indicators <- aspire
 wbl_indicators <- wbl_data
 
+# NOTE: PMR OECD data indicators is from 2018 methodology to 2022 dropped/renamed indicators.
+# We drop these indicators to avoid confusion with the 2022 methodology indicators, 
+# which are included in the panel so the mapping is consistent with the 2022 methodology. The dropped indicators are:
+
+pmr_indicators <- pmr_indicators |>
+  select(-any_of(c("oecd_pmr_2018_1_1", "oecd_pmr_2018_1_2", "oecd_pmr_2018_2_2")))
+
+
 # read-in metadate variables
 db_variables <- db_variables
 wb_countries <- wb_country_list
