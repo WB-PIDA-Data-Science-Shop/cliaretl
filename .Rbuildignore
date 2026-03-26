@@ -8,3 +8,5 @@
 ^\.github$
 ^README\.Rmd$
 ^spielplatz$
+^_targets$
+^_targets.R$
