@@ -164,6 +164,9 @@ calculate_time_range <- function(indicator, time_id) {
 #' @param year_id A column identifying years.
 #' @param ref_year A numeric value indicating the most recent year of reference
 #'   (used to calculate last-five-years coverage and continuity flags).
+#' @param country_region_list A data frame with columns `country_code` and `region`
+#'   used to assess regional country coverage. If `NULL` (the default), the
+#'   `flag_country` metric will return `NA` for all indicators.
 #'
 #' @details
 #' The function computes, for each indicator:
@@ -171,7 +174,7 @@ calculate_time_range <- function(indicator, time_id) {
 #' - **Year Coverage**: number of distinct years with non-missing values.
 #' - **Flag Continuity**: indicator of whether values are continuous up to `ref_year`.
 #' - **Flag Country Coverage**: indicator of sufficient country coverage
-#'   (requires access to `country_region_list`).
+#'   (requires `country_region_list` to be supplied).
 #' - **Flag Year Coverage**: indicator of whether minimum year coverage criteria are met.
 #' - **Year Range**: minimum and maximum year observed with non-missing values.
 #' - **Percentage of Complete Records**: share of complete observations.
@@ -194,7 +197,7 @@ calculate_time_range <- function(indicator, time_id) {
 #' }
 #'
 #' @export
-compute_coverage <- function(data, country_id, year_id, ref_year){
+compute_coverage <- function(data, country_id, year_id, ref_year, country_region_list = NULL){
 
   # ---- local helpers (no external packages) ----
   prop_complete_vec <- function(x) {

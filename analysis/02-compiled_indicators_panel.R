@@ -394,7 +394,7 @@ country_region_list <- wb_countries |>
 # Compute coverage for each indicator
 cliar_indicators_diagnostic <- cliar_indicators_clean |>
   select(-country_name) |>
-  compute_coverage(country_code, year, ref_year - 5) |>
+  compute_coverage(country_code, year, ref_year - 5, country_region_list = country_region_list) |>
   left_join(
     db_variables |> select(variable, var_name, source, family_name),
     by = c("Indicator" = "variable")
