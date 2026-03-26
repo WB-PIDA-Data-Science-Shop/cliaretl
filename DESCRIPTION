@@ -16,6 +16,7 @@ Description: Provides a modular and reproducible ETL toolkit for the
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
+LazyDataCompression: xz
 URL: https://github.com/WB-PIDA-Data-Science-Shop/cliaretl
 BugReports: https://github.com/WB-PIDA-Data-Science-Shop/cliaretl/issues
 Depends: 
