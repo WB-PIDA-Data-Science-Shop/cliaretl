@@ -1,0 +1,12 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+extraction_results|stem|32ff69691e225d28|6bf5b67190df007e|2c530c1562a7fbd1|-859476772||t20538.8582157407s|s133649b|133649|rds|local|vector|||2.83|Extra columns in new_rows ignored: etl_source|
+extraction_qc|stem|d8a7b83b33dc74b7|4369ba3e69c46e1a|2c530c1562a7fbd1|-1319848527||t20538.8588822685s|s48b|48|rds|local|vector|||57.55||
+db_variables_final|stem|d892ef9a5b3ac41b|3e53559bece16862|92a0d07ac741a173|1282726667||t20538.8588831768s|s67199b|67199|rds|local|vector|||0||
+db_variables|stem|e6e86259e8cff809|70b8f5c77b1074da|92a0d07ac741a173|1911806739||t20538.8588836365s|s66598b|66598|rds|local|vector|||0||
+compiled_indicators|stem|68153bd343eb19a5|340ce4f0f4a65dd6|73018d695de7e9eb|1370470920|C:/Users/wb559885/OneDrive - WBG/Documents/GitProjects/cliaretl/inst/extdata/compiled_indicators.rds|t20538.8700573281s|s4495748b|4495748|file|local|vector|||13.62||
+ctf_results|stem|83dd437b3c707cd6|59c6309b8d653e40|4eccb1436cc0515f|1296316576||t20538.8701393422s|s696673b|696673|rds|local|vector|||6.98||
+compiled_indicators_qc|stem|d8a7b83b33dc74b7|fe9235b65c3ffb80|7ae4895428b6ae3f|-2125751886||t20538.8706433947s|s48b|48|rds|local|vector|||43.46||
+ctf_dynamic|stem|5ddbf1ca3223f4be|d50ffeb85558c4ba|bf1f6b305ba3a8b5|1201086315||t20538.8706442295s|s579418b|579418|rds|local|vector|||0||
+ctf_static|stem|02cf4a2fa4e0c3dc|5859f1022ab569a3|bf1f6b305ba3a8b5|-276448208||t20538.8706447108s|s117048b|117048|rds|local|vector|||0||
+indicators_map|stem|c6bd8c61d2ce6b9b|dc8a2b4f4c9d6ddf|29f9ba2bfd631a17|-654970461|C:/Users/wb559885/OneDrive - WBG/Documents/GitProjects/cliaretl/inst/extdata/indicators_map.rds|t20538.8718732408s|s5111092b|5111092|file|local|vector|||106.11||
+ctf_qc|stem|d8a7b83b33dc74b7|ee15475d54acff1c|d3e0a745a486ebbf|-1858436554||t20538.8719525645s|s48b|48|rds|local|vector|||6.8|Removed 18432 rows containing missing values or values outside the scale range (`geom_point()`).. Removed 41 rows containing non-finite outside the scale range (`stat_bin()`).|

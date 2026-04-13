@@ -4,7 +4,13 @@
 \alias{compute_coverage}
 \title{Compute coverage and summary statistics for indicators}
 \usage{
-compute_coverage(data, country_id, year_id, ref_year)
+compute_coverage(
+  data,
+  country_id,
+  year_id,
+  ref_year,
+  country_region_list = NULL
+)
 }
 \arguments{
 \item{data}{A data frame or tibble containing indicator values along with
@@ -16,6 +22,10 @@ country and year identifiers.}
 
 \item{ref_year}{A numeric value indicating the most recent year of reference
 (used to calculate last-five-years coverage and continuity flags).}
+
+\item{country_region_list}{A data frame with columns `country_code` and `region`
+used to assess regional country coverage. If `NULL` (the default), the
+`flag_country` metric will return `NA` for all indicators.}
 }
 \value{
 A tibble with one row per indicator and the following columns:
@@ -44,7 +54,7 @@ The function computes, for each indicator:
 - **Year Coverage**: number of distinct years with non-missing values.
 - **Flag Continuity**: indicator of whether values are continuous up to `ref_year`.
 - **Flag Country Coverage**: indicator of sufficient country coverage
-  (requires access to `country_region_list`).
+  (requires `country_region_list` to be supplied).
 - **Flag Year Coverage**: indicator of whether minimum year coverage criteria are met.
 - **Year Range**: minimum and maximum year observed with non-missing values.
 - **Percentage of Complete Records**: share of complete observations.

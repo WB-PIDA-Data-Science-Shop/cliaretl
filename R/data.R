@@ -1458,3 +1458,43 @@
 #'}
 #' @source World Bank Data 360. https://data360.worldbank.org/en/int/indicator/WEF_TTDI_INDCCREDITRATE
 "credit_rating"
+
+#' @title World Bank Country Scorecard (WB_CSC) Indicators
+#' @description A long-format panel dataset of World Bank Country Scorecard
+#'   indicators extracted from the WB_CSC database via the Data360 API. Each
+#'   row represents a country-year observation. The indicators serve as
+#'   economy-wide proxies for the World Bank's corporate scorecard results
+#'   variables, tracking development outcomes across social protection, health,
+#'   education, climate, infrastructure, digital, gender, and private sector
+#'   domains.
+#' @format A data frame with 7,121 rows and 25 variables:
+#' \describe{
+#'   \item{\code{country_code}}{character World Bank 3-letter ISO country code.}
+#'   \item{\code{year}}{character Year of the observation.}
+#'   \item{\code{wb_csc_per_allsp_cov_pop_tot}}{double Social protection coverage — total population (\%). Proxy for: Beneficiaries of social safety net programs.}
+#'   \item{\code{wb_csc_se_lpv_prim}}{double Learning poverty — \% of children unable to read and understand a simple text by age 10. Proxy for: Students supported with better education.}
+#'   \item{\code{wb_csc_sh_uhc_srvs_cv_xd}}{double UHC service coverage index (0–100). Proxy for: People receiving quality health, nutrition & population services.}
+#'   \item{\code{wb_csc_fi_deb_risk}}{double Debt distress risk rating. Proxy for: Countries implementing debt sustainability reforms.}
+#'   \item{\code{wb_csc_fi_tax_gd_zs}}{double Tax revenue as \% of GDP. Proxy for: Countries with low tax-to-GDP that increased collections.}
+#'   \item{\code{wb_csc_ghg_all_ghg}}{double Total GHG emissions — all gases (MtCO₂e). Proxy for: Net greenhouse gas emissions.}
+#'   \item{\code{wb_csc_en_clm_vuln}}{double Climate vulnerability index. Proxy for: Beneficiaries with enhanced resilience to climate risks.}
+#'   \item{\code{wb_csc_er_ptd_totl_zs}}{double Terrestrial & marine protected areas (\% of total territorial area). Proxy for: Hectares of terrestrial & aquatic areas under conservation.}
+#'   \item{\code{wb_csc_sh_h2o_basw_zs}}{double Access to basic drinking water (\% of population). Proxy for: People provided with basic drinking water.}
+#'   \item{\code{wb_csc_sh_sta_bass_zs}}{double Access to basic sanitation (\% of population). Proxy for: People provided with basic sanitation.}
+#'   \item{\code{wb_csc_sh_sta_hygn_zs}}{double Access to basic hygiene (\% of population). Proxy for: People provided with basic hygiene.}
+#'   \item{\code{wb_csc_sn_itk_msfi_zs}}{double Prevalence of moderate or severe food insecurity (\% of population). Proxy for: People with strengthened food & nutrition security.}
+#'   \item{\code{wb_csc_sp_rod_r2km}}{double \% of rural population living within 2 km of an all-season road. Proxy for: People benefiting from improved transport access.}
+#'   \item{\code{wb_csc_eg_elc_accs_zs}}{double \% of population with access to electricity. Proxy for: People provided with access to electricity.}
+#'   \item{\code{wb_csc_er_nca_rnew}}{double Renewable natural capital index. Proxy for: GW of renewable energy capacity enabled.}
+#'   \item{\code{wb_csc_it_net_user_zs}}{double \% of population using the internet. Proxy for: People using broadband internet.}
+#'   \item{\code{wb_csc_it_gov_egov_xq}}{double UN E-Government Development Index. Proxy for: People using digitally enabled services.}
+#'   \item{\code{wb_csc_sl_emp_work_fe_zs}}{double Female employment-to-population ratio (\%). Proxy for: Gender equality — total beneficiaries (female population).}
+#'   \item{\code{wb_csc_fx_own_totl_fe_zs}}{double Female account ownership at a financial institution (\% of female population 15+). Proxy for: Gender equality — economic opportunities sub-indicator.}
+#'   \item{\code{wb_csc_fx_own_totl_zs}}{double Account ownership at a financial institution (\% of population 15+). Proxy for: People & businesses using financial services.}
+#'   \item{\code{wb_csc_sl_emp_work_zs}}{double Employment-to-population ratio (\%). Proxy for: More and better-paid jobs.}
+#'   \item{\code{wb_csc_sm_pop_fdip}}{double Total forcibly displaced persons. Proxy for: Displaced people & host communities provided with services.}
+#'   \item{\code{wb_csc_ne_gdi_fprv_zs}}{double Private investment as \% of GDP. Proxy for: Total private capital enabled / mobilized.}
+#' }
+#' @source World Bank Data360 API, WB_CSC database.
+#'   \url{https://data360.worldbank.org}
+"csc"

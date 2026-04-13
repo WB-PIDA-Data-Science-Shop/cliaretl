@@ -114,6 +114,57 @@ get_data360_api <- function(dataset_id, indicator_id, pivot = TRUE) {
 #' @importFrom janitor clean_names
 #'
 #' @export
+pivot_data360 <- function(data) {
+  data_pivot <- data |>
+    pivot_wider(
+      id_cols = c(.data[["REF_AREA"]], .data[["TIME_PERIOD"]]),
+      values_from = .data[["OBS_VALUE"]],
+      names_from = .data[["INDICATOR"]]
+    ) |>
+    select(
+      country_code = .data[["REF_AREA"]],
+      year = .data[["TIME_PERIOD"]],
+      everything()
+    ) |>
+    janitor::clean_names()
+
+  return(data_pivot)
+}
+
+#' Get all indicator IDs for a Data360 database
+#'
+#' Fetches the list of indicator IDs available for a given Data360 database.
+#' The endpoint returns a plain JSON array of indicator ID strings.
+#'
+#' @param database_id A string. The Data360 database identifier, e.g.
+#'   `"WB_CSC"` or `"WB_WDI"`.
+#'
+#' @return A character vector of indicator IDs belonging to the database.
+#'
+#' @examples
+#' \dontrun{
+#'   get_csc_indicators("WB_CSC")
+#' }
+#'
+#' @importFrom httr modify_url GET stop_for_status content
+#' @importFrom jsonlite fromJSON
+#' @export
+get_csc_indicators <- function(database_id = "WB_CSC") {
+  url <- httr::modify_url(
+    "https://data360api.worldbank.org/data360/indicators",
+    query = list(datasetId = database_id)
+  )
+
+  res <- httr::GET(url)
+  httr::stop_for_status(res)
+
+  content <- httr::content(res, as = "text", encoding = "UTF-8")
+  parsed <- jsonlite::fromJSON(content)
+
+  return(parsed)
+
+}
+
 pivot_data360 <- function(data){
   data_pivot <- data |>
     pivot_wider(
