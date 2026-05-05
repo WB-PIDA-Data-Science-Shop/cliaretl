@@ -1497,4 +1497,4 @@
 #' }
 #' @source World Bank Data360 API, WB_CSC database.
 #'   \url{https://data360.worldbank.org}
-"csc"
+"scorecard"
