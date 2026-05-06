@@ -8,7 +8,6 @@
 # - Output:
 # `data-raw/output/compiled_indicators.csv.gz` file.
 
-
 # set-up ------------------------------------------------------------------
 # Load necessary libraries
 library(haven)
@@ -34,7 +33,6 @@ if(
 ref_year <- attr(db_variables, "ref_year")
 print(ref_year)
 
-
 # read-in data ------------------------------------------------------------
 
 # read-in data sources
@@ -51,6 +49,7 @@ d30_indicators <- d360_efi_data
 fraser_indicators <- fraser
 aspire_indicators <- aspire
 wbl_indicators <- wbl_data
+scorecard_indicators <- scorecard
 
 # NOTE: PMR OECD data indicators is from 2018 methodology to 2022 dropped/renamed indicators.
 # We drop these indicators to avoid confusion with the 2022 methodology indicators, 
@@ -58,7 +57,6 @@ wbl_indicators <- wbl_data
 
 pmr_indicators <- pmr_indicators |>
   select(-any_of(c("oecd_pmr_2018_1_1", "oecd_pmr_2018_1_2", "oecd_pmr_2018_2_2")))
-
 
 # read-in metadate variables
 db_variables <- db_variables
@@ -73,7 +71,6 @@ rise_indicators <- read_dta(
 compiled_indicators <- readRDS(
   here("data-raw", "input", "cliar", "compiled_indicators.rds")
 )
-
 
 # 1. Create Panel ----------------------------------------------------
 
@@ -114,7 +111,8 @@ cliar_indicators <- list(
   aspire_indicators = aspire,
   wbl_indicators = wbl_data,
   rise_indicators = rise_indicators, # Provisional
-  wdi_wb_indicators = wdi_indicators
+  wdi_wb_indicators = wdi_indicators,
+  scorecard_indicators = scorecard_indicators
 ) |>
   map(
     ~ mutate(
@@ -132,7 +130,6 @@ cliar_indicators <- list(
     year >= 1990
   )
 
-
 # order column names
 cliar_indicators <- cliar_indicators |>
   select(
@@ -147,7 +144,6 @@ cliar_indicators <- cliar_indicators |>
   mutate(
     index = row_number()
   )
-
 
 ##QC: Indicators Selection control ------------------------------------------
 
@@ -190,8 +186,6 @@ test_that(
     )
   }
 )
-
-
 
 # 2. Clusters avgs processing ---------------------------------------------
 

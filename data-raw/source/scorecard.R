@@ -26,7 +26,10 @@ lapply(X = colnames(csc_tbl)[!colnames(csc_tbl) %in% c("country_code", "year")],
            dplyr::filter(n > 1L)
        })
 
-scorecard <- csc_tbl 
+scorecard <- csc_tbl |> 
+  mutate(
+    year = as.numeric(year)
+  )
 
 rm(csc_tbl)
 
