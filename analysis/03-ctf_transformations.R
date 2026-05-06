@@ -57,7 +57,7 @@ income_and_region_class <- wb_income_and_region
 
 compiled_indicators <- read_rds(
   here(
-    "data-raw/output/compiled_indicators.rds"
+    "inst", "extdata", "compiled_indicators.rds"
   )
 )
 
@@ -453,4 +453,3 @@ saveRDS(
   ctf_dynamic_clean,
     here("data-raw", "output", "dynamic_ctf_pre_quality.rds")
 )
-
