@@ -97,6 +97,13 @@ excluded_country_code <- c(
   "SPM"  # Saint Pierre and Miquelon
 )
 
+# exclude strange country codes from scorecard_indicators (e.g., DEC, BLA)
+scorecard_indicators <- scorecard_indicators |> 
+  inner_join(
+    cliaretl::wb_country_list |> 
+      distinct(country_code)
+  )
+
 cliar_indicators <- list(
   debt_transparency_indicators = debt_transparency,
   pefa_assessments_indicators = pefa_assessments,

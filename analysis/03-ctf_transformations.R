@@ -116,14 +116,15 @@ country_average <-
   group_by(
     country_code
   ) |>
+  # calculate average for both 
   summarise(
     across(all_of(var_lists$vars_static_ctf), ~ mean(.x, na.rm = TRUE)),
     .groups = "drop"
   ) |>
   left_join(
     cliar_indicators_rescaled |>
-      filter(year == 2024) |> # 2025 release: use 2024 value for gdp per capita
-      select(country_code, wdi_nygdppcapppkd),
+      filter(year == 2024) |> # 2025 release: use 2024 value for gdp per capita and scorecard values
+      select(country_code, wdi_nygdppcapppkd, starts_with("wb_csc")),
     by = "country_code"
   )
 
@@ -151,7 +152,6 @@ country_last_year <-
 # helper fns that don't warn on all-NA
 safe_min <- function(x) if (all(is.na(x))) NA_real_ else min(x, na.rm = TRUE)
 safe_max <- function(x) if (all(is.na(x))) NA_real_ else max(x, na.rm = TRUE)
-
 
 # Identify min and max values for each indicator to benchmark CTF scores
 # Static
@@ -347,7 +347,7 @@ ctf_long_clean <-
   bind_rows(ctf_long)
 
 ## 3.2 Prepare dynamic data ----
-# Clean CTF dynamic data and incorporate logged GDP per capita
+# Clean CTF dynamic data and incorporate logged GDP per capita, scorecard indicators
 ctf_dynamic <-
   ctf_dynamic |>
   # add country codes and names
@@ -360,6 +360,11 @@ ctf_dynamic <-
     cliar_indicators |> select(country_code, year, wdi_nygdppcapppkd),
     by = c("country_code", "year")
   ) |>
+  # add scorecard indicators
+  left_join(
+    cliar_indicators |> select(country_code, year, starts_with("wb_csc_")),
+    by = c("country_code", "year")
+  ) |> 
   # rename and transform gdp per capita to log
   mutate(
     log_gdp = log(wdi_nygdppcapppkd)
