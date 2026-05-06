@@ -79,10 +79,8 @@ vars_ctf <- db_variables |>
   ) |>
   pull(variable)
 
-
 # Build lists from metadata - auxiliary lists such as: vars_static_ctf, vars_all, etc.
 var_lists <- get_variable_lists(db_variables)
-
 
 ## 1.2 Rescale Indicators -----
 cliar_indicators_rescaled <- cliar_indicators |>
@@ -102,7 +100,6 @@ cliar_indicators_rescaled <- cliar_indicators |>
     # GFDB bank concentration (0–100): reverse
     wb_gfdb_oi_01 = reverse_indicator(wb_gfdb_oi_01, min = 0, max = 100)
   )
-
 
 ## 1.3 Country-Level Aggregation -----
 
@@ -295,10 +292,9 @@ ctf_static <-
     country_list |> distinct(country_code, country_name),
     by = c("country_code")
   ) |>
-  # add gdp per capita (PPP) data
-  # use average value (as in legacy ctf)
+  # add gdp per capita (PPP) data and scorecard indicators
   left_join(
-    country_average |> select(country_code, wdi_nygdppcapppkd),
+    country_average |> select(country_code, wdi_nygdppcapppkd, starts_with("wb_csc")),
     by = c("country_code")
   ) |>
   # rename and transform gdp per capita to log
