@@ -317,7 +317,7 @@ ctf_long <-
     all_of(var_lists$vars_static_ctf),
     names_to = "variable"
   ) |>
-  select(-contains("gdp")) |>
+  select(-contains("gdp"), -starts_with("wb_csc")) |>
   left_join(
     db_variables |>
       select(variable, var_name, family_name, family_var),
@@ -380,7 +380,7 @@ ctf_dynamic_long <-
     all_of(var_lists$vars_dynamic_ctf),
     names_to = "variable"
   ) |>
-  select(-contains("gdp")) |>
+  select(-contains("gdp"), -starts_with("wb_csc")) |>
   left_join(
     db_variables |>
       select(variable, var_name, family_name, family_var)

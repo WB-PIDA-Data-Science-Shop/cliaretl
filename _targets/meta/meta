@@ -1,12 +1,12 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-extraction_results|stem|dcad92cc07854925|6bf5b67190df007e|2c530c1562a7fbd1|-859476772||t20580.5935752979s|s136534b|136534|rds|local|vector|||11.59|Extra columns in new_rows ignored: etl_source. Extra columns in new_rows ignored: rank_id, etl_source|
-extraction_qc|stem|d8a7b83b33dc74b7|4369ba3e69c46e1a|2c530c1562a7fbd1|-1319848527||t20580.5950908094s|s48b|48|rds|local|vector|||130.78||
-db_variables_final|stem|c5450eb8dd9809b8|3e53559bece16862|1efbd8338d32aaad|1282726667||t20580.5950930287s|s68633b|68633|rds|local|vector|||0||
-db_variables|stem|89681425823695d6|70b8f5c77b1074da|1efbd8338d32aaad|1911806739||t20580.5950940385s|s68019b|68019|rds|local|vector|||0||
-compiled_indicators|stem|566ad7fccf1df586|340ce4f0f4a65dd6|e7b824925422baae|1370470920|C:/Users/wb438023/github/cliaretl/inst/extdata/compiled_indicators.rds|t20580.5954858883s|s4722828b|4722828|file|local|vector|||33.79|There were 2 warnings in `dplyr::summarise()`. The first warning was: ℹ In argument: `dplyr::across(...)`. Caused by warning in `min()`: ! no non-missing arguments to min; returning Inf ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.|
-ctf_results|stem|63bc9fda29c48fc7|59c6309b8d653e40|f9074d217260485b|1296316576||t20580.5957012213s|s815836b|815836|rds|local|vector|||18.42||
-compiled_indicators_qc|stem|d8a7b83b33dc74b7|fe9235b65c3ffb80|5c3961aedb83d0e7|-2125751886||t20580.5967872844s|s48b|48|rds|local|vector|||93.76||
-ctf_dynamic|stem|69a7a68b0b6fb51c|d50ffeb85558c4ba|b200495dc8e0f372|1201086315||t20580.5967892906s|s693904b|693904|rds|local|vector|||0.01||
-ctf_static|stem|d0646f1e0adc1873|5859f1022ab569a3|b200495dc8e0f372|-276448208||t20580.5967903384s|s121770b|121770|rds|local|vector|||0||
-indicators_map|stem|c6bd8c61d2ce6b9b|dc8a2b4f4c9d6ddf|b4852063a740351b|-654970461|C:/Users/wb438023/github/cliaretl/inst/extdata/indicators_map.rds|t20580.5988714203s|s5111092b|5111092|file|local|vector|||179.75||
-ctf_qc|stem|d8a7b83b33dc74b7|ee15475d54acff1c|ea66dca124666c5a|-1858436554||t20580.5990805751s|s48b|48|rds|local|vector|||17.96|Removed 18432 rows containing missing values or values outside the scale range (`geom_point()`).. Removed 41 rows containing non-finite outside the scale range (`stat_bin()`).|
+extraction_results|stem|101859465a1e98b0|6bf5b67190df007e|2c530c1562a7fbd1|-859476772||t20580.8219031156s|s136573b|136573|rds|local|vector|||11.03|Extra columns in new_rows ignored: etl_source. Extra columns in new_rows ignored: rank_id, etl_source|
+extraction_qc|stem|d8a7b83b33dc74b7|4369ba3e69c46e1a|2c530c1562a7fbd1|-1319848527||t20580.8235250071s|s48b|48|rds|local|vector|||140.02||
+db_variables_final|stem|cdfe2d1369a893da|3e53559bece16862|9963c462c10c5d20|1282726667||t20580.8235274966s|s68654b|68654|rds|local|vector|||0||
+db_variables|stem|3977a223634b49c0|70b8f5c77b1074da|9963c462c10c5d20|1911806739||t20580.8235284158s|s68036b|68036|rds|local|vector|||0||
+compiled_indicators|stem|566ad7fccf1df586|340ce4f0f4a65dd6|695f07326aaea825|1370470920|C:/Users/wb438023/github/cliaretl/inst/extdata/compiled_indicators.rds|t20580.8240540642s|s4722828b|4722828|file|local|vector|||45.37|There were 2 warnings in `dplyr::summarise()`. The first warning was: ℹ In argument: `dplyr::across(...)`. Caused by warning in `min()`: ! no non-missing arguments to min; returning Inf ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.|
+ctf_results|stem|63bc9fda29c48fc7|59c6309b8d653e40|31d48092d1407e40|1296316576||t20580.824308223s|s815836b|815836|rds|local|vector|||21.74||
+compiled_indicators_qc|stem|d8a7b83b33dc74b7|fe9235b65c3ffb80|5c3961aedb83d0e7|-2125751886||t20580.8253908769s|s48b|48|rds|local|vector|||93.41||
+ctf_dynamic|stem|69a7a68b0b6fb51c|d50ffeb85558c4ba|b200495dc8e0f372|1201086315||t20580.8253932246s|s693904b|693904|rds|local|vector|||0||
+ctf_static|stem|d0646f1e0adc1873|5859f1022ab569a3|b200495dc8e0f372|-276448208||t20580.8253945241s|s121770b|121770|rds|local|vector|||0||
+indicators_map|stem|c6bd8c61d2ce6b9b|dc8a2b4f4c9d6ddf|58a08f49d6a6ce69|-654970461|C:/Users/wb438023/github/cliaretl/inst/extdata/indicators_map.rds|t20580.8273211032s|s5111092b|5111092|file|local|vector|||166.37||
+ctf_qc|stem|d8a7b83b33dc74b7|ee15475d54acff1c|ea66dca124666c5a|-1858436554||t20580.8274921719s|s48b|48|rds|local|vector|||14.69|Removed 18432 rows containing missing values or values outside the scale range (`geom_point()`).. Removed 41 rows containing non-finite outside the scale range (`stat_bin()`).|
