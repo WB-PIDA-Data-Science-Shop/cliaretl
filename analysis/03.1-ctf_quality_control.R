@@ -113,11 +113,11 @@ test_that(
   {
     ## Shel added _avg to the pattern to take care of the new family level indicators (that all have an _avg suffix)
     expect_setequal(
-      static_clean |> colnames() |> str_subset("year|country|gdp|_avg$", negate = TRUE),
+      static_clean |> colnames() |> str_subset("year|country|gdp|wb_csc|_avg$", negate = TRUE),
       var_lists$vars_static_ctf
     )
     expect_setequal(
-      dynamic_clean |> colnames() |> str_subset("year|country|gdp|_avg$", negate = TRUE),
+      dynamic_clean |> colnames() |> str_subset("year|country|gdp|wb_csc|_avg$", negate = TRUE),
       var_lists$vars_dynamic_ctf
     )
   }

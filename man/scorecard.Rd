@@ -23,7 +23,6 @@ A data frame with 7,121 rows and 25 variables:
   \item{\code{wb_csc_sn_itk_msfi_zs}}{double Prevalence of moderate or severe food insecurity (\% of population). Proxy for: People with strengthened food & nutrition security.}
   \item{\code{wb_csc_sp_rod_r2km}}{double \% of rural population living within 2 km of an all-season road. Proxy for: People benefiting from improved transport access.}
   \item{\code{wb_csc_eg_elc_accs_zs}}{double \% of population with access to electricity. Proxy for: People provided with access to electricity.}
-  \item{\code{wb_csc_er_nca_rnew}}{double Renewable natural capital index. Proxy for: GW of renewable energy capacity enabled.}
   \item{\code{wb_csc_it_net_user_zs}}{double \% of population using the internet. Proxy for: People using broadband internet.}
   \item{\code{wb_csc_it_gov_egov_xq}}{double UN E-Government Development Index. Proxy for: People using digitally enabled services.}
   \item{\code{wb_csc_sl_emp_work_fe_zs}}{double Female employment-to-population ratio (\%). Proxy for: Gender equality — total beneficiaries (female population).}

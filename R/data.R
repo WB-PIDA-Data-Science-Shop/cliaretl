@@ -1104,6 +1104,29 @@
 #'   \item{wb_aspire_adequacy_benefits}{ASPIRE: adequacy of social assistance benefits, rescaled.}
 #'   \item{wb_aspire_coverage}{ASPIRE: coverage of social assistance, rescaled.}
 #'
+#'   \item{wb_csc_eg_elc_accs_zs}{World Bank Country Scorecard: \% of population with access to electricity.}
+#'   \item{wb_csc_en_clm_vuln}{World Bank Country Scorecard: climate vulnerability index.}
+#'   \item{wb_csc_er_ptd_totl_zs}{World Bank Country Scorecard: terrestrial & marine protected areas (\% of total territorial area).}
+#'   \item{wb_csc_fi_deb_risk}{World Bank Country Scorecard: debt distress risk rating.}
+#'   \item{wb_csc_fi_tax_gd_zs}{World Bank Country Scorecard: tax revenue as \% of GDP.}
+#'   \item{wb_csc_fx_own_totl_fe_zs}{World Bank Country Scorecard: female account ownership at a financial institution (\% of female population 15+).}
+#'   \item{wb_csc_fx_own_totl_zs}{World Bank Country Scorecard: account ownership at a financial institution (\% of population 15+).}
+#'   \item{wb_csc_ghg_all_ghg}{World Bank Country Scorecard: total GHG emissions — all gases (MtCO2e).}
+#'   \item{wb_csc_it_gov_egov_xq}{World Bank Country Scorecard: UN E-Government Development Index.}
+#'   \item{wb_csc_it_net_user_zs}{World Bank Country Scorecard: \% of population using the internet.}
+#'   \item{wb_csc_ne_gdi_fprv_zs}{World Bank Country Scorecard: private investment as \% of GDP.}
+#'   \item{wb_csc_per_allsp_cov_pop_tot}{World Bank Country Scorecard: social protection coverage — total population (\%).}
+#'   \item{wb_csc_se_lpv_prim}{World Bank Country Scorecard: learning poverty — \% of children unable to read and understand a simple text by age 10.}
+#'   \item{wb_csc_sh_h2o_basw_zs}{World Bank Country Scorecard: access to basic drinking water (\% of population).}
+#'   \item{wb_csc_sh_sta_bass_zs}{World Bank Country Scorecard: access to basic sanitation (\% of population).}
+#'   \item{wb_csc_sh_sta_hygn_zs}{World Bank Country Scorecard: access to basic hygiene (\% of population).}
+#'   \item{wb_csc_sh_uhc_srvs_cv_xd}{World Bank Country Scorecard: UHC service coverage index (0-100).}
+#'   \item{wb_csc_sl_emp_work_fe_zs}{World Bank Country Scorecard: female employment-to-population ratio (\%).}
+#'   \item{wb_csc_sl_emp_work_zs}{World Bank Country Scorecard: employment-to-population ratio (\%).}
+#'   \item{wb_csc_sm_pop_fdip}{World Bank Country Scorecard: total forcibly displaced persons.}
+#'   \item{wb_csc_sn_itk_msfi_zs}{World Bank Country Scorecard: prevalence of moderate or severe food insecurity (\% of population).}
+#'   \item{wb_csc_sp_rod_r2km}{World Bank Country Scorecard: \% of rural population living within 2 km of an all-season road.}
+#'
 #'   \item{wb_debt_transp_index}{World Bank/ID4D–Debt Transparency Index (reversed where needed & rescaled).}
 #'   \item{wb_gfdb_oi_01}{Global Financial Development Database: Openness/Information (OI_01) sub-indicator, rescaled.}
 #'
@@ -1306,6 +1329,29 @@
 #'   \item{wb_aspire_adequacy_benefits}{ASPIRE: adequacy of social assistance benefits, rescaled.}
 #'   \item{wb_aspire_coverage}{ASPIRE: coverage of social assistance, rescaled.}
 #'
+#'   \item{wb_csc_eg_elc_accs_zs}{World Bank Country Scorecard: \% of population with access to electricity.}
+#'   \item{wb_csc_en_clm_vuln}{World Bank Country Scorecard: climate vulnerability index.}
+#'   \item{wb_csc_er_ptd_totl_zs}{World Bank Country Scorecard: terrestrial & marine protected areas (\% of total territorial area).}
+#'   \item{wb_csc_fi_deb_risk}{World Bank Country Scorecard: debt distress risk rating.}
+#'   \item{wb_csc_fi_tax_gd_zs}{World Bank Country Scorecard: tax revenue as \% of GDP.}
+#'   \item{wb_csc_fx_own_totl_fe_zs}{World Bank Country Scorecard: female account ownership at a financial institution (\% of female population 15+).}
+#'   \item{wb_csc_fx_own_totl_zs}{World Bank Country Scorecard: account ownership at a financial institution (\% of population 15+).}
+#'   \item{wb_csc_ghg_all_ghg}{World Bank Country Scorecard: total GHG emissions — all gases (MtCO2e).}
+#'   \item{wb_csc_it_gov_egov_xq}{World Bank Country Scorecard: UN E-Government Development Index.}
+#'   \item{wb_csc_it_net_user_zs}{World Bank Country Scorecard: \% of population using the internet.}
+#'   \item{wb_csc_ne_gdi_fprv_zs}{World Bank Country Scorecard: private investment as \% of GDP.}
+#'   \item{wb_csc_per_allsp_cov_pop_tot}{World Bank Country Scorecard: social protection coverage — total population (\%).}
+#'   \item{wb_csc_se_lpv_prim}{World Bank Country Scorecard: learning poverty — \% of children unable to read and understand a simple text by age 10.}
+#'   \item{wb_csc_sh_h2o_basw_zs}{World Bank Country Scorecard: access to basic drinking water (\% of population).}
+#'   \item{wb_csc_sh_sta_bass_zs}{World Bank Country Scorecard: access to basic sanitation (\% of population).}
+#'   \item{wb_csc_sh_sta_hygn_zs}{World Bank Country Scorecard: access to basic hygiene (\% of population).}
+#'   \item{wb_csc_sh_uhc_srvs_cv_xd}{World Bank Country Scorecard: UHC service coverage index (0-100).}
+#'   \item{wb_csc_sl_emp_work_fe_zs}{World Bank Country Scorecard: female employment-to-population ratio (\%).}
+#'   \item{wb_csc_sl_emp_work_zs}{World Bank Country Scorecard: employment-to-population ratio (\%).}
+#'   \item{wb_csc_sm_pop_fdip}{World Bank Country Scorecard: total forcibly displaced persons.}
+#'   \item{wb_csc_sn_itk_msfi_zs}{World Bank Country Scorecard: prevalence of moderate or severe food insecurity (\% of population).}
+#'   \item{wb_csc_sp_rod_r2km}{World Bank Country Scorecard: \% of rural population living within 2 km of an all-season road.}
+#'
 #'   \item{wb_gfdb_oi_01}{Global Financial Development Database: Openness/Information (OI_01) sub-indicator, rescaled.}
 #'
 #'   \item{wb_gtmi_cgsi}{GovTech Maturity Index: core government systems (CGSI), rescaled.}
@@ -1485,7 +1531,6 @@
 #'   \item{\code{wb_csc_sn_itk_msfi_zs}}{double Prevalence of moderate or severe food insecurity (\% of population). Proxy for: People with strengthened food & nutrition security.}
 #'   \item{\code{wb_csc_sp_rod_r2km}}{double \% of rural population living within 2 km of an all-season road. Proxy for: People benefiting from improved transport access.}
 #'   \item{\code{wb_csc_eg_elc_accs_zs}}{double \% of population with access to electricity. Proxy for: People provided with access to electricity.}
-#'   \item{\code{wb_csc_er_nca_rnew}}{double Renewable natural capital index. Proxy for: GW of renewable energy capacity enabled.}
 #'   \item{\code{wb_csc_it_net_user_zs}}{double \% of population using the internet. Proxy for: People using broadband internet.}
 #'   \item{\code{wb_csc_it_gov_egov_xq}}{double UN E-Government Development Index. Proxy for: People using digitally enabled services.}
 #'   \item{\code{wb_csc_sl_emp_work_fe_zs}}{double Female employment-to-population ratio (\%). Proxy for: Gender equality — total beneficiaries (female population).}
