@@ -1,12 +1,12 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-extraction_results|stem|32ff69691e225d28|6bf5b67190df007e|2c530c1562a7fbd1|-859476772||t20538.8582157407s|s133649b|133649|rds|local|vector|||2.83|Extra columns in new_rows ignored: etl_source|
-extraction_qc|stem|d8a7b83b33dc74b7|4369ba3e69c46e1a|2c530c1562a7fbd1|-1319848527||t20538.8588822685s|s48b|48|rds|local|vector|||57.55||
-db_variables_final|stem|d892ef9a5b3ac41b|3e53559bece16862|92a0d07ac741a173|1282726667||t20538.8588831768s|s67199b|67199|rds|local|vector|||0||
-db_variables|stem|e6e86259e8cff809|70b8f5c77b1074da|92a0d07ac741a173|1911806739||t20538.8588836365s|s66598b|66598|rds|local|vector|||0||
-compiled_indicators|stem|68153bd343eb19a5|340ce4f0f4a65dd6|73018d695de7e9eb|1370470920|C:/Users/wb559885/OneDrive - WBG/Documents/GitProjects/cliaretl/inst/extdata/compiled_indicators.rds|t20538.8700573281s|s4495748b|4495748|file|local|vector|||13.62||
-ctf_results|stem|83dd437b3c707cd6|59c6309b8d653e40|4eccb1436cc0515f|1296316576||t20538.8701393422s|s696673b|696673|rds|local|vector|||6.98||
-compiled_indicators_qc|stem|d8a7b83b33dc74b7|fe9235b65c3ffb80|7ae4895428b6ae3f|-2125751886||t20538.8706433947s|s48b|48|rds|local|vector|||43.46||
-ctf_dynamic|stem|5ddbf1ca3223f4be|d50ffeb85558c4ba|bf1f6b305ba3a8b5|1201086315||t20538.8706442295s|s579418b|579418|rds|local|vector|||0||
-ctf_static|stem|02cf4a2fa4e0c3dc|5859f1022ab569a3|bf1f6b305ba3a8b5|-276448208||t20538.8706447108s|s117048b|117048|rds|local|vector|||0||
-indicators_map|stem|c6bd8c61d2ce6b9b|dc8a2b4f4c9d6ddf|29f9ba2bfd631a17|-654970461|C:/Users/wb559885/OneDrive - WBG/Documents/GitProjects/cliaretl/inst/extdata/indicators_map.rds|t20538.8718732408s|s5111092b|5111092|file|local|vector|||106.11||
-ctf_qc|stem|d8a7b83b33dc74b7|ee15475d54acff1c|d3e0a745a486ebbf|-1858436554||t20538.8719525645s|s48b|48|rds|local|vector|||6.8|Removed 18432 rows containing missing values or values outside the scale range (`geom_point()`).. Removed 41 rows containing non-finite outside the scale range (`stat_bin()`).|
+extraction_results|stem|101859465a1e98b0|6bf5b67190df007e|2c530c1562a7fbd1|-859476772||t20580.8219031156s|s136573b|136573|rds|local|vector|||11.03|Extra columns in new_rows ignored: etl_source. Extra columns in new_rows ignored: rank_id, etl_source|
+extraction_qc|stem|d8a7b83b33dc74b7|4369ba3e69c46e1a|2c530c1562a7fbd1|-1319848527||t20580.8235250071s|s48b|48|rds|local|vector|||140.02||
+db_variables_final|stem|cdfe2d1369a893da|3e53559bece16862|9963c462c10c5d20|1282726667||t20580.8235274966s|s68654b|68654|rds|local|vector|||0||
+db_variables|stem|3977a223634b49c0|70b8f5c77b1074da|9963c462c10c5d20|1911806739||t20580.8235284158s|s68036b|68036|rds|local|vector|||0||
+compiled_indicators|stem|566ad7fccf1df586|340ce4f0f4a65dd6|695f07326aaea825|1370470920|C:/Users/wb438023/github/cliaretl/inst/extdata/compiled_indicators.rds|t20580.8240540642s|s4722828b|4722828|file|local|vector|||45.37|There were 2 warnings in `dplyr::summarise()`. The first warning was: ℹ In argument: `dplyr::across(...)`. Caused by warning in `min()`: ! no non-missing arguments to min; returning Inf ℹ Run `dplyr::last_dplyr_warnings()` to see the 1 remaining warning.|
+ctf_results|stem|63bc9fda29c48fc7|59c6309b8d653e40|31d48092d1407e40|1296316576||t20580.824308223s|s815836b|815836|rds|local|vector|||21.74||
+compiled_indicators_qc|stem|d8a7b83b33dc74b7|fe9235b65c3ffb80|5c3961aedb83d0e7|-2125751886||t20580.8253908769s|s48b|48|rds|local|vector|||93.41||
+ctf_dynamic|stem|69a7a68b0b6fb51c|d50ffeb85558c4ba|b200495dc8e0f372|1201086315||t20580.8253932246s|s693904b|693904|rds|local|vector|||0||
+ctf_static|stem|d0646f1e0adc1873|5859f1022ab569a3|b200495dc8e0f372|-276448208||t20580.8253945241s|s121770b|121770|rds|local|vector|||0||
+indicators_map|stem|c6bd8c61d2ce6b9b|dc8a2b4f4c9d6ddf|58a08f49d6a6ce69|-654970461|C:/Users/wb438023/github/cliaretl/inst/extdata/indicators_map.rds|t20580.8273211032s|s5111092b|5111092|file|local|vector|||166.37||
+ctf_qc|stem|d8a7b83b33dc74b7|ee15475d54acff1c|ea66dca124666c5a|-1858436554||t20580.8274921719s|s48b|48|rds|local|vector|||14.69|Removed 18432 rows containing missing values or values outside the scale range (`geom_point()`).. Removed 41 rows containing non-finite outside the scale range (`stat_bin()`).|

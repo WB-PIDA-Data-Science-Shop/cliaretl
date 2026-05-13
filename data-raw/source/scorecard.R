@@ -17,7 +17,6 @@ csc_tbl <-
     .cols = !c("country_code", "year"), 
     .fns = as.numeric))
 
-
 ### the following code below should contain no duplicates
 lapply(X = colnames(csc_tbl)[!colnames(csc_tbl) %in% c("country_code", "year")],
        FUN = function(x) {
@@ -27,9 +26,11 @@ lapply(X = colnames(csc_tbl)[!colnames(csc_tbl) %in% c("country_code", "year")],
            dplyr::filter(n > 1L)
        })
 
-csc <- csc_tbl 
+scorecard <- csc_tbl |> 
+  mutate(
+    year = as.numeric(year)
+  )
 
 rm(csc_tbl)
 
-
-usethis::use_data(csc, overwrite = TRUE)
+usethis::use_data(scorecard, overwrite = TRUE)

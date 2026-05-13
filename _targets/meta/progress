@@ -1,8 +1,12 @@
 name|type|parent|branches|progress
-extraction_results|stem|extraction_results|0|skipped
-extraction_qc|stem|extraction_qc|0|skipped
-db_variables_final|stem|db_variables_final|0|skipped
-db_variables|stem|db_variables|0|skipped
+extraction_results|stem|extraction_results|0|dispatched
+extraction_results|stem|extraction_results|0|completed
+extraction_qc|stem|extraction_qc|0|dispatched
+extraction_qc|stem|extraction_qc|0|completed
+db_variables_final|stem|db_variables_final|0|dispatched
+db_variables_final|stem|db_variables_final|0|completed
+db_variables|stem|db_variables|0|dispatched
+db_variables|stem|db_variables|0|completed
 compiled_indicators|stem|compiled_indicators|0|dispatched
 compiled_indicators|stem|compiled_indicators|0|completed
 ctf_results|stem|ctf_results|0|dispatched
