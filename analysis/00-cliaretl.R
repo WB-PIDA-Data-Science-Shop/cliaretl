@@ -14,4 +14,4 @@ source(here::here("analysis", "04-map_indicators.R"), local = TRUE)
 # https://usethis.r-lib.org/reference/use_version.html
 
 # Increment the minor version for small changes, bug fixes, or documentation updates
-# run the following code in the console to update the version 'usethis::use_version("minor")'
+# run the following code in the console to update the version 'usethis::use_version("patch")'
