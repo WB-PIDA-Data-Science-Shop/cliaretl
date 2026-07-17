@@ -32,10 +32,11 @@ coverage_dt <-
                                       ref_year = 2024,
                                       country_region_list = wb_income_and_region)
                 
-                y <- y |> mutate(dataset = name)
+                y <- y |> dplyr::mutate(dataset = name)
                 
                 return(y)
 
-              }) |> bind_rows()
+              }) |> dplyr::bind_rows()
 
-write.csv(coverage_dt, "data-raw/output/coverage_report.csv")
+dir.create("data-raw/output", recursive = TRUE, showWarnings = FALSE)
+utils::write.csv(coverage_dt, file = "data-raw/output/coverage_report.csv", row.names = FALSE)
