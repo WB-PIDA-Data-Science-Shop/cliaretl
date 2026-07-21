@@ -268,3 +268,5 @@ compute_coverage <- function(data, country_id, year_id, ref_year, country_region
 
   return(data_coverage)
 }
+
+
