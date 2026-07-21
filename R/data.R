@@ -1558,3 +1558,18 @@
 #' }
 #' @source Internal compilation
 "bready"
+
+#' FCV Country Group
+#' 
+#' A dataset containing the list of countries classified as fragile, conflict-affected, and vulnerable (FCV) by the World Bank.
+#' 
+#' @format A data frame containing 38 rows and 4 columns:
+#' \describe{
+#'   \item{country_code}{ISO3 country code (character)}
+#'   \item{country_name}{Country name (character)}
+#'   \item{group}{FCV group classification (character)}
+#'   \item{group_code}{FCV group code (character)}
+#' }
+#' @source World Bank Fragile, Conflict and Violence (FCV) List
+#'   \url{https://www.worldbank.org/en/topic/fragilityconflictviolence/brief/classification-of-fragile-and-conflict-affected-situations}
+"fcv"
