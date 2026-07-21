@@ -206,6 +206,7 @@ aspire <- aspire_pre_clean |>
     wb_aspire_adequacy_benefits = per_allsp.adq_pop_tot
   )
 
+aspire <- 
 aspire |>
   add_plmetadata(source = "d360_efi_data",
                  other_info = "API pull")
