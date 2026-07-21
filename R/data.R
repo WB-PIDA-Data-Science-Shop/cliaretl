@@ -1543,3 +1543,18 @@
 #' @source World Bank Data360 API, WB_CSC database.
 #'   \url{https://data360.worldbank.org}
 "scorecard"
+
+#' Business Ready (B-READY) Dataset
+#'
+#' Scores for regulatory framework, public services, and operational efficiency by country.
+#'
+#' @format A data frame with 101 rows and 5 columns:
+#' \describe{
+#'   \item{economy}{Country name (character)}
+#'   \item{country_code}{ISO country code (character)}
+#'   \item{pillar_1_regulatory_framework}{Score for regulatory framework (numeric)}
+#'   \item{pillar_2_public_services}{Score for public services (numeric)}
+#'   \item{pillar_3_operational_efficiency}{Score for operational efficiency (numeric)}
+#' }
+#' @source Internal compilation
+"bready"
