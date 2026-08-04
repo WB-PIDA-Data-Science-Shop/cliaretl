@@ -31,7 +31,7 @@ add_plmetadata <- function(df,
                            other_info) {
   attr(df, "source") <- source
   attr(df, "other_info") <- other_info
-  attr(df, "latest_download") <- Sys.Date()
+  attr(df, "last_updated") <- Sys.Date()
 
   return(df)
 
