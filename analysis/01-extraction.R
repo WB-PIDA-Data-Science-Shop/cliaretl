@@ -60,6 +60,10 @@ vars_ctf <- db_variables |>
 
 var_lists <- get_variable_lists(db_variables)
 
+# 1. Change log for db_variables -----------------------------------------
+# ref_year: 2026
+# PLACEHOLDER
+
 # 2. Conflicting indicators analysis -------------------------------------------
 
 # a. Mismatching -------------------------------------------------------------
@@ -427,12 +431,12 @@ db_variables <- db_variables |>
   add_plmetadata(source = "metadata dictionary", other_info = "")
 
 # Add year attribute
-attr(db_variables, "ref_year") <- 2025
+attr(db_variables, "ref_year") <- 2026
 
 db_variables <- db_variables |>
   add_plmetadata(
     source = "Own dictionary",
-    other_info = "Version 2025, updated with indicators extracted from various sources and cleaned."
+    other_info = "Version 2026, updated with indicators extracted from various sources and cleaned."
   )
 
 # snapshot data ----------------------------------------------------------
@@ -443,7 +447,7 @@ db_variables |>
       "input",
       "cliar",
       "db_variables",
-      "db_variables_2025.rds"
+      "db_variables_2026.rds"
     )
   )
 
