@@ -1,6 +1,6 @@
 ## code to prepare `wdi_indicators` dataset goes here
 # source: WDI Package https://cran.r-project.org/web/packages/WDI/WDI.pdf
-# access date: 12/08/2025
+# access date: 29/07/2025
 library(here)
 library(dplyr)
 library(readr)
@@ -14,7 +14,7 @@ library(countrycode)
 # Download indicators
 # Define the start and end years for data retrieval
 start_year <- 1990
-end_year <- 2024 # CLIAR 3.0 cutoff year
+end_year <- 2025 # CLIAR 3.0 cutoff year for 2026 update
 
 # Define a comprehensive list of World Bank Development Indicators
 # Grouped for better readability and easier management.
@@ -193,6 +193,8 @@ tryCatch({
 })
 
 
+### Isue with the indicator "EN.ATM.CO2E.PP.GD.KD" being deprecated or unavailable.
+
 # cleaning ----------------------------------------------------------------
 
 # Clean col names
@@ -259,13 +261,13 @@ wdi_indicators <- wdi_clean |>
   select(!all_of(columns_to_drop)) |>
   filter(!is.na(country_code) & country_code != ""
   ) |>
-  distinct(country_code, year, .keep_all = TRUE) |>
+  distinct(country_code, year, .keep_all = TRUE) |> 
   select(-wdi_gctaxtotlgdzs) # Extracted in EFI API pull
 
 
 wdi_indicators <- wdi_indicators |>
   add_plmetadata(source = wdi_indicators_list,
-                 other_info = "R package")
+                 other_info = "Last 2026 extraction date: 8/3/2025. WDI package version: 2.7.1.")
 
 
 # write-out ---------------------------------------------------------------

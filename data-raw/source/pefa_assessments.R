@@ -1,6 +1,11 @@
 ################################################################################
 ##################### PREPARE THE PEFA ASSESSMENTS DATA ########################
 ################################################################################
+# Instructions to download the panel data from PEFA's website: https://www.pefa.org/assessments/batch-downloads
+# Select the "All Assessments" option and download the CSV file. 
+# Verify the name of the file "assessments_1785352713.csv" and replace it here in the code if it is different.
+#
+
 
 #### load packages
 library(janitor)
@@ -13,7 +18,7 @@ library(readxl)
 base_url <- "https://www.pefa.org/sites/pefa/files/bulk_downloads"
 
 pefa_tbl <-
-  read.csv(paste0(base_url, "/assessments_1749564823.csv")) |>
+  read.csv(paste0(base_url, "/assessments_1785352713.csv")) |>
   as_tibble() |>
   clean_names()
 
@@ -68,15 +73,20 @@ country_list <- unique(c(origpefa_tbl$country,
 pefa_vars <- intersect(colnames(pefaclean_tbl), dbvar_dt$variable)
 
 
+
 #### save the data
 pefaclean_tbl <-
   pefaclean_tbl |>
   rename(country_name = "country") |>
   dplyr::filter(country_name %in% country_list) |>
-  dplyr::select(country_name, year, all_of(pefa_vars))
+  # Convert country_name to country_code (ISO 3-letter codes by default)
+  dplyr::mutate(country_code = countrycode(country_name, origin = "country.name", destination = "iso3c")) |>
+  dplyr::select(country_code, year, all_of(pefa_vars))
 
 
-pefa_assessments <- pefaclean_tbl
+pefa_assessments <- pefaclean_tbl |> 
+  add_plmetadata(source = base_url,
+                 other_info = "2026 extraction date: 7/27/2026. 1 country dissapeared in 2023. 10 in2025 are added")
 
 
 ### write the pefa assessments data to rda

@@ -11,7 +11,6 @@
 # 4. # Locate the file in your Downloads folder and move it to:
 #   `.../cliaretl/data-raw/input/fraser/`
 
-### access date: 7/30/2025
 
 library(janitor)
 library(dplyr)
@@ -63,7 +62,7 @@ fraser_renamed <- fraser_clean |>
 
 fraser <- fraser_renamed |>
   add_plmetadata(source = "https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0",
-                 other_info = "Manually downloaded")
+                 other_info = "Manually downloaded. Last year of observation: 2023 registered on 7/27/2026.")
 
 
 # write-out ---------------------------------------------------------------

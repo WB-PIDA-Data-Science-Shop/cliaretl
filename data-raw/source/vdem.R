@@ -1,6 +1,6 @@
 ## code to prepare `vdem_data` dataset goes here
-# source: V-dem Package (V-15) https://github.com/vdeminstitute/vdemdata
-# access date: 6/10/2025
+# source: V-dem Package (V-16) https://github.com/vdeminstitute/vdemdata for 2026
+
 library(here)
 library(dplyr)
 library(readr)
@@ -8,6 +8,11 @@ library(stringr)
 library(janitor)
 library(countrycode)
 library(vdemdata)
+
+# ## 2026 pack update code and credentials as well
+# Sys.setenv(GITHUB_PAT = "ghp_your_new_token_here")
+# devtools::install_github("vdeminstitute/vdemdata")
+# renv::snapshot()
 
 # read-in -----------------------------------------------------------------
 
@@ -90,7 +95,7 @@ vdem_data <- vdem_clean |>
 
 vdem_data |>
   add_plmetadata(source = vdemdata::vdem,
-                 other_info = "R package, Version 15")
+                 other_info = "Last 2026 extraction: 07/30/26. R package, Version 16")
 
 
 # write-out ---------------------------------------------------------------
