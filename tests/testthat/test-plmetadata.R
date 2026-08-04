@@ -9,7 +9,7 @@ test_that("add_plmetadata correctly attaches metadata", {
 
   expect_equal(attr(df_meta, "source"), source_url)
   expect_equal(attr(df_meta, "other_info"), info)
-  expect_equal(attr(df_meta, "latest_download"), Sys.Date())
+  expect_equal(attr(df_meta, "last_update"), Sys.Date())
 })
 
 test_that("add_plmetadata preserves original data", {
@@ -31,7 +31,7 @@ test_that("collect_metadata handles missing attributes gracefully", {
   expect_s3_class(metadata, "data.frame")
   expect_equal(metadata$source[1], NA_character_)
   expect_equal(metadata$other_info[1], NA_character_)
-  expect_true(is.na(metadata$latest_download[1]))
+  expect_true(is.na(metadata$last_update[1]))
 
   # Clean up
   file.remove(file.path("data", "plain_dataset.rda"))
@@ -58,7 +58,7 @@ test_that("collect_metadata works on one .rda file", {
   expect_equal(metadata$dataset[1], "df")
   expect_equal(metadata$source[1], "https://example.com/test.csv")
   expect_equal(metadata$other_info[1], "Unit test dataset")
-  expect_equal(metadata$latest_download[1], as.character(Sys.Date()))
+  expect_equal(metadata$last_update[1], as.character(Sys.Date()))
 
   # Clean up test file
   file.remove(file.path(test_dir, "mock_dataset.rda"))

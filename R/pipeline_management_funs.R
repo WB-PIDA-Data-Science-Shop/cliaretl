@@ -65,7 +65,7 @@ collect_metadata <- function(data_path = "data") {
         dataset = obj_name,
         source = attr(obj, "source") %||% NA_character_,
         other_info = attr(obj, "other_info") %||% NA_character_,
-        latest_download = as.character(attr(obj, "latest_download") %||% NA)
+        last_update = as.character(attr(obj, "last_update") %||% NA)
       )
     })
 

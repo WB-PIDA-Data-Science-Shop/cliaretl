@@ -20,7 +20,7 @@ test_that("collect_metadata reads valid metadata from a .rda file", {
   expect_equal(metadata$dataset, "df")
   expect_equal(metadata$source, "https://example.com/data.csv")
   expect_equal(metadata$other_info, "Metadata test")
-  expect_equal(metadata$latest_download, as.character(Sys.Date()))
+  expect_equal(metadata$last_update, as.character(Sys.Date()))
 
   # Clean up
   unlink(test_dir, recursive = TRUE)
@@ -39,7 +39,7 @@ test_that("collect_metadata handles missing metadata attributes", {
   expect_equal(metadata$dataset, "plain_df")
   expect_true(is.na(metadata$source))
   expect_true(is.na(metadata$other_info))
-  expect_true(is.na(metadata$latest_download))
+  expect_true(is.na(metadata$last_update))
 
   # Clean up
   unlink(test_dir, recursive = TRUE)
