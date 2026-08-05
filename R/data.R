@@ -1573,3 +1573,16 @@
 #' @source World Bank Fragile, Conflict and Violence (FCV) List
 #'   \url{https://www.worldbank.org/en/topic/fragilityconflictviolence/brief/classification-of-fragile-and-conflict-affected-situations}
 "fcv"
+
+#' Budget Execution Rates
+#'
+#' Annual budget execution rates by country.
+#'
+#' @format A tibble with 2368 rows and 3 columns:
+#' \describe{
+#'   \item{country_code}{ISO country code (character)}
+#'   \item{year}{Year (character)}
+#'   \item{budget_execution_rate}{Budget execution rate. Numeric value representing the percentage of the budget originally approved that was executed.}
+#' }
+#' @source World Bank. \url{https://data360.worldbank.org/en/indicator/WB_WDI_GF_XPD_BUDG_ZS}
+"budget_execution"
