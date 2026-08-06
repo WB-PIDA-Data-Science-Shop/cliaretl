@@ -832,7 +832,7 @@
 #' @description
 #' The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized, cross-country indicators related to social protection and labor programs. It includes harmonized measures on adequacy and coverage of benefits, enabling regional and income-level comparWorld Bankns over time.
 #'
-#' @format A data frame with 512 rows and 4 variables:
+#' @format A data frame with 588 rows and 4 variables:
 #' \describe{
 #'   \item{\code{country_code}}{Character. World Bank3 country code based on World Bank standards.}
 #'   \item{\code{year}}{Numeric. Year of the observation.}
