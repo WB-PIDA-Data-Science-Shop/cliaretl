@@ -340,7 +340,7 @@
 #'
 #' This dataset includes composite indicators developed by the OECD to quantify the strength of employment protection legislation (EPL) for regular and temporary contracts. The indicators reflect rules and practices regarding individual dismissals and are part of the OECD Employment Protection Database.
 #'
-#' @format A tibble with 287 rows and 4 variables:
+#' @format A tibble with 519 rows and 4 variables:
 #' \describe{
 #'   \item{country_code}{Three-letter World Bank country code (e.g., "AUS", "FRA").}
 #'   \item{year}{Observation year (e.g., 2013).}

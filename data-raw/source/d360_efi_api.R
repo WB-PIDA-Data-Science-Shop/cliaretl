@@ -347,26 +347,28 @@ d360_efi_data_pre_clean |>
     everything()
   )
 
-d360_efi_data <- d360_efi_data_clean |>
-  # Generate an average index of the census and survey indexes
-  mutate(
-    wb_spi_census_and_survey_index = rowMeans(
-      cbind(wb_spi_dim4_1_cen_index, wb_spi_dim4_1_svy_index),
-      na.rm = TRUE
-    )
-  ) |>
-  select(-wb_spi_dim4_1_cen_index, -wb_spi_dim4_1_svy_index
-  ) |>
-  rename(
-    wb_spi_std_and_methods = wb_spi_dim5_2_index
-  )
+d360_efi_data <- d360_efi_data_clean 
+
+# |>
+#   # Generate an average index of the census and survey indexes
+#   mutate(
+#     wb_spi_census_and_survey_index = rowMeans(
+#       cbind(wb_spi_dim4_1_cen_index, wb_spi_dim4_1_svy_index),
+#       na.rm = TRUE
+#     )
+#   ) |>
+#   select(-wb_spi_dim4_1_cen_index, -wb_spi_dim4_1_svy_index
+#   ) |>
+#   rename(
+#     wb_spi_std_and_methods = wb_spi_dim5_2_index
+#   )
 
 
 
 ### quickly add pipeline metadata to the d360_efi_data
 d360_efi_data <-
   d360_efi_data |>
-  add_plmetadata(source = "World Bank EFI Data 360 API",
+  add_plmetadata(source = "World Bank & EFI Data 360 API",
                  other_info = "Data collected for EFI and Data 360 indicators")
 
 

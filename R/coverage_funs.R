@@ -346,9 +346,7 @@ compute_coverage2 <- function(data,
                               country_region_list    = NULL,
                               dataset_name           = NULL,
                               static_window          = 2021:2025,
-                              dynamic_even_years     = seq(2016, 2025, by = 2),
-                              dynamic_excluded       = c("PEFA", "OECD PMR", "GTMI"),
-                              exception_datasets     = c("PEFA", "OECD PMR")) {
+                              dynamic_even_years     = seq(2016, 2025, by = 2)) {
 
   # ---- local helpers ----
   prop_complete_vec <- function(x) {
@@ -366,9 +364,11 @@ compute_coverage2 <- function(data,
   # This implements the Box 1 "each year must have >= 10 countries" criterion
   # restricted to the window of interest (static or dynamic).
   count_valid_years_in_window <- function(x, yr, window) {
-    target_years <- unique(yr[yr %in% window])
-    if (length(target_years) == 0L) return(0L)
-    sum(vapply(target_years, function(y) sum(!is.na(x[yr == y])) >= 10L, logical(1L)))
+    dplyr::tibble(x = x, yr = yr) |>
+      dplyr::filter(yr %in% window, !is.na(x)) |>
+      dplyr::count(yr) |>
+      dplyr::filter(n >= 10) |>
+      nrow()
   }
 
   # Count distinct countries with >= 1 non-missing observation in `window`.
