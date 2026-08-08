@@ -363,15 +363,27 @@ d360_efi_data <- d360_efi_data_clean
 #     wb_spi_std_and_methods = wb_spi_dim5_2_index
 #   )
 
+### include a couple more indicators
+wdi_dt <- get_data360_api(dataset_id = "WB_WDI", indicator_id = c("WB_WDI_LP_LPI_CUST_XQ"))
+# spi_dt <- get_data360_api(dataset_id = "WB_SPI", indicator_id = c("SPI_DIM4_1_INDEX", "SPI_DIM5_2_INDEX"))
+# wbl_dt <- get_data360_api(dataset_id = "WB_WBL", indicator_id = "GD_WBL_OVL")
+wdi_dt <- 
+  wdi_dt |>
+  mutate(year = as.numeric(as.integer(year)),
+         wb_wdi_lp_lpi_cust_xq = as.numeric(wb_wdi_lp_lpi_cust_xq))
 
-
+d360_efi_data <- 
+  d360_efi_data |>
+  full_join(wdi_dt, by = c("country_code", "year"))
 ### quickly add pipeline metadata to the d360_efi_data
 d360_efi_data <-
   d360_efi_data |>
   add_plmetadata(source = "World Bank & EFI Data 360 API",
                  other_info = "Data collected for EFI and Data 360 indicators")
 
-
+d360_efi_data <- 
+  d360_efi_data |>
+  rename(wb_lpi_lp_lpi_cust_xq = "wb_wdi_lp_lpi_cust_xq")
 
 ### write package data for lazy loading
 usethis::use_data(d360_efi_data, overwrite = TRUE)

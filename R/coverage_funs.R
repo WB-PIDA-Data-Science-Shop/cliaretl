@@ -295,12 +295,6 @@ compute_coverage <- function(data, country_id, year_id, ref_year, country_region
 #'   window for coverage assessment (default is 2021 to 2025).
 #' @param dynamic_even_years A numeric vector specifying the even years for the
 #'   dynamic panel coverage assessment (default is every second year from 2016 to 2025).
-#' @param dynamic_excluded A character vector of dataset names to be excluded from
-#'   dynamic benchmarking (default includes "PEFA", "OECD PMR", "GTMI").
-#' @param exception_datasets A character vector of dataset names that have
-#'   documented methodology exceptions, meaning red flags on coverage are expected
-#'   and should not be interpreted as data quality failures (default includes
-#'   "PEFA", "OECD PMR").
 #'
 #' @details
 #' The function computes, for each indicator:

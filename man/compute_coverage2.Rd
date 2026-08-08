@@ -12,9 +12,7 @@ compute_coverage2(
   country_region_list = NULL,
   dataset_name = NULL,
   static_window = 2021:2025,
-  dynamic_even_years = seq(2016, 2025, by = 2),
-  dynamic_excluded = c("PEFA", "OECD PMR", "GTMI"),
-  exception_datasets = c("PEFA", "OECD PMR")
+  dynamic_even_years = seq(2016, 2025, by = 2)
 )
 }
 \arguments{
@@ -40,14 +38,6 @@ window for coverage assessment (default is 2021 to 2025).}
 
 \item{dynamic_even_years}{A numeric vector specifying the even years for the
 dynamic panel coverage assessment (default is every second year from 2016 to 2025).}
-
-\item{dynamic_excluded}{A character vector of dataset names to be excluded from
-dynamic benchmarking (default includes "PEFA", "OECD PMR", "GTMI").}
-
-\item{exception_datasets}{A character vector of dataset names that have
-documented methodology exceptions, meaning red flags on coverage are expected
-and should not be interpreted as data quality failures (default includes
-"PEFA", "OECD PMR").}
 }
 \value{
 A tibble with one row per indicator and the following columns:
