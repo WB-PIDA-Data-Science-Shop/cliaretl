@@ -31,7 +31,7 @@ add_plmetadata <- function(df,
                            other_info) {
   attr(df, "source") <- source
   attr(df, "other_info") <- other_info
-  attr(df, "latest_download") <- Sys.Date()
+  attr(df, "last_updated") <- Sys.Date()
 
   return(df)
 
@@ -65,7 +65,7 @@ collect_metadata <- function(data_path = "data") {
         dataset = obj_name,
         source = attr(obj, "source") %||% NA_character_,
         other_info = attr(obj, "other_info") %||% NA_character_,
-        latest_download = as.character(attr(obj, "latest_download") %||% NA)
+        last_updated = as.character(attr(obj, "last_updated") %||% NA)
       )
     })
 
