@@ -18,7 +18,7 @@ The input `data.frame` with additional attributes:
 \describe{
   \item{`source`}{The URL or source location of the dataset.}
   \item{`other info`}{Any user-supplied contextual information.}
-  \item{`download_date`}{The date when the data was processed or downloaded.}
+  \item{`latest_download`}{The date when the data was processed or downloaded.}
 }
 }
 \description{

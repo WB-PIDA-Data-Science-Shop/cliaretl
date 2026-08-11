@@ -6,3 +6,7 @@ utils::globalVariables(c("country_code", "year", "type_equal",
                          "missingness_equal", "old_value", "new_value",
                          "over_1pct_change", "is_update", "value_equal"))
 utils::globalVariables(c("avg", "var"))
+utils::globalVariables(c(
+  "static_valid_years", "dynamic_valid_years",
+  "static_countries", "dynamic_countries"
+))

@@ -5,7 +5,7 @@
 \alias{epl}
 \title{OECD Employment Protection Legislation (EPL) Indicators}
 \format{
-A tibble with 287 rows and 4 variables:
+A tibble with 519 rows and 4 variables:
 \describe{
   \item{country_code}{Three-letter World Bank country code (e.g., "AUS", "FRA").}
   \item{year}{Observation year (e.g., 2013).}
