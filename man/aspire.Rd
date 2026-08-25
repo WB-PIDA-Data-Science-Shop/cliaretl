@@ -5,7 +5,7 @@
 \alias{aspire}
 \title{ASPIRE Social Protection Indicators}
 \format{
-A data frame with 512 rows and 4 variables:
+A data frame with 588 rows and 4 variables:
 \describe{
   \item{\code{country_code}}{Character. World Bank3 country code based on World Bank standards.}
   \item{\code{year}}{Numeric. Year of the observation.}

@@ -339,7 +339,7 @@
 #'
 #' This dataset includes composite indicators developed by the OECD to quantify the strength of employment protection legislation (EPL) for regular and temporary contracts. The indicators reflect rules and practices regarding individual dismissals and are part of the OECD Employment Protection Database.
 #'
-#' @format A tibble with 287 rows and 4 variables:
+#' @format A tibble with 519 rows and 4 variables:
 #' \describe{
 #'   \item{country_code}{Three-letter World Bank country code (e.g., "AUS", "FRA").}
 #'   \item{year}{Observation year (e.g., 2013).}
@@ -366,7 +366,7 @@
 #'
 #' This dataset contains a cleaned slice of the World Bank EFI (Data 360) database.
 #'
-#' @format A data frame with 8878 rows and 223 variables:
+#' @format A data frame with 8878 rows and 200 variables:
 #' \describe{
 #'   \item{country_code}{The World Bank World Bank-3166 country code}
 #'   \item{year}{Year}
@@ -465,6 +465,7 @@
 #'   \item{wb_pefa_pi_2016_30}{PI-30. Measures the effectiveness of external audits}
 #'   \item{wb_wdi_iq_sci_mthd}{Methodology assessment of statistical capacity (scale 0 - 100)}
 #'   \item{wb_wdi_iq_sci_prdc}{Periodicity and timeliness assessment of statistical capacity (scale 0 - 100)}
+#'   \item{wb_lpi_lp_lpi_cust_xq}{Logistics Performance Index: Efficiency of customs clearance processes (i.e. speed, simplicity and predictability of formalities) by border control agencies, including customs (scale 1-5)}
 #'   \item{wb_wdi_si_pov_mdim}{The percentage of people who are multidimensionally poor}
 #'   \item{wb_wdi_si_pov_mdim_it}{Average share of deprivations experienced by the poor}
 #'   \item{wb_wdi_si_pov_mdim_xq}{Multidimensional poverty index, children (population ages 0-17) (scale 0-1)}
@@ -535,8 +536,6 @@
 #'   \item{imf_world_rtp_rm_gdp}{Property Tax Revenue in Percent of GDP}
 #'   \item{imf_world_rtpay_rm_gdp}{Taxes on Payroll and Workforce Revenue in Percent of GDP}
 #'   \item{imf_world_rtt_rm_gdp}{Tax revenue (Percent of GDP)}
-#'   \item{wb_spi_census_and_survey_index}{Standards and Methods indicator}
-#'   \item{wb_spi_std_and_methods}{Censuses and Surveys indicator (EGVPI processed)}
 #'   \item{wb_girg_6}{Captures how policymakers interact with stakeholders when shaping regulations affecting business communities}
 #'   \item{wb_gtmi_cgsi}{Captures the key aspects of a whole-of-government approach, including government cloud, interoperability framework and other platforms.}
 #'   \item{wb_gtmi_dcei}{Measures aspects of public participation platforms, citizen feedback mechanisms, open data, and open government portals.}
@@ -549,8 +548,6 @@
 #'   \item{wb_gtmi_i_7}{Captures whether there a Tax Management Information System in place}
 #'   \item{wb_gtmi_i_8}{Captures whether there is a Customs Management Information System is in place}
 #'   \item{wb_gtmi_psdi}{Measures the maturity of online public service portals with a focus on citizen centric design and universal accessibility.}
-#'   \item{wb_lpi_lp_lpi_cust_xq}{Measures the efficiency of customs clearance processes (i.e. speed, simplicity and predictability of formalities) by border control agencies}
-#'   \item{wb_wbl_sg_law_indx}{Measures gender equality in the private sector workforce based on several indicators related to mobility, workplace dynamics, pay, marriage, parenthood, entrepreneurship, assets, and pensions}
 #'   \item{wb_wdi_dt_dod_mwbg_cd}{IBRD loans and IDA credits (DOD, current US$)}
 #'   \item{wb_wdi_dt_nfl_pcbo_cd}{Commercial banks and other lending (PPG + PNG) (NFL, current US$)}
 #'   \item{wb_wdi_gc_rev_xgrt_gd_zs}{Measures cash receipts from taxes, social contributions, and other revenues such as fines, fees, rent, and income from property or sales}
@@ -571,24 +568,6 @@
 #'   \item{wb_wdi_iq_spi_pil4}{Statistical performance indicators (SPI): Pillar 4 data sources score (scale 0-100)}
 #'   \item{wb_wdi_iq_spi_pil5}{Statistical performance indicators (SPI): Pillar 5 data infrastructure score (scale 0-100)}
 #'   \item{wb_wdi_tm_val_fuel_zs_un}{Fuel imports (Percent of merchandise imports)}
-#'   \item{wjp_rol_2_2}{Measures whether judicial officials refrain from soliciting and accepting bribes to perform duties and whether the judiciary is free of improper influence by the government, private interests, or criminal organizations.}
-#'   \item{wjp_rol_3_1}{Measures whether basic laws and information on legal rights are publicly available, presented in plain language, and made accessible in all languages used in the country or jurisdiction}
-#'   \item{wjp_rol_3_2}{Measures whether requests for information held by a government agency are granted within a reasonable time period and at a reasonable cost without paying a bribe}
-#'   \item{wjp_rol_3_4}{Measures whether people are able to bring specific complaints to the government about the provision of public services or the performance of government officers in carrying out their legal duties in practice as well as whether government officials respond to such complaints}
-#'   \item{wjp_rol_4_3}{Measures whether the basic rights of criminal suspects are respected, including the presumption of innocence and the freedom from arbitrary arrest and unreasonable pre-trial detention}
-#'   \item{wjp_rol_4_4}{Measures whether an independent media, civil society organizations, political parties, and individuals are free to report and comment on government policies without fear of retaliation}
-#'   \item{wjp_rol_4_5}{Measures whether members of religious minorities can worship and conduct religious practices freely and publicly}
-#'   \item{wjp_rol_4_6}{Measures whether the police or other government officials conduct physical searches without warrants, or intercept electronic communications of private individuals without judicial authorization}
-#'   \item{wjp_rol_4_7}{Measures whether people can freely attend community meetings, join political organizations, hold peaceful public demonstrations, sign petitions, and express opinions against government policies and actions without fear of retaliation}
-#'   \item{wjp_rol_4_8}{Measures the effective enforcement of fundamental labor rights, including freedom of association and the right to collective bargaining, the absence of discrimination with respect to employment, and freedom from forced labor and child labor.}
-#'   \item{wjp_rol_6_2}{Measures whether the enforcement of regulations is subject to bribery or improper influence by private interests and whether public service are provided without bribery or other inducements}
-#'   \item{wjp_rol_7_1}{Captures whether people can access and afford civil justice as well as whether it is free of discrimination, improper government influence, and unreasonable delays}
-#'   \item{wjp_rol_7_5}{Measures whether civil justice proceedings are conducted and judgments are produced in a timely manner without unreasonable delay}
-#'   \item{wjp_rol_7_6}{Measures the effectiveness and timeliness of the enforcement of civil justice decisions and judgments in practice}
-#'   \item{wjp_rol_7_7}{Captures the accessibility, impartiality, and effectiveness of alternative dispute resolution mechanisms}
-#'   \item{wjp_rol_8_1}{Measures whether perpetrators of crimes are effectively apprehended and charged as well as whether police, investigators, and prosecutors have adequate resources}
-#'   \item{wjp_rol_8_2}{Captures the effectiveness and timeliness of the criminal investigation system is effective}
-#'   \item{wjp_rol_8_4}{Measures whether the police and criminal judges are impartial and whether they discriminate in practice based on socio-economic status, gender, ethnicity, religion, national origin, sexual orientation, or gender identity}
 #'   \item{wb_gtmi_pfm_mis}{Measures whether there is an operational FMIS, a TSA, a Tax MIS, a Customs MIS, a DMS, a PIMS, and e-procurement in place}
 #' }
 #'
@@ -772,8 +751,6 @@
 #'   \item \strong{wb_gtmi_i_7}: Is there a Tax Management Information System in place? Measured with scale 0= No, 1= Implementation in progress, 2= Yes (in use)
 #'   \item \strong{wb_gtmi_i_8}: Is there a Customs Management Information System in place? Measured by 0= No, 1= Implementation in progress, 2= Yes (in use)
 #'   \item \strong{wb_gtmi_psdi}: The Public Service Delivery Index (9 indicators) measures the maturity of online public service portals, with a focus on citizen centric design and universal accessibility.
-#'   \item \strong{wb_lpi_lp_lpi_cust_xq}: Efficiency of customs clearance processes (i.e. speed, simplicity and predictability of formalities) by border control agencies, including customs
-#'   \item \strong{wb_wbl_sg_law_indx}: The index scores 35 data points across eight indicators composed of four or five binary questions, with each indicator representing a different phase of a woman’s life. Indicator-level scores are obtained by calculating the unweighted average of responses to the questions within that indicator and scaling the result to 100. Questions are related to gender equality around mobility, workplace, pay, marriage, parenthood, entrepreneurship, assets, and pension.
 #'   \item \strong{wb_wdi_dt_dod_mwbg_cd}: IBRD loans and IDA credits are public and publicly guaranteed debt extended by the World Bank Group. The International Bank for Reconstruction and Development (IBRD) lends at market rates. Credits from the International Development Association (IDA) are at concessional rates. Data are in current U.S. dollars.
 #'   \item \strong{wb_wdi_dt_nfl_pcbo_cd}: Commercial bank and other lending includes net commercial bank lending (public and publicly guaranteed and private nonguaranteed) and other private credits. Data are in current U.S. dollars.
 #'   \item \strong{wb_wdi_gc_rev_xgrt_gd_zs}: Revenue is cash receipts from taxes, social contributions, and other revenues such as fines, fees, rent, and income from property or sales. Grants are also considered as revenue but are excluded here.
@@ -794,24 +771,6 @@
 #'   \item \strong{wb_wdi_iq_spi_pil4}: The data sources overall score is a composity measure of whether countries have data available from the following sources: Censuses and surveys, administrative data, geospatial data, and private sector/citizen generated data.  The data sources (input) pillar is segmented by four types of sources generated by (i) the statistical office (censuses and surveys), and sources accessed from elsewhere such as (ii)  administrative data, (iii) geospatial data, and (iv) private sector data and citizen generated data. The appropriate balance between these source types will vary depending on a country’s institutional setting and the maturity of its statistical system. High scores should reflect the extent to which the sources being utilized enable the necessary statistical indicators to be generated. For example, a low score on environment statistics (in the data production pillar) may reflect a lack of use of (and low score for) geospatial data (in the data sources pillar). This type of linkage is inherent in the data cycle approach and can help highlight areas for investment required if country needs are to be met.
 #'   \item \strong{wb_wdi_iq_spi_pil5}: The data infrastructure  pillar  overall score measures the hard and soft infrastructure segments, itemizing essential cross cutting requirements for an effective statistical system.  The segments are: (i) legislation and governance covering the existence of laws and a functioning institutional framework for the statistical system; (ii) standards and methods addressing compliance with recognized frameworks and concepts; (iii) skills including level of skills within the statistical system and among users (statistical literacy); (iv) partnerships reflecting the need for the statistical system to be inclusive and coherent; and (v) finance mobilized both domestically and from donors.
 #'   \item \strong{wb_wdi_tm_val_fuel_zs_un}: Fuels comprise the commodities in SITC section 3 (mineral fuels, lubricants and related materials).
-#'   \item \strong{wjp_rol_2_2}: Measures whether judges and judicial officials refrain from soliciting and accepting bribes to perform duties or expedite processes, and whether the judiciary and judicial rulings are free of improper influence by the government, private interests, or criminal organizations.
-#'   \item \strong{wjp_rol_3_1}: Measures whether basic laws and information on legal rights are publicly available, presented in plain language, and made accessible in all languages used in the country or jurisdiction. It also measures the quality and accessibility of information published by the government in print or online, and whetheradministrative regulations, drafts of legislation, and high court decisions are made accessible to the public in a timely manner
-#'   \item \strong{wjp_rol_3_2}: Measures whether requests for information held by a government agency are granted, whether these requests are granted within a reasonable time period, if the information provided is pertinent and complete, and if requests for information are granted at a reasonable cost and without having to pay a bribe. It also measures whether people are aware of their right to information, and whether relevant records are accessible to the public upon request. Coded from 0 to 1, with higher scores indicating stronger rights.
-#'   \item \strong{wjp_rol_3_4}: Measures whether people are able to bring specific complaints to the government about the provision of public services or the performance of government officers in carrying out their legal duties in practice, and how government officials respond to such complaints. Coded from 0 to 1, with higher scores indicating stronger mechanisms.
-#'   \item \strong{wjp_rol_4_3}: Measures whether the basic rights of criminal suspects are respected, including the presumption of innocence and the freedom from arbitrary arrest and unreasonable pre-trial detention. It also measures whether criminal suspects are able to access and challenge evidence used against them, whether they are subject to abusive treatment, and whether they are provided with adequate legal assistance. In addition, it measures whether the basic rights of prWorld Bankners are respected once they have been convicted of a crime.
-#'   \item \strong{wjp_rol_4_4}: Measures whether an independent media, civil society organizations, political parties, and individuals are free to report and comment on government policies without fear of retaliation.
-#'   \item \strong{wjp_rol_4_5}: Measures whether members of religious minorities can worship and conduct religious practices freely and publicly, and whether non-adherents are protected from having to submit to religious laws.
-#'   \item \strong{wjp_rol_4_6}: Measures whether the police or other government officials conduct physical searches without warrants, or intercept electronic communications of private individuals without judicial authorization
-#'   \item \strong{wjp_rol_4_7}: Measures whether people can freely attend community meetings, join political organizations, hold peaceful public demonstrations, sign petitions, and express opinions against government policies and actions without fear of retaliation.
-#'   \item \strong{wjp_rol_4_8}: Measures the effective enforcement of fundamental labor rights, including freedom of association and the right to collective bargaining, the absence of discrimination with respect to employment, and freedom from forced labor and child labor.
-#'   \item \strong{wjp_rol_6_2}: Measures whether the enforcement of regulations is subject to bribery or improper influence by private interests, and whether public services, such as the issuance of permits and licenses and the administration of public health services, are provided without bribery or other inducements.
-#'   \item \strong{wjp_rol_7_1}: People can access & afford civil justice; Civil justice is free of discrimination; Civil justice is free of corruption; Civil justice is free of improper government influence; Civil justice is not subject to unreasonable delay; Civil justice is effectively enforced; Alternative dispute resolution mechanisms are accessible, impartial, and effective.
-#'   \item \strong{wjp_rol_7_5}: Measures whether civil justice proceedings are conducted and judgments are produced in a timely manner without unreasonable delay.
-#'   \item \strong{wjp_rol_7_6}: Measures the effectiveness and timeliness of the enforcement of civil justice decisions and judgments in practice.
-#'   \item \strong{wjp_rol_7_7}: Alternative dispute resolution mechanisms are accessible, impartial, and effective (WJP Rule of Law Index)
-#'   \item \strong{wjp_rol_8_1}: Measures whether perpetrators of crimes are effectively apprehended and charged. It also measures whether police, investigators, and prosecutors have adequate resources, are free of corruption, and perform their duties competently.
-#'   \item \strong{wjp_rol_8_2}: Criminal investigation system is effective; Criminal adjudication system is timely and effective; Correctional system is effective in reducing criminal behavior; Criminal justice system is impartial; Criminal justice system is free of corruption; Criminal justice system is free of improper government influence; Due process of the law & rights of the accused.
-#'   \item \strong{wjp_rol_8_4}: Measures whether the police and criminal judges are impartial and whether they discriminate in practice based on socio-economic status, gender, ethnicity, religion, national origin, sexual orientation, or gender identity.
 #'   \item \strong{wb_gtmi_pfm_mis}: CLIAR made Index of PFM MIS based on GTMI data. Considers whether there's an operational FMIS (GTMI_I-5), a TSA (GTMI_I-6), a Tax MIS (GTMI_I-7), a DMS (GTMI_I-13), Customs MIS (GTMI_I-8), a PIMS (GTMI_I-14), and an e-Procurement system in place.
 #' }
 #'
@@ -825,13 +784,12 @@
 #' head(d360_efi_data)
 "d360_efi_data"
 
-
 #' @title ASPIRE Social Protection Indicators
 #'
 #' @description
 #' The ASPIRE (Atlas of Social Protection Indicators of Resilience and Equity) dataset provides standardized, cross-country indicators related to social protection and labor programs. It includes harmonized measures on adequacy and coverage of benefits, enabling regional and income-level comparWorld Bankns over time.
 #'
-#' @format A data frame with 512 rows and 4 variables:
+#' @format A data frame with 588 rows and 4 variables:
 #' \describe{
 #'   \item{\code{country_code}}{Character. World Bank3 country code based on World Bank standards.}
 #'   \item{\code{year}}{Numeric. Year of the observation.}
@@ -1585,3 +1543,76 @@
 #' }
 #' @source World Bank. \url{https://data360.worldbank.org/en/indicator/WB_WDI_GF_XPD_BUDG_ZS}
 "budget_execution"
+
+
+
+#' World Justice Project Rule of Law Index Indicators
+#'
+#' This dataset contains World Justice Project (WJP) Rule of Law Index
+#' indicators, pulled directly from source and relabeled to match the
+#' variable naming scheme used elsewhere in the package.
+#'
+#' @format A data frame with 1694 rows and 24 variables:
+#' \describe{
+#'   \item{country_code}{The World Bank country code}
+#'   \item{year}{Year}
+#'   \item{wjp_rol_2}{Captures the extent to which state officials in the executive branch, the judicial branch, the legislative branch, and the police/military use public office for private gain}
+#'   \item{wjp_rol_6_2}{Measures whether the enforcement of regulations is subject to bribery or improper influence by private interests and whether public service are provided without bribery or other inducements}
+#'   \item{wjp_rol_4_8}{Measures the effective enforcement of fundamental labor rights, including freedom of association and the right to collective bargaining, the absence of discrimination with respect to employment, and freedom from forced labor and child labor.}
+#'   \item{wjp_rol_2_2}{Measures whether judicial officials refrain from soliciting and accepting bribes to perform duties and whether the judiciary is free of improper influence by the government, private interests, or criminal organizations.}
+#'   \item{wjp_rol_7_1}{Captures whether people can access and afford civil justice as well as whether it is free of discrimination, improper government influence, and unreasonable delays}
+#'   \item{wjp_rol_4_3}{Measures whether the basic rights of criminal suspects are respected, including the presumption of innocence and the freedom from arbitrary arrest and unreasonable pre-trial detention}
+#'   \item{wjp_rol_7_7}{Captures the accessibility, impartiality, and effectiveness of alternative dispute resolution mechanisms}
+#'   \item{wjp_rol_8_2}{Captures the effectiveness and timeliness of the criminal investigation system is effective}
+#'   \item{wjp_rol_7_6}{Measures the effectiveness and timeliness of the enforcement of civil justice decisions and judgments in practice}
+#'   \item{wjp_rol_7_5}{Measures whether civil justice proceedings are conducted and judgments are produced in a timely manner without unreasonable delay}
+#'   \item{wjp_rol_6_6}{Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated}
+#'   \item{wjp_rol_8_1}{Measures whether perpetrators of crimes are effectively apprehended and charged as well as whether police, investigators, and prosecutors have adequate resources}
+#'   \item{wjp_rol_8_4}{Measures whether the police and criminal judges are impartial and whether they discriminate in practice based on socio-economic status, gender, ethnicity, religion, national origin, sexual orientation, or gender identity}
+#'   \item{wjp_rol_6}{Captures whether government regulations are effectively enforced without improper influence and unreasonable delays}
+#'   \item{wjp_rol_1}{Captures the extent to which the legislature, the judiciary, and non-governmental institutions limit government powers}
+#'   \item{wjp_rol_4_7}{Measures whether people can freely attend community meetings, join political organizations, hold peaceful public demonstrations, sign petitions, and express opinions against government policies and actions without fear of retaliation}
+#'   \item{wjp_rol_4_5}{Measures whether members of religious minorities can worship and conduct religious practices freely and publicly}
+#'   \item{wjp_rol_4_4}{Measures whether an independent media, civil society organizations, political parties, and individuals are free to report and comment on government policies without fear of retaliation}
+#'   \item{wjp_rol_4_6}{Measures whether the police or other government officials conduct physical searches without warrants, or intercept electronic communications of private individuals without judicial authorization}
+#'   \item{wjp_rol_3_2}{Measures whether requests for information held by a government agency are granted within a reasonable time period and at a reasonable cost without paying a bribe}
+#'   \item{wjp_rol_3_1}{Measures whether basic laws and information on legal rights are publicly available, presented in plain language, and made accessible in all languages used in the country or jurisdiction}
+#'   \item{wjp_rol_3_4}{Measures whether people are able to bring specific complaints to the government about the provision of public services or the performance of government officers in carrying out their legal duties in practice as well as whether government officials respond to such complaints}
+#' }
+#'
+#' @details
+#' Below are the longer descriptions for each variable:
+#' \itemize{
+#'   \item \strong{wjp_rol_2}: It is an index of 4 items: Government officials in the executive branch do not use public office for private gain; Government officials in the judicial branch do not use public office for private gain; Government officials in the police & the military do not use public office for private gain; Government officials in the legislative branch do not use public office for private gain.
+#'   \item \strong{wjp_rol_6_2}: Measures whether the enforcement of regulations is subject to bribery or improper influence by private interests, and whether public services, such as the issuance of permits and licenses and the administration of public health services, are provided without bribery or other inducements.
+#'   \item \strong{wjp_rol_4_8}: Measures the effective enforcement of fundamental labor rights, including freedom of association and the right to collective bargaining, the absence of discrimination with respect to employment, and freedom from forced labor and child labor.
+#'   \item \strong{wjp_rol_2_2}: Measures whether judges and judicial officials refrain from soliciting and accepting bribes to perform duties or expedite processes, and whether the judiciary and judicial rulings are free of improper influence by the government, private interests, or criminal organizations.
+#'   \item \strong{wjp_rol_7_1}: People can access & afford civil justice; Civil justice is free of discrimination; Civil justice is free of corruption; Civil justice is free of improper government influence; Civil justice is not subject to unreasonable delay; Civil justice is effectively enforced; Alternative dispute resolution mechanisms are accessible, impartial, and effective.
+#'   \item \strong{wjp_rol_4_3}: Measures whether the basic rights of criminal suspects are respected, including the presumption of innocence and the freedom from arbitrary arrest and unreasonable pre-trial detention. It also measures whether criminal suspects are able to access and challenge evidence used against them, whether they are subject to abusive treatment, and whether they are provided with adequate legal assistance. In addition, it measures whether the basic rights of prisoners are respected once they have been convicted of a crime.
+#'   \item \strong{wjp_rol_7_7}: Alternative dispute resolution mechanisms are accessible, impartial, and effective (WJP Rule of Law Index)
+#'   \item \strong{wjp_rol_8_2}: Criminal investigation system is effective; Criminal adjudication system is timely and effective; Correctional system is effective in reducing criminal behavior; Criminal justice system is impartial; Criminal justice system is free of corruption; Criminal justice system is free of improper government influence; Due process of the law & rights of the accused.
+#'   \item \strong{wjp_rol_7_6}: Measures the effectiveness and timeliness of the enforcement of civil justice decisions and judgments in practice.
+#'   \item \strong{wjp_rol_7_5}: Measures whether civil justice proceedings are conducted and judgments are produced in a timely manner without unreasonable delay.
+#'   \item \strong{wjp_rol_6_6}: Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated.
+#'   \item \strong{wjp_rol_8_1}: Measures whether perpetrators of crimes are effectively apprehended and charged. It also measures whether police, investigators, and prosecutors have adequate resources, are free of corruption, and perform their duties competently.
+#'   \item \strong{wjp_rol_8_4}: Measures whether the police and criminal judges are impartial and whether they discriminate in practice based on socio-economic status, gender, ethnicity, religion, national origin, sexual orientation, or gender identity.
+#'   \item \strong{wjp_rol_6}: Government regulations are effectively enforced; Government regulations are applied & enforced without improper influence; Administrative proceedings are conducted without unreasonable delay; Due process is respected in administrative proceedings; The government does not expropriate without lawful process & adequate compensation.
+#'   \item \strong{wjp_rol_1}: Government powers are effectively limited by the legislature; Government powers are effectively limited by the judiciary; Government powers are effectively limited by independent auditing and review; Government officials are sanctioned for misconduct; Government powers are subject to non-governmental checks; Transition of power is subject to the law.
+#'   \item \strong{wjp_rol_4_7}: Measures whether people can freely attend community meetings, join political organizations, hold peaceful public demonstrations, sign petitions, and express opinions against government policies and actions without fear of retaliation.
+#'   \item \strong{wjp_rol_4_5}: Measures whether members of religious minorities can worship and conduct religious practices freely and publicly, and whether non-adherents are protected from having to submit to religious laws.
+#'   \item \strong{wjp_rol_4_4}: Measures whether an independent media, civil society organizations, political parties, and individuals are free to report and comment on government policies without fear of retaliation.
+#'   \item \strong{wjp_rol_4_6}: Measures whether the police or other government officials conduct physical searches without warrants, or intercept electronic communications of private individuals without judicial authorization
+#'   \item \strong{wjp_rol_3_2}: Measures whether requests for information held by a government agency are granted, whether these requests are granted within a reasonable time period, if the information provided is pertinent and complete, and if requests for information are granted at a reasonable cost and without having to pay a bribe. It also measures whether people are aware of their right to information, and whether relevant records are accessible to the public upon request. Coded from 0 to 1, with higher scores indicating stronger rights.
+#'   \item \strong{wjp_rol_3_1}: Measures whether basic laws and information on legal rights are publicly available, presented in plain language, and made accessible in all languages used in the country or jurisdiction. It also measures the quality and accessibility of information published by the government in print or online, and whether administrative regulations, drafts of legislation, and high court decisions are made accessible to the public in a timely manner.
+#'   \item \strong{wjp_rol_3_4}: Measures whether people are able to bring specific complaints to the government about the provision of public services or the performance of government officers in carrying out their legal duties in practice, and how government officials respond to such complaints. Coded from 0 to 1, with higher scores indicating stronger mechanisms.
+#' }
+#'
+#' @source World Justice Project, Rule of Law Index (pulled directly from source)
+#' @docType data
+#' @name wjp
+#' @keywords datasets governance rule-of-law wjp
+#' @examples
+#' data(wjp)
+#' str(wjp)
+#' head(wjp)
+"wjp"
