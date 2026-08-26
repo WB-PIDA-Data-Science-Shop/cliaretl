@@ -140,3 +140,98 @@ db_variables_2024 <- db_variables_2024 |>
       T ~ indicator_order
     )
   )
+
+
+
+# Legacy code for etl labeling -------------------------------------------
+
+# # ...by etl source -------------------------------------------------------
+# # db variables source column is not reliable at this point.
+# # Build a compiled indicators panel df to check matching
+# sources <- db_variables_2025 |>
+#   count(source)
+
+# # Step 1: Clean and classify
+# dictionary_clean <- dictionary_identifiers |>
+#   mutate(
+#     variable = str_trim(as.character(variable)),
+#     etl_source = case_when(
+#       # Exact match group
+#       variable %in%
+#         c(
+#           "bs_sgi",
+#           "bs_bti",
+#           "fh_fiw",
+#           "ibp_obs",
+#           "idea_gsod",
+#           "imf_fm",
+#           "imf_gfscofog",
+#           "imf_world",
+#           "rise_ee",
+#           "rise_re",
+#           "rwb_pfi",
+#           "spi_census",
+#           "spi_std",
+#           "wb_es",
+#           "wb_girg",
+#           "wb_gtmi",
+#           "wb_lpi",
+#           "wb_wwbi",
+#           "wjp_rol"
+#         ) ~ "d360_efi_data",
+#       variable == "fraser_efw" ~ "fraser",
+#       variable %in%
+#         c(
+#           "heritage_business",
+#           "heritage_financial",
+#           "heritage_investment"
+#         ) ~ "heritage",
+#       variable == "oecd_epl" ~ "epl",
+#       variable == "oecd_pmr" ~ "pmr",
+#       variable == "romelli_cbi" ~ "romelli",
+#       variable == "aspire" ~ "aspire",
+#       variable == "wb_csc" ~ "scorecard",
+#       variable == "wb_debt" ~ "debt_transparency",
+#       variable == "wb_gfdb" ~ "gfdb",
+#       variable == "wb_pefa" ~ "pefa_assessments",
+#       variable == "wb_wbl" ~ "wbl_data",
+#       variable == "vdem_core" ~ "vdem_data",
+#       TRUE ~ "wdi_indicators"
+#     )
+#   )
+
+# # Map etl_source by source
+# etl_mapping <- dictionary_clean |>
+#   distinct(source, etl_source) |>
+#   # fix sources to be more specific about provenance
+#   mutate(
+#     source = case_when(
+#       source == "CLIAR" &
+#         etl_source == "debt_transparency" ~ "CLIAR (Debt Transparency)",
+#       source == "CLIAR" & etl_source == "wbl_data" ~ "CLIAR (WBL)",
+#       source == "CLIAR" & etl_source == "d360_efi_data" ~ "CLIAR (WB API)",
+#       T ~ source
+#     )
+#   )
+
+# # Step 3:Join to db_variables_2025
+# db_variables_2025 <- db_variables_2025 |>
+#   mutate(
+#     source = case_when(
+#       source == "CLIAR" &
+#         str_detect(variable, "^wb_debt") ~ "CLIAR (Debt Transparency)",
+#       source == "CLIAR" & str_detect(variable, "^wb_wbl") ~ "CLIAR (WBL)",
+#       source == "CLIAR" & str_detect(variable, "^wb_gtmi") ~ "CLIAR (WB API)",
+#       T ~ source
+#     )
+#   ) |>
+#   left_join(etl_mapping, by = "source")
+
+# # Ultimately check d360 API indicators
+# api_missing_indicators <- flag_missing_indicators(
+#   db_variables_2025,
+#   d360_efi_data,
+#   source_type = "wb_api",
+#   source_colname = "etl_source"
+# )
+
