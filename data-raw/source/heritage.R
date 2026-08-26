@@ -2,75 +2,85 @@
 ########## DOWNLOAD AND PROCESS HERITAGE'S INDEX OF FREEDOM DATA ###############
 ################################################################################
 
+# Isntructions to manually download the panel data from Heritage's website:
+# step 1. Go to the following URL in your browser: https://economicfreedom.heritage.org/pages/all-country-scores
+# step 2. Click all box btoh for the years and country filter. then click "Filter Data" button 
+# step 3. Click the "Download Filtered Data" button and select "CSV" to download the data and rename it to "heritage_iof_raw.csv"
+
 library(readr)
 library(dplyr)
 library(countrycode)
 
-#### reading the data directly from the internet
 
-urldata <- "https://www.heritage.org/index/assets/data/csv/ef-country-scores.csv"
-heritage_df <- read_csv(urldata)
+# 1. Read the data and skip 4 rows of metadata at the top
+heritage_raw <- read.csv(
+  "data-raw/input/heritage/heritage_iof_raw.csv", 
+  skip = 4, 
+  stringsAsFactors = FALSE
+)
 
-urlcountry <- "https://www.heritage.org/index/assets/data/csv/ef-country-names.csv"
-country_df <- read_csv(urlcountry)
-
-#### quickly store raw data with its attributes
-heritage_df |>
-  add_plmetadata(source = urldata,
-                 other_info = "Index of Economic Freedom Raw Data") |>
-  saveRDS("data-raw/input/heritage/heritage_iof_raw.rds")
-
-
-#### lets merge in country name and country code and remove
-#### original "webname" in the raw data
-heritage_df <- merge(heritage_df,
-                     country_df[, c("name_web", "name_ISO3166_3")] |>
-                       rename(country_code = "name_ISO3166_3"),
-                     all.x = TRUE,
-                     by = "name_web") |>
-               mutate(country_code = case_when(
-                 country_code == "KOS" ~ "XKX",
-                 TRUE ~ country_code
-               )) |>
-               merge(wb_country_list[, c("country_code", "country_name")] |>
-                       unique() |>
-                       add_row(country_code = "XKX",
-                               country_name = "Kosovo"),
-                     by = "country_code") |>
-               dplyr::select(-name_web) |>
-               as_tibble()
+# 2. Add standardized country code and country name using countrycode
+heritage_df <- heritage_raw |>
+  mutate(
+    # Generate ISO3c code (handles Kosovo mapping to XKX)
+    country_code = countrycode(
+      sourcevar = Country,
+      origin = "country.name",
+      destination = "iso3c",
+      custom_match = c("Kosovo" = "XKX")
+    ),
+    # Generate standardized country name
+    country_name = countrycode(
+      sourcevar = country_code,
+      origin = "iso3c",
+      destination = "country.name",
+      custom_match = c("XKX" = "Kosovo")
+    )
+  ) |>
+  # Remove the original raw country name column ("webname" equivalent)
+  dplyr::select(-Country)
 
 dbvar_dt <- readxl::read_excel("data-raw/input/cliar/db_variables.xlsx")
 
-#### change column names by just removing any spaces
-colnames(heritage_df) <- gsub(pattern = " ",
-                              replacement = "_",
-                              x = colnames(heritage_df)) |>
-                         tolower()
+# 3. Change column names by replacing spaces/dots with underscores and converting to lowercase
+colnames(heritage_df) <- colnames(heritage_df) |>
+  gsub(pattern = "[ .]+", replacement = "_") |>
+  tolower()
 
-#### convert indicator columns to numeric and represent missing values as NA
-#### and a few changes to match the naming conventions of the last year's data
-heritage_df <-
-  heritage_df |>
-  mutate(across(
-    .cols = where(~ any(. == "N/A", na.rm = TRUE)),
-    .fns = ~ suppressWarnings(as.numeric(na_if(., "N/A")))
-  ),
-  year = year - 1) |>
-  dplyr::select(country_code, year, business_freedom,
-                financial_freedom, investment_freedom) |>
-  rename_with(.cols = ends_with("_freedom"),
-              .fn = ~ paste0("heritage_", .)) |>
-  filter(year >= 2012)
+# 4. Convert indicator columns to numeric (handling "N/A"),
+#    adjust year (-1 offset), select/rename key variables, and filter.
+heritage_df <- heritage_df |>
+  # Rename index_year to year before transforming
+  rename(year = index_year) |>
+  mutate(
+    # Convert character columns containing "N/A" into proper numeric NAs
+    across(
+      .cols = where(~ is.character(.) && any(. == "N/A", na.rm = TRUE)),
+      .fns = ~ suppressWarnings(as.numeric(na_if(., "N/A")))
+    ),
+    year = year - 1
+  ) |>
+  dplyr::select(
+    country_code, 
+    country_name,
+    year, 
+    business_freedom,
+    financial_freedom, 
+    investment_freedom
+  ) |>
+  rename_with(
+    .cols = ends_with("_freedom"),
+    .fn = ~ paste0("heritage_", .)
+  ) |>
+  filter(year >= 2012) |> 
+  select(-country_name)  # Remove country_name column as it's redundant with country_code)
 
-heritage_df <-
+heritage <-
   heritage_df |>
   add_plmetadata(source = urldata,
-                 other_info = "")
+                 other_info = " 2026 extraction date: 8/7/2026. Script was fully refactored")
 
-heritage <- heritage_df
-
-rm(heritage_df) ## drop the heritage_df
+# Export the processed data to the package's data directory
 
 usethis::use_data(heritage, overwrite = TRUE)
 

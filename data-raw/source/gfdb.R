@@ -1,11 +1,14 @@
 #GFDB
-# install.packages("readxl")
+# This script downloads the GFDB data from the World Bank and reshapes it into a long format for further analysis.
+# Access the data from: https://www.worldbank.org/en/publication/gfdr/data/global-financial-development-database
+
 library(readxl)
 library(dplyr)
 library(tidyr)
 library(janitor)
-# URL
 
+
+# URL
 url <- "https://thedocs.worldbank.org/en/doc/5882f2b2117b882d58a78f9c64ea3613-0050062022/original/20220909-global-financial-development-database.xlsx"
 # tf <- tempfile(fileext = ".xlsx")
 
@@ -59,7 +62,7 @@ rm(gfdb_df)
 gfdb <-
 gfdb |>
   add_plmetadata(source = url,
-                 other_info = "")
+                 other_info = "Data last updated: 2022-09-09, 2026 extraction date: 2026-07-27.")
 
 usethis::use_data(gfdb, overwrite = TRUE)
 

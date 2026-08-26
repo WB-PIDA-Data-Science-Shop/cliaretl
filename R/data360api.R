@@ -53,9 +53,17 @@ get_data360_api <- function(dataset_id, indicator_id, pivot = TRUE) {
     )
 
     data_res <- httr::GET(data_url)
-    httr::stop_for_status(res)  # error if request fails
+    httr::stop_for_status(data_res)  # error if request fails
 
     data_json <- httr::content(data_res, as = "text", encoding = "UTF-8")
+    if (!grepl("application/json", httr::http_type(data_res), fixed = TRUE)) {
+      stop(
+        "Data360 API did not return JSON (likely a server error or too many ",
+        "indicators in one request). Status: ", httr::status_code(data_res),
+        ". Try requesting fewer indicators per call.",
+        call. = FALSE
+      )
+    }
     data_list <- jsonlite::fromJSON(data_json)
 
     data_360 <- data_360 |>

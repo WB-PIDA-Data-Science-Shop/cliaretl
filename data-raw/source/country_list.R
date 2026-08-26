@@ -13,7 +13,7 @@ devtools::load_all()
 wb_country_list_temp <- tempfile(fileext = ".xlsx")
 
 # Download the file
-# last updated: 12/4/2025
+# last updated: 7/27/2025
 download.file(
   "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
   destfile = wb_country_list_temp,
@@ -129,15 +129,15 @@ wb_country_list |>
 
 wb_country_list |>
   add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
-                 other_info = "2025 CLASSIFICATION")
+                 other_info = "2026 CLASSIFICATION")
 
 wb_country_groups <- wb_country_groups |>
   add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
-                 other_info = "2025 CLASSIFICATION")
+                 other_info = "2026 CLASSIFICATION")
 
 wb_income_and_region <- wb_country_income_and_region |>
   add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
-                 other_info = "2025 CLASSIFICATION")
+                 other_info = "2026 CLASSIFICATION")
 
 # write-out ---------------------------------------------------------------
 usethis::use_data(wb_country_list, overwrite = TRUE)

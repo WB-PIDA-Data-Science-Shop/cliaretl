@@ -21,7 +21,6 @@ Evidence from a New Dataset}. Review of International Organizations.
 romelli
 }
 \description{
-This dataset provides an annual panel of central bank independence (CBI) scores for countries,
 based on the unweighted index developed by Cukierman et al. (1992) and recomputed by Romelli using
 updated legal and institutional data.
 }
