@@ -76,6 +76,7 @@
 
 #' Central Bank Independence Index (Romelli Update of Cukierman et al.)
 #'
+#' This dataset provides an annual panel of central bank independence (CBI) scores for countries,
 #' based on the unweighted index developed by Cukierman et al. (1992) and recomputed by Romelli using
 #' updated legal and institutional data.
 #'
