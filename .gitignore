@@ -6,3 +6,4 @@
 .quarto
 .Rproj
 *.geojson
+data-raw/input

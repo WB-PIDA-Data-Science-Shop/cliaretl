@@ -1,6 +1,6 @@
 ## code to prepare `wdi_indicators` dataset goes here
-# source: WDI website https://datacatalog.worldbank.org/int/search/dataset/0037712/World-Development-Indicators
-
+# source: WDI Package https://cran.r-project.org/web/packages/WDI/WDI.pdf is unestable.
+#         Data360 API is used instead to pull WDI indicators.
 # access date: 8/11/2026
 library(here)
 library(dplyr)
@@ -13,40 +13,7 @@ library(countrycode)
 devtools::load_all()
 
 
-
-# data-load --------------------------------------------------------------
-
-url <- "https://datacatalogfiles.worldbank.org/ddh-published/0037712/DR0095335/WDI_CSV_2026_07_15.zip"
-
-# download to a temp file, read the csv from inside the zip, clean up
-zip_path <- tempfile(fileext = ".zip")
-download.file(url, zip_path, mode = "wb")
-
-# inspect the archive contents to get the exact file name (safer than hardcoding)
-zip_contents <- unzip(zip_path, list = TRUE)
-csv_name <- zip_contents$Name[str_detect(zip_contents$Name, "^WDICSV\\.csv$")]
-
-# extract to a temp directory
-exdir <- tempfile()
-dir.create(exdir)
-unzip(zip_path, files = csv_name, exdir = exdir)
-
-# read it in
-wdi_indicators_raw <- read_csv(
-  file.path(exdir, csv_name),
-  show_col_types = FALSE
-) |>
-  clean_names()
-
-# clean up temp files
-unlink(zip_path)
-unlink(exdir, recursive = TRUE)
-
-wdi_indicators_raw |> glimpse()
-
-
 # read-in -----------------------------------------------------------------
-
 
 # Define a comprehensive list of World Bank Development Indicators
 # Grouped for better readability and easier management.
@@ -56,7 +23,7 @@ wdi_indicators_raw |> glimpse()
 
 # 1. Create Indicator vector
 
-wdi_indicators_list <- c(
+wdi_macro_indicators_list <- c(
   # Macroeconomic Indicators
   "GC.DOD.TOTL.GD.ZS",        # Central government debt, total (% of GDP)
   "EN.GHG.CO2.RT.GDP.PP.KD",  # Carbon intensity of GDP (kg CO2e per 2021 PPP $ of GDP) [Replaced]
@@ -116,8 +83,11 @@ wdi_indicators_list <- c(
   "GC.REV.SOCL.ZS",           # Social contributions (% of revenue)
   "MS.MIL.TOTL.TF.ZS",        # Armed forces personnel, total (% of total labor force)
   "SL.UEM.TOTL.NE.ZS",        # Unemployment, total (% of total labor force) (modeled ILO estimate) - This might be a duplicate of SL.UEM.TOTL.ZS
-  "SL.UEM.TOTL.ZS",           # Unemployment, total (% of total labor force) (modeled ILO estimate)
+  "SL.UEM.TOTL.ZS"           # Unemployment, total (% of total labor force) (modeled ILO estimate)
+)
 
+
+wdi_social_indicators_list <- c(
   # Social and Human Development Indicators
   "SH.XPD.GHED.GD.ZS",        # Domestic general government health expenditure (% of GDP)
   "SE.XPD.TOTL.GD.ZS",        # Expenditure on education (% of GDP)
@@ -165,8 +135,10 @@ wdi_indicators_list <- c(
   "SH.MED.PHYS.ZS",           # Physicians (per 1,000 people)
   "SP.REG.BRTH.ZS",           # Completeness of birth registration, total (%)
   "SP.REG.BRTH.RU.ZS",        # Completeness of birth registration, rural (%)
-  "SP.REG.BRTH.UR.ZS",        # Completeness of birth registration, urban (%)
+  "SP.REG.BRTH.UR.ZS"        # Completeness of birth registration, urban (%)
+)
 
+wdi_cpia_indicators_list <- c(
   # CPIA Indicators (Country Policy and Institutional Assessment)
   "IQ.CPA.HRES.XQ",           # CPIA: Human resources (quality of public administration) (1=low to 6=high)
   "IQ.CPA.BREG.XQ",           # CPIA: Business regulatory environment (1=low to 6=high)
@@ -190,74 +162,123 @@ wdi_indicators_list <- c(
   "IQ.CPA.TRAN.XQ"            # CPIA: Transport and communications (1=low to 6=high)
 )
 
-
-# cleaning ----------------------------------------------------------------
-
-wdi_selected_panel <- wdi_indicators_raw |>
-  filter(indicator_code %in% wdi_indicators_list) |>
-  select(country_name, country_code, indicator_name, indicator_code, starts_with("x")) |>
-  pivot_longer(
-    cols = starts_with("x"),
-    names_to = "year",
-    values_to = "value"
-  ) |>
-  mutate(
-    year = as.integer(str_remove(year, "^x"))
-  ) |>
-  pivot_wider(
-    names_from = indicator_code,
-    values_from = value
-  ) |>
-  arrange(country_code, year)
+# 2. Convert WDI codes -> Data360 WB_WDI INDICATOR ids (batched, 3 different calls for each group of indicators)
+d360_macro_indicator_ids <- paste0("WB_WDI_", gsub("\\.", "_", wdi_macro_indicators_list))
+d360_social_indicator_ids <- paste0("WB_WDI_", gsub("\\.", "_", wdi_social_indicators_list))
+d360_cpia_indicator_ids <- paste0("WB_WDI_", gsub("\\.", "_", wdi_cpia_indicators_list))
 
 
+# 3. Pull data from Data360 API for each group of indicators
+# Chunk indicator ids so the request URL stays under the Data360 server limit
+
+mini_pull_d360 <- function(ids, chunk_size = 10) {
+  chunks <- split(ids, ceiling(seq_along(ids) / chunk_size))
+
+  results <- lapply(seq_along(chunks), function(i) {
+    chunk <- chunks[[i]]
+    tryCatch(
+      get_data360_api("WB_WDI", chunk, pivot = FALSE),
+      error = function(e) { # good to find the bad ids instead of losing the whole run
+        message("Chunk ", i, " FAILED: ", paste(chunk, collapse = ", "))
+        message("  -> ", conditionMessage(e))
+        NULL
+      }
+    )
+  })
+
+  bind_rows(results)
+}
+
+# Run funs to pull data for each group of indicators
+wdi_macro_d360_long  <- mini_pull_d360(d360_macro_indicator_ids)
+wdi_social_d360_long <- mini_pull_d360(d360_social_indicator_ids)
+wdi_cpia_d360_long   <- mini_pull_d360(d360_cpia_indicator_ids)
+
+## Combine all three datasets into one long-format dataset
+# wdi_panel <- bind_rows(wdi_macro_d360_long, wdi_social_d360_long, wdi_cpia_d360_long) |> 
+#   select(REF_AREA, TIME_PERIOD, INDICATOR, OBS_VALUE)
+
+wdi_d360_test <- get_data360_api(
+  dataset_id   = "WB_WDI",
+  indicator_id = d360_macro_indicator_ids[29],
+  pivot        = TRUE                
+) 
 
 
-# Normalise indicator column names: lowercase, remove underscores and dots, then add `wdi_` prefix
-# We skip the identifier columns (country_name, country_code, year).
-wdi_named <- wdi_selected_panel |>
-  rename_with(
-    ~ str_to_lower(.) %>% str_replace_all("[_.]", ""),
-    .cols = -c(country_name, country_code, year)
-  ) |>
-  rename_with(
-    ~ paste0("wdi_", .),
-    .cols = -c(country_name, country_code, year)
-  )
+# # cleaning ----------------------------------------------------------------
 
-# process -----------------------------------------------------------------
+# # Clean col names
+# wdi_name <- wdi_data |>
+#             clean_names() |>
+#             rename(
+#               country_name = country,
+#               country_code = iso3c
+#             )
 
-# Step 1: Extract variable names and labels
-var_labels <- sapply(wdi_named, function(x) attr(x, "label"))  # Extract labels from the attributes
-var_names <- names(var_labels)  # Get the variable names
+# # Replace ISO2 to ISO3
+# wdi_iso3 <- wdi_name |>
+#              mutate(
+#                iso3c = countrycode(iso2c,
+#                                    origin = "iso2c",
+#                                    destination = "iso3c")
+#                )
 
-# wdi_named is already lower-cased and prefixed; assign to wdi_clean for downstream consistency
-wdi_clean <- wdi_named |> 
-  select(-wdi_indicatorname) # Remove this 
-
-
-columns_to_drop <- c(
-  "country_name",
-  "wdi_dcodatotlgnzs",
-  "wdi_dtdodpvlxgnzs",
-  "wdi_shmedcmhwp3",
-  # "wdi_sipovmdim",
-  # "wdi_sipovmdimxq",
-  "wdi_gcrevxgrtgdzs"
-)
-
-wdi_indicators <- wdi_clean |>
-  select(!all_of(columns_to_drop)) |>
-  filter(!is.na(country_code) & country_code != ""
-  ) |>
-  distinct(country_code, year, .keep_all = TRUE) |> 
-  select(-wdi_gctaxtotlgdzs) # Extracted in EFI API pull
+# # Identify the unmatched country codes
+# unmatched_iso2c <- wdi_iso3 |>
+#                     filter(is.na(iso3c)) |>
+#                     distinct(iso2c) |>
+#                     pull(iso2c) # None of them are WB territories
 
 
-wdi_indicators <- wdi_indicators |>
-  add_plmetadata(source = "WDI DDH bulk download via: https://datacatalog.worldbank.org/int/search/dataset/0037712/World-Development-Indicators",
-                 other_info = "Last 2026 extraction date: 8/18/2026. Bulk download of WDI CSV file from World Bank Data Catalog.")
+# # Drop rows where iso3c is NA
+# wdi_cleaned_codes <- wdi_iso3 |>
+#                     filter(!is.na(iso3c)) |>
+#                     select(-c(iso2c, iso3c))
+
+# # Remove underscores from column names and replace prefixes with `wdi_` convention
+# wdi_named <- wdi_cleaned_codes |>
+#   rename_with(~ str_replace_all(.x, "_", ""),
+#               .cols = -c(country_name, country_code)
+#   ) |>
+#   rename_with(~ str_replace_all(.x, "^(.+)", "wdi_\\1"),
+#               .cols = !starts_with("country") & !starts_with("year")
+#   )
+
+# # process -----------------------------------------------------------------
+
+# # Step 1: Extract variable names and labels
+# var_labels <- sapply(wdi_named, function(x) attr(x, "label"))  # Extract labels from the attributes
+# var_names <- names(var_labels)  # Get the variable names
+
+# wdi_clean <- wdi_named |>
+#   rename_with(
+#     ~ str_to_lower(.) |>
+#       str_replace_all("^wdi_", "wdi_"),
+#     starts_with("wdi_")
+#   )
+
+# columns_to_drop <- c(
+#   "country_name",
+#   "wdi_dcodatotlgnzs",
+#   "wdi_dtdodpvlxgnzs",
+#   "wdi_shmedcmhwp3",
+#   "wdi_sipovmdim",
+#   "wdi_sipovmdimxq",
+#   "wdi_gcrevxgrtgdzs"
+# )
+
+# wdi_indicators <- wdi_clean |>
+#   select(!all_of(columns_to_drop)) |>
+#   filter(!is.na(country_code) & country_code != ""
+#   ) |>
+#   distinct(country_code, year, .keep_all = TRUE) |> 
+#   select(-wdi_gctaxtotlgdzs) # Extracted in EFI API pull
 
 
-# write-out ---------------------------------------------------------------
-usethis::use_data(wdi_indicators, overwrite = TRUE)
+# wdi_indicators <- wdi_indicators |>
+#   add_plmetadata(source = wdi_indicators_list,
+#                  other_info = "Last 2026 extraction date: 8/3/2025. WDI package version: 2.7.1.")
+
+
+# # write-out ---------------------------------------------------------------
+# usethis::use_data(wdi_indicators, overwrite = TRUE)

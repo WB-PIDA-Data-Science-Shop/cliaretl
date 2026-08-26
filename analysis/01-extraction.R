@@ -387,27 +387,21 @@ family_order <- tibble(
 )
 
 # Clean and prepare db_variables
-db_variables <- db_variables_2025 |>
+db_variables_2026 <- db_variables_2025 |>
   clean_names() |>
   mutate(
     variable = make_clean_names(variable),
     var_name = str_to_sentence(var_name, locale = "en") # To Sentence
   )
 
-# Add family-level variables to db_variables: ranks and names
-db_variables <- db_variables |>
-  mutate(
-    across(where(is.character), str_squish)
-  ) |>
-  rename(
-    rank_id = indicator_order
-  ) |>
-  mutate(
-    rank_id = rank_id + 1
-  )
+# Rank ID was already created in db_variables_2025, but we can ensure it's present and correct
+db_variables_2026 <- db_variables_2026 |>
+  group_by(family_var) |>
+  mutate(rank_id = row_number()) |>
+  ungroup()
 
 # Create a family_var column to link family-level vars
-family_level_vars <- db_variables |>
+family_level_vars <- db_variables_2026 |>
   distinct(family_var, family_name) |>
   rowwise() |>
   mutate(
@@ -422,13 +416,14 @@ family_level_vars <- db_variables |>
   )
 
 # Create final db_variables with family-level vars included
-db_variables_final <- db_variables |>
+db_variables_final <- db_variables_2026 |>
   bind_rows(family_level_vars) |>
-  arrange(family_var, rank_id)
+  arrange(family_var, rank_id) |> 
+  add_plmetadata(source = "2026 metadata dictionary", other_info = "Last updated: 08/26/2026")
 
 # Add time stamp
-db_variables <- db_variables |>
-  add_plmetadata(source = "metadata dictionary", other_info = "")
+db_variables <- db_variables_2026 |>
+  add_plmetadata(source = "2026 metadata dictionary", other_info = "Last updated: 08/26/2026")
 
 # Add year attribute
 attr(db_variables, "ref_year") <- 2026
@@ -436,7 +431,7 @@ attr(db_variables, "ref_year") <- 2026
 db_variables <- db_variables |>
   add_plmetadata(
     source = "Own dictionary",
-    other_info = "Version 2026, updated with indicators extracted from various sources and cleaned."
+    other_info = "Last updated: 08/26/2026. Version 2026, updated with indicators extracted from various sources and cleaned."
   )
 
 # snapshot data ----------------------------------------------------------
