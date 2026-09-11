@@ -50,6 +50,8 @@ fraser_indicators <- fraser
 aspire_indicators <- aspire
 wbl_indicators <- wbl_data
 scorecard_indicators <- scorecard
+spi_indicators <- spi
+wjp_indicators <- wjp
 
 # NOTE: PMR OECD data indicators is from 2018 methodology to 2022 dropped/renamed indicators.
 # We drop these indicators to avoid confusion with the 2022 methodology indicators, 
@@ -119,7 +121,9 @@ cliar_indicators <- list(
   wbl_indicators = wbl_data,
   rise_indicators = rise_indicators, # Provisional
   wdi_wb_indicators = wdi_indicators,
-  scorecard_indicators = scorecard_indicators
+  scorecard_indicators = scorecard_indicators,
+  spi_indicators = spi_indicators,
+  wjp_indicators = wjp_indicators
 ) |>
   map(
     ~ mutate(

@@ -498,10 +498,6 @@
 #'   \item{wb_wwbi_bi_wag_prem_pb_gp}{Percentage differences in public sector wages compared to private sector wages (in local currency units) controlling for education, age, gender, and location.}
 #'   \item{wb_wwbi_bi_wag_totl_gd_zs}{General government wave bill in proportion to country GDP (based on PPP; 2009 dollars). The wage bill is defined as the total compensation (in cash or in-kind) payable to a government employee in exchange for work. Wage bill includes wages and salaries, allowances, and social security contributions made on behalf of employees to social insurance schemes.}
 #'   \item{wb_wwbi_bi_wag_totl_pb_zs}{Measures the total compensation (in cash or in-kind) payable to a government employee in exchange for work.}
-#'   \item{wjp_rol_1}{Captures the extent to which the legislature, the judiciary, and non-governmental institutions limit government powers}
-#'   \item{wjp_rol_2}{Captures the extent to which state officials in the executive branch, the judicial branch, the legislative branch, and the police/military use public office for private gain}
-#'   \item{wjp_rol_6}{Captures whether government regulations are effectively enforced without improper influence and unreasonable delays}
-#'   \item{wjp_rol_6_6}{Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated}
 #'   \item{bs_sgi_195}{Measures the existence of the following supervWorld Bankry bodies (a) audit office, (b) ombuds office and (3) data protection authority}
 #'   \item{bs_sgi_196}{Measures whether there is an independent and effective audit office}
 #'   \item{bs_bti_q1_2}{Measures whether all relevant groups in society agree about citizenship and accept the nation-state as legitimate}
@@ -701,10 +697,6 @@
 #'   \item \strong{wb_wwbi_bi_wag_prem_pb_gp}: Percentage differences in public sector wages compared to private sector wages (in local currency units) controlling for education, age, gender, and location.
 #'   \item \strong{wb_wwbi_bi_wag_totl_gd_zs}: General government wave bill in proportion to country GDP (based on PPP; 2009 dollars). The wage bill is defined as the total compensation (in cash or in-kind) payable to a government employee in exchange for work. Wage bill includes wages and salaries, allowances, and social security contributions made on behalf of employees to social insurance schemes.
 #'   \item \strong{wb_wwbi_bi_wag_totl_pb_zs}: The wage bill is defined as the total compensation (in cash or in-kind) payable to a government employee in exchange for work. Wage bill includes wages and salaries, allowances, and social security contributions made on behalf of employees to social insurance schemes.
-#'   \item \strong{wjp_rol_1}: Government powers are effectively limited by the legislature; Government powers are effectively limited by the judiciary; Government powers are effectively limited by independent auditing and review; Government officials are sanctioned for misconduct; Government powers are subject to non-governmental checks; Transition of power is subject to the law.
-#'   \item \strong{wjp_rol_2}: It is an index of 4 items: Government officials in the executive branch do not use public office for private gain; Government officials in the judicial branch do not use public office for private gain; Government officials in the police & the military do not use public office for private gain; Government officials in the legislative branch do not use public office for private gain.
-#'   \item \strong{wjp_rol_6}: Government regulations are effectively enforced; Government regulations are applied & enforced without improper influence; Administrative proceedings are conducted without unreasonable delay; Due process is respected in administrative proceedings; The government does not expropriate without lawful process & adequate compensation.
-#'   \item \strong{wjp_rol_6_6}: Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated.
 #'   \item \strong{bs_sgi_195}: Measures the existence of the following supervWorld Bankry bodies: (a) audit office, (b) ombuds office and (3) data protection authority.
 #'   \item \strong{bs_sgi_196}: Does there exist an independent and effective audit office?
 #'   \item \strong{bs_bti_q1_2}: To what extent do all relevant groups in society agree about citizenship and accept the nation-state as legitimate?
@@ -1616,3 +1608,39 @@
 #' str(wjp)
 #' head(wjp)
 "wjp"
+
+
+#' Statistical Performance Indicators (SPI) — Digital and Data Institutions
+#'
+#' A subset of the World Bank's Statistical Performance Indicators (SPI),
+#' covering two indicators from the "Digital and Data Institutions" family:
+#' availability of recent censuses/surveys, and use of internationally
+#' accepted statistical standards and methods.
+#'
+#' @format A tibble with columns:
+#' \describe{
+#'   \item{country_code}{World Bank Country ISO3 code.}
+#'   \item{year}{Reference year of the indicator value.}
+#'   \item{wb_spi_census_and_survey_index}{Availability of recent censuses
+#'     and surveys covering broad areas, including Population & Housing
+#'     census, Agriculture census, Business/establishment census, Household
+#'     Survey on income/consumption/expenditure/budget/Integrated Survey,
+#'     Agriculture survey, Labor Force Survey, Health/Demographic survey,
+#'     and Business/establishment survey. Source: NSO websites, World Bank
+#'     microdata library, ILO microdata library, IHSN microdata library.}
+#'   \item{wb_spi_std_and_methods}{Countries' use of internationally
+#'     accepted and recommended methodologies, classifications and
+#'     standards for data integration, covering System of National
+#'     Accounts in use, National Accounts base year, classification of
+#'     national industry, CPI base year, classification of household
+#'     consumption, classification of status of employment, central
+#'     government accounting status, compilation of government finance
+#'     statistics, compilation of monetary and financial statistics, and
+#'     business process. Further work could improve the validity of this
+#'     indicator and reduce the risk that countries may be incentivized to
+#'     adopt only traditional standards and methods, neglecting innovative
+#'     solutions that may be more valid in the current context.}
+#' }
+#'
+#' @source World Bank Statistical Performance Indicators (SPI).
+"spi"
