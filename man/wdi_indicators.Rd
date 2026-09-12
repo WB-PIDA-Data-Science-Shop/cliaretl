@@ -5,7 +5,7 @@
 \alias{wdi_indicators}
 \title{World Development Indicators (WDI) Dataset}
 \format{
-A data frame with 7,310 rows and 129 variables:
+A data frame with 14190 rows and 121 variables:
 \describe{
   \item{\code{country_code}}{character The 3-letter World Bank code for the country or region.}
   \item{\code{year}}{integer The year of the observation.}

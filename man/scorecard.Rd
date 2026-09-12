@@ -5,7 +5,7 @@
 \alias{scorecard}
 \title{World Bank Country Scorecard (WB_CSC) Indicators}
 \format{
-A data frame with 7,121 rows and 25 variables:
+A data frame with 5323 rows and 24 variables:
 \describe{
   \item{\code{country_code}}{character World Bank 3-letter ISO country code.}
   \item{\code{year}}{character Year of the observation.}

@@ -5,7 +5,7 @@
 \alias{spi}
 \title{Statistical Performance Indicators (SPI) — Digital and Data Institutions}
 \format{
-A tibble with columns:
+A tibble with 4515 rows and 4 columns:
 \describe{
   \item{country_code}{World Bank Country ISO3 code.}
   \item{year}{Reference year of the indicator value.}

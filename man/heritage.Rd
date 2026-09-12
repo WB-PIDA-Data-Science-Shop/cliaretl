@@ -5,7 +5,7 @@
 \alias{heritage}
 \title{Heritage Index of Economic Freedom Data}
 \format{
-A tibble with 2,381 rows and 5 variables:
+A tibble with 2,563 rows and 5 variables:
 \describe{
   \item{country_code}{A three-letter World Bank 3166-1 alpha-3 country code identifying the country.}
   \item{year}{The year of the score, adjusted so that a given year's value reflects the conditions of the previous year.}

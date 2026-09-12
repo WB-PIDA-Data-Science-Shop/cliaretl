@@ -42,6 +42,14 @@ census_and_survey_tbl <-
 
 spi <- full_join(stdmethods_tbl, census_and_survey_tbl, by = c("country_code", "year"))
 
+### lets drop the countries that are not in wb_country_list
+spi <- spi |> 
+       dplyr::filter(!is.na(country_code) & 
+       country_code %in% unique(wb_country_list$country_code))
+
+### add metadata
+spi <- spi |> add_plmetadata(source = "WB Data 360 API Pulls", other_info = "Pulled on 9/11/2026")
+
 ### writing the lazyload
 
 usethis::use_data(spi, overwrite = TRUE)

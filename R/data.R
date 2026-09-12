@@ -102,7 +102,7 @@
 
 #' @title World Development Indicators (WDI) Dataset
 #' @description A dataset containing World Development Indicators from the World Bank, providing time-series data for multiple countries.
-#' @format A data frame with 7,310 rows and 129 variables:
+#' @format A data frame with 14190 rows and 121 variables:
 #' \describe{
 #'   \item{\code{country_code}}{character The 3-letter World Bank code for the country or region.}
 #'   \item{\code{year}}{integer The year of the observation.}
@@ -229,9 +229,9 @@
 #' @source World Development Indicators (WDI) R Package https://vincentarelbundock.github.io/WDI/.
 "wdi_indicators"
 
-#' @title V-Dem Core Indicators, Version 15
-#' @description A country–year panel of 52 core indicators from the Varieties of Democracy (V‑Dem) 2025 release, processed for the CLIAR ETL pipeline.
-#' @format A data frame with 6,204 rows and 52 variables:
+#' @title V-Dem Core Indicators, Version 16
+#' @description A country–year panel of 47 core indicators from the Varieties of Democracy (V‑Dem) 2026 release, processed for the CLIAR ETL pipeline.
+#' @format A data frame with 6,219 rows and 49 variables:
 #' \describe{
 #'   \item{country_code}{Three‑letter World Bank3 country code.}
 #'   \item{year}{Calendar year.}
@@ -283,7 +283,7 @@
 #'   \item{vdem_core_v2edteautonomy}{Teacher autonomy in education (`v2edteautonomy`).}
 #'   \item{vdem_core_v2edteunionindp}{Independence of teachers’ unions (`v2edteunionindp`).}
 #' }
-#' @source Varieties of Democracy (V‑Dem) Institute. 2025. V‑Dem v15 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
+#' @source Varieties of Democracy (V‑Dem) Institute. 2026. V‑Dem v16 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
 "vdem_data"
 
 
@@ -291,7 +291,7 @@
 #'
 #' A dataset containing country-level scores from the Heritage Foundation's Index of Economic Freedom, focused on freedom indicators relevant to business, finance, and investment sectors.
 #'
-#' @format A tibble with 2,381 rows and 5 variables:
+#' @format A tibble with 2,563 rows and 5 variables:
 #' \describe{
 #'   \item{country_code}{A three-letter World Bank 3166-1 alpha-3 country code identifying the country.}
 #'   \item{year}{The year of the score, adjusted so that a given year's value reflects the conditions of the previous year.}
@@ -797,7 +797,7 @@
 #'
 #' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
 #'
-#' @format A data frame with 4,786 rows and 6 variables:
+#' @format A data frame with 4,785 rows and 6 variables:
 #' \describe{
 #'   \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
 #'   \item{\code{year}}{Numeric. The year of the observation.}
@@ -812,23 +812,8 @@
 "fraser"
 
 
-#' Fraser Economic Freedom Dataset
-#'
-#' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
-#'
-#' @format A data frame with 4,786 rows and 6 variables:
-#' \describe{
-#'   \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
-#'   \item{\code{year}}{Numeric. The year of the observation.}
-#'   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
-#'   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
-#'   \item{\code{fraser_efw_capital_controls}}{Numeric. Capital controls.}
-#'   \item{\code{fraser_efw_credit_market_regulation}}{Numeric. Credit market regulations.}
-#' }
-#' @source \url{https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0}
-#' @usage data(fraser)
-#' @keywords datasets
-"fraser"
+
+
 
 #' Database Variable Metadata
 #'
@@ -909,7 +894,7 @@
 #' economic participation across different areas including entrepreneurship,
 #' social protections, and labor market participation.
 #'
-#' @format A tibble with 6,460 rows and 5 variables:
+#' @format A tibble with 7030 rows and 5 variables:
 #' \describe{
 #'   \item{country_code}{Character. World Bank 3-letter country codes.}
 #'   \item{year}{Numeric. Year of observation.}
@@ -1462,7 +1447,7 @@
 #'   variables, tracking development outcomes across social protection, health,
 #'   education, climate, infrastructure, digital, gender, and private sector
 #'   domains.
-#' @format A data frame with 7,121 rows and 25 variables:
+#' @format A data frame with 5323 rows and 24 variables:
 #' \describe{
 #'   \item{\code{country_code}}{character World Bank 3-letter ISO country code.}
 #'   \item{\code{year}}{character Year of the observation.}
@@ -1617,7 +1602,7 @@
 #' availability of recent censuses/surveys, and use of internationally
 #' accepted statistical standards and methods.
 #'
-#' @format A tibble with columns:
+#' @format A tibble with 4515 rows and 4 columns:
 #' \describe{
 #'   \item{country_code}{World Bank Country ISO3 code.}
 #'   \item{year}{Reference year of the indicator value.}

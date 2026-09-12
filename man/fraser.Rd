@@ -5,17 +5,7 @@
 \alias{fraser}
 \title{Fraser Economic Freedom Dataset}
 \format{
-A data frame with 4,786 rows and 6 variables:
-\describe{
-  \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
-  \item{\code{year}}{Numeric. The year of the observation.}
-  \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
-  \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
-  \item{\code{fraser_efw_capital_controls}}{Numeric. Capital controls.}
-  \item{\code{fraser_efw_credit_market_regulation}}{Numeric. Credit market regulations.}
-}
-
-A data frame with 4,786 rows and 6 variables:
+A data frame with 4,785 rows and 6 variables:
 \describe{
   \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
   \item{\code{year}}{Numeric. The year of the observation.}
@@ -27,17 +17,11 @@ A data frame with 4,786 rows and 6 variables:
 }
 \source{
 \url{https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0}
-
-\url{https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0}
 }
 \usage{
 data(fraser)
-
-data(fraser)
 }
 \description{
-A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
-
 A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
 }
 \keyword{datasets}

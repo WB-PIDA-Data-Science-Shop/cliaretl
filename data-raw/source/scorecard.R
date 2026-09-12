@@ -33,4 +33,17 @@ scorecard <- csc_tbl |>
 
 rm(csc_tbl)
 
+## lets make sure to only keep the countries in the wb_country_list
+
+scorecard <- 
+  scorecard |>
+  dplyr::filter(country_code %in% unique(wb_country_list$country_code)) |>
+  dplyr::filter(!is.na(country_code))
+
+
+scorecard <- 
+  scorecard |>
+  add_plmetadata(source = "WB Data 360 API Pulls",
+                 other_info = "Repulled from API on 9/11/2026")
+
 usethis::use_data(scorecard, overwrite = TRUE)

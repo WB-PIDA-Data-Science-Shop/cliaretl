@@ -93,9 +93,16 @@ vdem_data <- vdem_clean |>
     .cols = starts_with("v2")
   )
 
+# lets keep only WB countries
+vdem_data <- 
+  vdem_data |> 
+  dplyr::filter(!is.na(country_code) & country_code %in% unique(wb_country_list$country_code)) |>
+  as_tibble()
+
+
 vdem_data |>
   add_plmetadata(source = vdemdata::vdem,
-                 other_info = "Last 2026 extraction: 07/30/26. R package, Version 16")
+                 other_info = "Last 2026 extraction: 09/11/26. R package, Version 16")
 
 
 # write-out ---------------------------------------------------------------
