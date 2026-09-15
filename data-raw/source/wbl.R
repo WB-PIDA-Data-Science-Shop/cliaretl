@@ -571,12 +571,25 @@ version_summary
 wbl_data  <- bind_rows(wblb_data_to_merge, wbl2_data_to_merge) |> 
   arrange(country_code, year)
 
+wbl_data <- 
+  wbl_data |>
+  dplyr::select(-wbl_version)
+
+
+# keep only the countries of interest
+### first rename kosovo
+
+wbl_data$country_code[wbl_data$country_code == "KSV"] <- "XKX"
+
+wbl_data <- 
+  wbl_data |>
+  dplyr::filter(!is.na(country_code) & country_code %in% unique(wb_country_list$country_code))
 
 
 # Add metadata
 wbl_data <- wbl_data |>
   add_plmetadata(source = "https://wbl.worldbank.org/en/wbl-data",
-                 other_info = "WBL Data for 1971-2024 and WBL Data for 2026. Accessed on 8/26/2026.")
+                 other_info = "WBL Data for 1971-2024 and WBL Data for 2026. Accessed on 9/11/2026.")
 
 
 # export data -----------------------------------------------------

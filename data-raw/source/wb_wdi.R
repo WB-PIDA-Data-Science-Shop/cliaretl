@@ -254,6 +254,12 @@ wdi_indicators <- wdi_clean |>
   select(-wdi_gctaxtotlgdzs) # Extracted in EFI API pull
 
 
+### ensure we only have wb_country_list countries included
+wdi_indicators <- 
+  wdi_indicators |>
+  dplyr::filter(!is.na(country_code) & country_code %in% unique(wb_country_list$country_code))
+
+
 wdi_indicators <- wdi_indicators |>
   add_plmetadata(source = "WDI DDH bulk download via: https://datacatalog.worldbank.org/int/search/dataset/0037712/World-Development-Indicators",
                  other_info = "Last 2026 extraction date: 8/18/2026. Bulk download of WDI CSV file from World Bank Data Catalog.")

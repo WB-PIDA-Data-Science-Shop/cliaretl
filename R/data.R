@@ -103,7 +103,7 @@
 
 #' @title World Development Indicators (WDI) Dataset
 #' @description A dataset containing World Development Indicators from the World Bank, providing time-series data for multiple countries.
-#' @format A data frame with 7,310 rows and 129 variables:
+#' @format A data frame with 14190 rows and 121 variables:
 #' \describe{
 #'   \item{\code{country_code}}{character The 3-letter World Bank code for the country or region.}
 #'   \item{\code{year}}{integer The year of the observation.}
@@ -230,9 +230,9 @@
 #' @source World Development Indicators (WDI) R Package https://vincentarelbundock.github.io/WDI/.
 "wdi_indicators"
 
-#' @title V-Dem Core Indicators, Version 15
-#' @description A country–year panel of 52 core indicators from the Varieties of Democracy (V‑Dem) 2025 release, processed for the CLIAR ETL pipeline.
-#' @format A data frame with 6,204 rows and 52 variables:
+#' @title V-Dem Core Indicators, Version 16
+#' @description A country–year panel of 47 core indicators from the Varieties of Democracy (V‑Dem) 2026 release, processed for the CLIAR ETL pipeline.
+#' @format A data frame with 6,219 rows and 49 variables:
 #' \describe{
 #'   \item{country_code}{Three‑letter World Bank3 country code.}
 #'   \item{year}{Calendar year.}
@@ -284,7 +284,7 @@
 #'   \item{vdem_core_v2edteautonomy}{Teacher autonomy in education (`v2edteautonomy`).}
 #'   \item{vdem_core_v2edteunionindp}{Independence of teachers’ unions (`v2edteunionindp`).}
 #' }
-#' @source Varieties of Democracy (V‑Dem) Institute. 2025. V‑Dem v15 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
+#' @source Varieties of Democracy (V‑Dem) Institute. 2026. V‑Dem v16 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
 "vdem_data"
 
 
@@ -292,7 +292,7 @@
 #'
 #' A dataset containing country-level scores from the Heritage Foundation's Index of Economic Freedom, focused on freedom indicators relevant to business, finance, and investment sectors.
 #'
-#' @format A tibble with 2,381 rows and 5 variables:
+#' @format A tibble with 2,563 rows and 5 variables:
 #' \describe{
 #'   \item{country_code}{A three-letter World Bank 3166-1 alpha-3 country code identifying the country.}
 #'   \item{year}{The year of the score, adjusted so that a given year's value reflects the conditions of the previous year.}
@@ -499,10 +499,6 @@
 #'   \item{wb_wwbi_bi_wag_prem_pb_gp}{Percentage differences in public sector wages compared to private sector wages (in local currency units) controlling for education, age, gender, and location.}
 #'   \item{wb_wwbi_bi_wag_totl_gd_zs}{General government wave bill in proportion to country GDP (based on PPP; 2009 dollars). The wage bill is defined as the total compensation (in cash or in-kind) payable to a government employee in exchange for work. Wage bill includes wages and salaries, allowances, and social security contributions made on behalf of employees to social insurance schemes.}
 #'   \item{wb_wwbi_bi_wag_totl_pb_zs}{Measures the total compensation (in cash or in-kind) payable to a government employee in exchange for work.}
-#'   \item{wjp_rol_1}{Captures the extent to which the legislature, the judiciary, and non-governmental institutions limit government powers}
-#'   \item{wjp_rol_2}{Captures the extent to which state officials in the executive branch, the judicial branch, the legislative branch, and the police/military use public office for private gain}
-#'   \item{wjp_rol_6}{Captures whether government regulations are effectively enforced without improper influence and unreasonable delays}
-#'   \item{wjp_rol_6_6}{Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated}
 #'   \item{bs_sgi_195}{Measures the existence of the following supervWorld Bankry bodies (a) audit office, (b) ombuds office and (3) data protection authority}
 #'   \item{bs_sgi_196}{Measures whether there is an independent and effective audit office}
 #'   \item{bs_bti_q1_2}{Measures whether all relevant groups in society agree about citizenship and accept the nation-state as legitimate}
@@ -702,10 +698,6 @@
 #'   \item \strong{wb_wwbi_bi_wag_prem_pb_gp}: Percentage differences in public sector wages compared to private sector wages (in local currency units) controlling for education, age, gender, and location.
 #'   \item \strong{wb_wwbi_bi_wag_totl_gd_zs}: General government wave bill in proportion to country GDP (based on PPP; 2009 dollars). The wage bill is defined as the total compensation (in cash or in-kind) payable to a government employee in exchange for work. Wage bill includes wages and salaries, allowances, and social security contributions made on behalf of employees to social insurance schemes.
 #'   \item \strong{wb_wwbi_bi_wag_totl_pb_zs}: The wage bill is defined as the total compensation (in cash or in-kind) payable to a government employee in exchange for work. Wage bill includes wages and salaries, allowances, and social security contributions made on behalf of employees to social insurance schemes.
-#'   \item \strong{wjp_rol_1}: Government powers are effectively limited by the legislature; Government powers are effectively limited by the judiciary; Government powers are effectively limited by independent auditing and review; Government officials are sanctioned for misconduct; Government powers are subject to non-governmental checks; Transition of power is subject to the law.
-#'   \item \strong{wjp_rol_2}: It is an index of 4 items: Government officials in the executive branch do not use public office for private gain; Government officials in the judicial branch do not use public office for private gain; Government officials in the police & the military do not use public office for private gain; Government officials in the legislative branch do not use public office for private gain.
-#'   \item \strong{wjp_rol_6}: Government regulations are effectively enforced; Government regulations are applied & enforced without improper influence; Administrative proceedings are conducted without unreasonable delay; Due process is respected in administrative proceedings; The government does not expropriate without lawful process & adequate compensation.
-#'   \item \strong{wjp_rol_6_6}: Measures whether the government respects the property rights of people and corporations, refrains from the illegal seizure of private property, and provides adequate compensation when property is legally expropriated.
 #'   \item \strong{bs_sgi_195}: Measures the existence of the following supervWorld Bankry bodies: (a) audit office, (b) ombuds office and (3) data protection authority.
 #'   \item \strong{bs_sgi_196}: Does there exist an independent and effective audit office?
 #'   \item \strong{bs_bti_q1_2}: To what extent do all relevant groups in society agree about citizenship and accept the nation-state as legitimate?
@@ -806,7 +798,7 @@
 #'
 #' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
 #'
-#' @format A data frame with 4,786 rows and 6 variables:
+#' @format A data frame with 4,785 rows and 6 variables:
 #' \describe{
 #'   \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
 #'   \item{\code{year}}{Numeric. The year of the observation.}
@@ -821,23 +813,8 @@
 "fraser"
 
 
-#' Fraser Economic Freedom Dataset
-#'
-#' A dataset containing 4 selected indicators from the Fraser Institute's Economic Freedom of the World database.
-#'
-#' @format A data frame with 4,786 rows and 6 variables:
-#' \describe{
-#'   \item{\code{country_code}}{Character. The 3-letter World Bank country code.}
-#'   \item{\code{year}}{Numeric. The year of the observation.}
-#'   \item{\code{fraser_efw_foreign_currency_bank_accounts}}{Numeric. Freedom to own foreign currency bank accounts.}
-#'   \item{\code{fraser_efw_freedom_of_foreigners_to_visit}}{Numeric. Freedom of foreigners to visit.}
-#'   \item{\code{fraser_efw_capital_controls}}{Numeric. Capital controls.}
-#'   \item{\code{fraser_efw_credit_market_regulation}}{Numeric. Credit market regulations.}
-#' }
-#' @source \url{https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0}
-#' @usage data(fraser)
-#' @keywords datasets
-"fraser"
+
+
 
 #' Database Variable Metadata
 #'
@@ -918,7 +895,7 @@
 #' economic participation across different areas including entrepreneurship,
 #' social protections, and labor market participation.
 #'
-#' @format A tibble with 6,460 rows and 5 variables:
+#' @format A tibble with 7030 rows and 5 variables:
 #' \describe{
 #'   \item{country_code}{Character. World Bank 3-letter country codes.}
 #'   \item{year}{Numeric. Year of observation.}
@@ -1471,7 +1448,7 @@
 #'   variables, tracking development outcomes across social protection, health,
 #'   education, climate, infrastructure, digital, gender, and private sector
 #'   domains.
-#' @format A data frame with 7,121 rows and 25 variables:
+#' @format A data frame with 5323 rows and 24 variables:
 #' \describe{
 #'   \item{\code{country_code}}{character World Bank 3-letter ISO country code.}
 #'   \item{\code{year}}{character Year of the observation.}
@@ -1617,3 +1594,39 @@
 #' str(wjp)
 #' head(wjp)
 "wjp"
+
+
+#' Statistical Performance Indicators (SPI) — Digital and Data Institutions
+#'
+#' A subset of the World Bank's Statistical Performance Indicators (SPI),
+#' covering two indicators from the "Digital and Data Institutions" family:
+#' availability of recent censuses/surveys, and use of internationally
+#' accepted statistical standards and methods.
+#'
+#' @format A tibble with 4515 rows and 4 columns:
+#' \describe{
+#'   \item{country_code}{World Bank Country ISO3 code.}
+#'   \item{year}{Reference year of the indicator value.}
+#'   \item{wb_spi_census_and_survey_index}{Availability of recent censuses
+#'     and surveys covering broad areas, including Population & Housing
+#'     census, Agriculture census, Business/establishment census, Household
+#'     Survey on income/consumption/expenditure/budget/Integrated Survey,
+#'     Agriculture survey, Labor Force Survey, Health/Demographic survey,
+#'     and Business/establishment survey. Source: NSO websites, World Bank
+#'     microdata library, ILO microdata library, IHSN microdata library.}
+#'   \item{wb_spi_std_and_methods}{Countries' use of internationally
+#'     accepted and recommended methodologies, classifications and
+#'     standards for data integration, covering System of National
+#'     Accounts in use, National Accounts base year, classification of
+#'     national industry, CPI base year, classification of household
+#'     consumption, classification of status of employment, central
+#'     government accounting status, compilation of government finance
+#'     statistics, compilation of monetary and financial statistics, and
+#'     business process. Further work could improve the validity of this
+#'     indicator and reduce the risk that countries may be incentivized to
+#'     adopt only traditional standards and methods, neglecting innovative
+#'     solutions that may be more valid in the current context.}
+#' }
+#'
+#' @source World Bank Statistical Performance Indicators (SPI).
+"spi"

@@ -5,7 +5,7 @@
 \alias{wbl_data}
 \title{World Bank Women, Business and the Law (WBL) Dataset}
 \format{
-A tibble with 6,460 rows and 5 variables:
+A tibble with 7030 rows and 5 variables:
 \describe{
   \item{country_code}{Character. World Bank 3-letter country codes.}
   \item{year}{Numeric. Year of observation.}

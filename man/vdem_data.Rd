@@ -3,9 +3,9 @@
 \docType{data}
 \name{vdem_data}
 \alias{vdem_data}
-\title{V-Dem Core Indicators, Version 15}
+\title{V-Dem Core Indicators, Version 16}
 \format{
-A data frame with 6,204 rows and 52 variables:
+A data frame with 6,219 rows and 49 variables:
 \describe{
   \item{country_code}{Three‑letter World Bank3 country code.}
   \item{year}{Calendar year.}
@@ -59,12 +59,12 @@ A data frame with 6,204 rows and 52 variables:
 }
 }
 \source{
-Varieties of Democracy (V‑Dem) Institute. 2025. V‑Dem v15 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
+Varieties of Democracy (V‑Dem) Institute. 2026. V‑Dem v16 Dataset. \url{https://www.v-dem.net/data/the-v-dem-dataset/}
 }
 \usage{
 vdem_data
 }
 \description{
-A country–year panel of 52 core indicators from the Varieties of Democracy (V‑Dem) 2025 release, processed for the CLIAR ETL pipeline.
+A country–year panel of 47 core indicators from the Varieties of Democracy (V‑Dem) 2026 release, processed for the CLIAR ETL pipeline.
 }
 \keyword{datasets}

@@ -59,6 +59,10 @@ fraser_renamed <- fraser_clean |>
    fraser_efw_credit_market_regulation = fraser_efw_credit_market_regulations
   )
 
+### drop countries that are not included in the wb_country_list
+fraser_renamed <- 
+fraser_renamed |>
+  dplyr::filter(!is.na(country_code) & country_code %in% unique(wb_country_list$country_code))
 
 fraser <- fraser_renamed |>
   add_plmetadata(source = "https://efotw.org/economic-freedom/dataset?geozone=world&page=dataset&min-year=2&max-year=0&filter=0",

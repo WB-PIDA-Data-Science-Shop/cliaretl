@@ -17,6 +17,12 @@ labor_income <- labor_income_raw |>
     status_label = obs_status.label
   )
 
+### ok lets ensure that only wb_country_list countries are in the country_code 
+labor_income <- 
+  labor_income |>
+  filter(country_code %in% unique(wb_country_list$country_code) & !is.na(country_code))
+
+
 labor_income <- labor_income |>
   add_plmetadata(
     source = "https://ilostat.ilo.org/topics/labour-income/",
