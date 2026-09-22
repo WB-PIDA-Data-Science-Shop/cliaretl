@@ -29,7 +29,7 @@ db_variables_final |>
   filter(source == "World Justice Project, Rule of Law") |>
   pull(variable)
 
-### the variables wjp_rol_7_1 and wjp_rol_8_2 appear to have been wrongly
+### the variables wjp_rol_7_1, wjp_rol_8_2, wjp_rol_6_6 appear to have been wrongly
 ### labelled in db_variables. In the actual data from WJP downloads, the 
 ### descriptions that match the variable names are wjp_rol_7 and wjp_rol_8
 ### I'll rename these in wjp_var_list so that we pull the correct thing
