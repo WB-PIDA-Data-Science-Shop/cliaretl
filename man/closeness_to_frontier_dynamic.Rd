@@ -120,10 +120,6 @@ A data frame with 2,808 rows and 118 variables:
 
   \item{wb_lpi_lp_lpi_cust_xq}{Logistics Performance Index: customs (survey), rescaled.}
 
-  \item{wb_wbl_entrepreneurship}{Women, Business & the Law: Entrepreneurship score, rescaled.}
-  \item{wb_wbl_labor}{WBL: Labor score, rescaled.}
-  \item{wb_wbl_social}{WBL: Parenthood/Social protection score, rescaled.}
-
   \item{wdi_sepretcaqzs}{WDI: secondary education – trained teachers (quality), rescaled.}
   \item{wdi_seprmenrltczs}{WDI: primary enrollment – net rate (male), rescaled.}
   \item{wdi_seprmtcaqzs}{WDI: primary education – trained teachers (quality), rescaled.}

@@ -39,6 +39,7 @@ d30_indicators <- cliaretl::d360_efi_data
 fraser_indicators <- cliaretl::fraser
 aspire_indicators <- cliaretl::aspire
 wbl_indicators <- cliaretl::wbl_data
+scorecard_indicators <- cliaretl::scorecard
 
 # Dictionary df
 db_variables_2025 <- readr::read_rds(
@@ -62,7 +63,34 @@ var_lists <- get_variable_lists(db_variables)
 
 # 1. Change log for db_variables -----------------------------------------
 # ref_year: 2026
-# PLACEHOLDER
+
+# 1.1 WBL indicators: Update benchmark_dynamic_indicator and benchmark_dynamic_family_aggregate 
+
+db_variables_2025 <- db_variables_2025 |>
+  mutate( # Apply this renaming only to the variables that start with "wb_wbl_"
+    is_wbl = str_starts(variable, "wb_wbl_"),
+    benchmark_dynamic_indicator = if_else(
+      is_wbl,
+      "No",
+      benchmark_dynamic_indicator
+    ),
+    benchmark_dynamic_family_aggregate = if_else(
+      is_wbl,
+      "No",
+      benchmark_dynamic_family_aggregate
+    ),
+    etl_source = if_else(
+      is_wbl,
+      "wb_wbl",
+      etl_source
+    )
+  ) |>
+  select(-is_wbl)
+
+# print out the changes made
+db_variables_2025 |> 
+filter(str_starts(variable, "wb_wbl_")) |>
+  select(variable, benchmark_dynamic_indicator, benchmark_dynamic_family_aggregate, etl_source)
 
 # 2. Conflicting indicators analysis -------------------------------------------
 
@@ -89,7 +117,10 @@ dataframes <- list(
   d30_indicators = d360_efi_data,
   fraser_indicators = fraser,
   aspire_indicators = aspire,
-  wbl_indicators = wbl_data
+  wbl_indicators = wbl_data,
+  scorecard_indicators = scorecard,
+  spi_indicators = spi,
+  wjp_indicators = wjp
 )
 
 # Apply the `flag_mismatched_indicators` function across all and bind results
@@ -193,6 +224,30 @@ wbl_missing_df <- flag_missing_indicators(
   source_type = "CLIAR"
 )
 
+# Add new data sets
+
+sc_missing_df <- flag_missing_indicators(
+  db_variables_2025,
+  scorecard_indicators,
+  source_type = "World Bank Corporate Scorecard"
+)
+
+# spi_missing_df <- flag_missing_indicators(
+#   db_variables_2025,
+#   spi_indicators,
+#   source_type = "SPI"
+# )
+
+# wjp_missing_df <- flag_missing_indicators(
+#   db_variables_2025,
+#   wjp_indicators,
+#   source_type = "WJP"
+# )
+
+scorecard_indicators <- scorecard
+spi_indicators <- spi
+wjp_indicators <- wjp
+
 # Combine them into a single dataframe
 all_missing_vars <- bind_rows(
   vdem_missing_df,
@@ -204,7 +259,8 @@ all_missing_vars <- bind_rows(
   heritage_missing_df,
   fraser_missing_df,
   aspire_missing_df,
-  wbl_missing_df
+  wbl_missing_df,
+  sc_missing_df 
 )
 
 # flag mismatched indicators
