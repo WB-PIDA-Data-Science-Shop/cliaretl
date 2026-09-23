@@ -10,3 +10,4 @@ utils::globalVariables(c(
   "static_valid_years", "dynamic_valid_years",
   "static_countries", "dynamic_countries"
 ))
+utils::globalVariables("etl_source")
