@@ -197,7 +197,7 @@ calculate_time_range <- function(indicator, time_id) {
 #' }
 #'
 #' @export
-compute_coverage <- function(data, country_id, year_id, ref_year, country_region_list = NULL){
+compute_coverage_legacy <- function(data, country_id, year_id, ref_year, country_region_list = NULL){
 
   # ---- local helpers (no external packages) ----
   prop_complete_vec <- function(x) {
@@ -333,7 +333,7 @@ compute_coverage <- function(data, country_id, year_id, ref_year, country_region
 #' }
 #'
 #' @export
-compute_coverage2 <- function(data,
+compute_coverage <- function(data,
                               country_id,
                               year_id,
                               ref_year,

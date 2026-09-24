@@ -2,14 +2,17 @@
 % Please edit documentation in R/coverage_funs.R
 \name{compute_coverage}
 \alias{compute_coverage}
-\title{Compute coverage and summary statistics for indicators}
+\title{Compute coverage and summary statistics for indicators (version 2)}
 \usage{
 compute_coverage(
   data,
   country_id,
   year_id,
   ref_year,
-  country_region_list = NULL
+  country_region_list = NULL,
+  dataset_name = NULL,
+  static_window = 2021:2025,
+  dynamic_even_years = seq(2016, 2025, by = 2)
 )
 }
 \arguments{
@@ -26,6 +29,15 @@ country and year identifiers.}
 \item{country_region_list}{A data frame with columns `country_code` and `region`
 used to assess regional country coverage. If `NULL` (the default), the
 `flag_country` metric will return `NA` for all indicators.}
+
+\item{dataset_name}{An optional column indicating the dataset or source of
+the indicators, used to apply specific rules or exclusions for certain datasets.}
+
+\item{static_window}{A numeric vector specifying the years defining the static
+window for coverage assessment (default is 2021 to 2025).}
+
+\item{dynamic_even_years}{A numeric vector specifying the even years for the
+dynamic panel coverage assessment (default is every second year from 2016 to 2025).}
 }
 \value{
 A tibble with one row per indicator and the following columns:
@@ -40,13 +52,21 @@ A tibble with one row per indicator and the following columns:
   \item{Percentage of Complete Records}{Proportion of complete cases overall.}
   \item{Percentage of Complete Records in Last Five Years}{Proportion complete near `ref_year`.}
   \item{Mean, Median, Standard Deviation, Minimum, Maximum}{Basic summary statistics.}
+  \item{Static Valid Years}{Number of years with at least 10 countries in the static window.}
+  \item{Dynamic Valid Years}{Number of years with at least 10 countries in the dynamic panel.}
+  \item{Static Country Coverage}{Number of distinct countries in the static window.}
+  \item{Dynamic Country Coverage}{Number of distinct countries in the dynamic panel.}
 }
 }
 \description{
 This function evaluates coverage and data quality for a set of indicators
-across countries and years. It summarizes country coverage, year coverage,
-continuity flags, completeness, and basic descriptive statistics (mean,
-median, standard deviation, min, max) for each indicator in a dataset.
+across countries and years, similar to `compute_coverage()`, but includes
+additional features for dynamic and static window analysis. It summarizes
+country coverage, year coverage, continuity flags, completeness, and basic
+descriptive statistics (mean, median, standard deviation, min, max) for each
+indicator in a dataset. It also assesses coverage in specified static and
+dynamic windows and flags indicators based on eligibility criteria for
+benchmarking.
 }
 \details{
 The function computes, for each indicator:
@@ -61,4 +81,8 @@ The function computes, for each indicator:
 - **Percentage of Complete Records in Last Five Years**: completeness restricted
   to the period close to `ref_year`.
 - **Summary statistics**: mean, median, standard deviation, minimum, and maximum.
+- **Static Valid Years**: count of years with at least 10 countries in the static window.
+- **Dynamic Valid Years**: count of years with at least 10 countries in the dynamic panel.
+- **Static Country Coverage**: count of distinct countries in the static window.
+- **Dynamic Country Coverage**: count of distinct countries in the dynamic panel.
 }
