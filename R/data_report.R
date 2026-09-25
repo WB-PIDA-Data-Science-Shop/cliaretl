@@ -47,7 +47,8 @@ compute_family_coverage <- function(data,
                                     year_id,
                                     ref_year,
                                     country_region_list = NULL,
-                                    metadata            = cliaretl::db_variables) {
+                                    metadata            = cliaretl::db_variables,
+                                    consolidate         = FALSE) {
   family_variables <- get_family_variables(family, metadata)
 
   missing_variables <- setdiff(family_variables$Variable, colnames(data))
@@ -72,7 +73,8 @@ compute_family_coverage <- function(data,
       country_id          = {{ country_id }},
       year_id             = {{ year_id }},
       ref_year            = ref_year,
-      country_region_list = country_region_list
+      country_region_list = country_region_list,
+      consolidate         = consolidate
     ) |>
     dplyr::left_join(
       family_variables |> dplyr::select("Variable", "Name"),
@@ -80,6 +82,13 @@ compute_family_coverage <- function(data,
     ) |>
     dplyr::relocate("Name", .after = "Indicator") |>
     dplyr::arrange(match(.data$Indicator, family_variables$Variable))
+}
+
+list_family_names <- function() {
+  dplyr::arrange(
+    cliaretl::family_order, dplyr::desc(.data$family_order)
+  ) |>
+    dplyr::pull("family_name")
 }
 
 #' Generate data coverage reports by institutional family
@@ -112,7 +121,7 @@ compute_family_coverage <- function(data,
 #'
 #' @export
 generate_data_report <- function(data                = readRDS(system.file("extdata", "compiled_indicators.rds", package = "cliaretl")),
-                                 families            = dplyr::arrange(cliaretl::family_order, dplyr::desc(.data$family_order))$family_name,
+                                 families            = list_family_names(),
                                  country_id          = country_code,
                                  year_id             = year,
                                  ref_year            = attr(metadata, "ref_year"),
@@ -155,7 +164,8 @@ generate_data_report <- function(data                = readRDS(system.file("extd
           year_id             = {{ year_id }},
           ref_year            = ref_year,
           country_region_list = country_region_list,
-          metadata            = metadata
+          metadata            = metadata,
+          consolidate         = TRUE
         )
       ),
       envir             = new.env(),

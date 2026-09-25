@@ -14,7 +14,7 @@ generate_data_report(
   country_region_list = cliaretl::wb_income_and_region,
   metadata = cliaretl::db_variables,
   output_dir = tempdir(),
-  output_type = c("html", "docx")
+  output_type = c("docx", "html")
 )
 }
 \arguments{

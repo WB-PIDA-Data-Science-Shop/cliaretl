@@ -43,16 +43,24 @@ flextable::flextable(params$variables) |>
 
 # Coverage
 
-Coverage statistics are computed with `cliaretl::compute_coverage()`. Flags
-equal to 1 indicate that the criterion is met:
+Coverage statistics are computed with `cliaretl::compute_coverage()`. The **Flags** column lists the
+criteria each indicator meets:
 
-- **Flag Continuity**: at least one observation in the five years before the reference year.
-- **Flag Country Coverage**: in the last five years, at least 100 countries, or at least 50 countries spanning all 7 regions.
-- **Flag Year Coverage**: at least two years with 10 or more countries each.
-- **Static / Dynamic Valid Years**: years with 10 or more countries within the static window or the dynamic panel.
+- **Continuity**: at least one observation in the five years before the reference year.
+- **Country Coverage**: in the last five years, at least 100 countries, or at least 50 countries spanning all 7 regions.
+- **Year Coverage**: at least two years with 10 or more countries each.
+- **Static/Dynamic Valid Years**: years with 10 or more countries within the static window / the dynamic panel.
+- **Static/Dynamic Country Coverage**: countries with data within the static window / the dynamic panel.
 
 ::: {.table-scroll}
 ```{r coverage}
-knitr::kable(params$coverage)
+flextable::flextable(params$coverage) |>
+  flextable::width(
+    j = c("Indicator", "Name", "Country/Year Coverage", "Flags", "Year Range", "Percentage of Complete Records", "Percentage of Complete Records in Last Five Years", "Static/Dynamic Valid Years", "Static/Dynamic Country Coverage"),
+    width = c(1.7, 2.0, 0.8, 1.2, 1.2, 0.8, 0.8, 0.8, 0.8)
+  ) |>
+  flextable::fontsize(size = 8.5, part = "all") |>
+  flextable::valign(valign = "top", part = "body") |>
+  flextable::theme_vanilla()
 ```
 :::

@@ -11,7 +11,8 @@ compute_family_coverage(
   year_id,
   ref_year,
   country_region_list = NULL,
-  metadata = cliaretl::db_variables
+  metadata = cliaretl::db_variables,
+  consolidate = FALSE
 )
 }
 \arguments{
@@ -32,6 +33,11 @@ used to assess regional country coverage. If `NULL` (the default), the
 `flag_country` metric will return `NA` for all indicators.}
 
 \item{metadata}{A variable metadata table. Defaults to [db_variables].}
+
+\item{consolidate}{If `FALSE` (the default), returns one numeric column per
+metric. If `TRUE`, returns a compact table for reporting: the three flags
+are consolidated into a single `Flags` column and paired counts are
+combined into single character columns separated by `/`.}
 }
 \value{
 The [compute_coverage()] table for the family's indicators, with an

@@ -294,6 +294,10 @@ compute_coverage_legacy <- function(data, country_id, year_id, ref_year, country
 #'   window for coverage assessment (default is 2021 to 2025).
 #' @param dynamic_even_years A numeric vector specifying the even years for the
 #'   dynamic panel coverage assessment (default is every second year from 2016 to 2025).
+#' @param consolidate If `FALSE` (the default), returns one numeric column per
+#'   metric. If `TRUE`, returns a compact table for reporting: the three flags
+#'   are consolidated into a single `Flags` column and paired counts are
+#'   combined into single character columns separated by `/`.
 #'
 #' @details
 #' The function computes, for each indicator:
@@ -329,6 +333,22 @@ compute_coverage_legacy <- function(data, country_id, year_id, ref_year, country
 #'   \item{Dynamic Country Coverage}{Number of distinct countries in the dynamic panel.}
 #' }
 #'
+#' With `consolidate = TRUE`, the columns are instead:
+#' \describe{
+#'   \item{Indicator}{Indicator name.}
+#'   \item{Country/Year Coverage}{Number of countries and number of years with
+#'     non-missing values, separated by `/`.}
+#'   \item{Flags}{Comma-separated list of the criteria the indicator complies
+#'     with (`Continuity`, `Country Coverage`, `Year Coverage`), or `"None"`.}
+#'   \item{Year Range}{Earliest and latest years with available data.}
+#'   \item{Percentage of Complete Records}{Proportion of complete cases overall.}
+#'   \item{Percentage of Complete Records in Last Five Years}{Proportion complete near `ref_year`.}
+#'   \item{Static/Dynamic Valid Years}{Number of years with at least 10 countries
+#'     in the static window and in the dynamic panel, separated by `/`.}
+#'   \item{Static/Dynamic Country Coverage}{Number of distinct countries in the
+#'     static window and in the dynamic panel, separated by `/`.}
+#' }
+#'
 #' @export
 compute_coverage <- function(data,
                               country_id,
@@ -337,7 +357,8 @@ compute_coverage <- function(data,
                               country_region_list    = NULL,
                               dataset_name           = NULL,
                               static_window          = 2021:2025,
-                              dynamic_even_years     = seq(2016, 2025, by = 2)) {
+                              dynamic_even_years     = seq(2016, 2025, by = 2),
+                              consolidate            = FALSE) {
 
   # ---- local helpers ----
   prop_complete_vec <- function(x) {
@@ -406,21 +427,57 @@ compute_coverage <- function(data,
       names_to   = c("indicator", ".value"),
       names_pattern = "(.*)__(.*)"
     ) |>
-    dplyr::arrange(indicator) |>
+    dplyr::arrange(indicator)
+
+  if (!consolidate) {
+    return(
+      data_coverage |>
+        dplyr::select(
+          Indicator                                        = indicator,
+          `Country Coverage`                               = country_coverage,
+          `Year Coverage`                                  = year_coverage,
+          `Flag Continuity`                                = flag_continued,
+          `Flag Country Coverage`                          = flag_country,
+          `Flag Year Coverage`                             = flag_minimum_coverage,
+          `Year Range`                                     = year_range,
+          `Percentage of Complete Records`                 = percent_complete_records,
+          `Percentage of Complete Records in Last Five Years` = percent_complete_records_last_five,
+          `Static Valid Years`                             = static_valid_years,
+          `Dynamic Valid Years`                            = dynamic_valid_years,
+          `Static Country Coverage`                        = static_countries,
+          `Dynamic Country Coverage`                       = dynamic_countries
+        )
+    )
+  }
+
+  data_coverage <- data_coverage |>
+    dplyr::mutate(
+      # list only the criteria the indicator complies with (NA counts as not met)
+      flags = purrr::pmap_chr(
+        list(flag_continued, flag_country, flag_minimum_coverage),
+        function(continuity, country, year) {
+          met <- c(
+            "Continuity"       = isTRUE(continuity == 1),
+            "Country Coverage" = isTRUE(country == 1),
+            "Year Coverage"    = isTRUE(year == 1)
+          )
+          if (!any(met)) return("None")
+          paste(names(met)[met], collapse = ", ")
+        }
+      ),
+      country_year_coverage = paste(country_coverage, year_coverage, sep = "/"),
+      static_dynamic_valid_years = paste(static_valid_years, dynamic_valid_years, sep = "/"),
+      static_dynamic_countries = paste(static_countries, dynamic_countries, sep = "/")
+    ) |>
     dplyr::select(
       Indicator                                        = indicator,
-      `Country Coverage`                               = country_coverage,
-      `Year Coverage`                                  = year_coverage,
-      `Flag Continuity`                                = flag_continued,
-      `Flag Country Coverage`                          = flag_country,
-      `Flag Year Coverage`                             = flag_minimum_coverage,
+      `Country/Year Coverage`                          = country_year_coverage,
+      Flags                                            = flags,
       `Year Range`                                     = year_range,
       `Percentage of Complete Records`                 = percent_complete_records,
       `Percentage of Complete Records in Last Five Years` = percent_complete_records_last_five,
-      `Static Valid Years`                             = static_valid_years,
-      `Dynamic Valid Years`                            = dynamic_valid_years,
-      `Static Country Coverage`                        = static_countries,
-      `Dynamic Country Coverage`                       = dynamic_countries
+      `Static/Dynamic Valid Years`                     = static_dynamic_valid_years,
+      `Static/Dynamic Country Coverage`                = static_dynamic_countries
     )
 
   return(data_coverage)
