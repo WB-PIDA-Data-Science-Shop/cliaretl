@@ -1,0 +1,58 @@
+---
+title: "CLIAR Data Report: `r params$family`"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document: default
+  word_document:
+    reference_docx: reference_landscape.docx
+params:
+  output_type: html
+  family: NULL
+  ref_year: NULL
+  variables: NULL
+  coverage: NULL
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+is_html <- identical(params$output_type, "html")
+```
+
+```{css, echo = FALSE, eval = is_html}
+.main-container { max-width: 1400px; }
+.table-scroll { overflow-x: auto; }
+```
+
+This report documents the `r nrow(params$variables)` indicators of the
+**`r params$family`** institutional family and their data coverage, with
+`r params$ref_year` as the reference year.
+
+# Variables
+
+```{r variables}
+# column widths in inches; landscape Letter leaves ~9.5in between margins
+flextable::flextable(params$variables) |>
+  flextable::width(
+    j     = c("Variable", "Name", "Definition", "Source"),
+    width = c(1.7, 2.0, 3.8, 2.0)
+  ) |>
+  flextable::fontsize(size = 9, part = "all") |>
+  flextable::valign(valign = "top", part = "body") |>
+  flextable::theme_vanilla()
+```
+
+# Coverage
+
+Coverage statistics are computed with `cliaretl::compute_coverage()`. Flags
+equal to 1 indicate that the criterion is met:
+
+- **Flag Continuity**: at least one observation in the five years before the reference year.
+- **Flag Country Coverage**: in the last five years, at least 100 countries, or at least 50 countries spanning all 7 regions.
+- **Flag Year Coverage**: at least two years with 10 or more countries each.
+- **Static / Dynamic Valid Years**: years with 10 or more countries within the static window or the dynamic panel.
+
+::: {.table-scroll}
+```{r coverage}
+knitr::kable(params$coverage)
+```
+:::

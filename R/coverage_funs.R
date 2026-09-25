@@ -129,7 +129,6 @@ flag_minimum_coverage <- function(indicator, country_id, year_id) {
   return(flag_minimum_coverage)
 }
 
-
 #' Calculate the time range of an indicator
 #'
 #' Returns the first and last year (inclusive) for which an indicator
@@ -308,7 +307,6 @@ compute_coverage_legacy <- function(data, country_id, year_id, ref_year, country
 #' - **Percentage of Complete Records**: share of complete observations.
 #' - **Percentage of Complete Records in Last Five Years**: completeness restricted
 #'   to the period close to `ref_year`.
-#' - **Summary statistics**: mean, median, standard deviation, minimum, and maximum.
 #' - **Static Valid Years**: count of years with at least 10 countries in the static window.
 #' - **Dynamic Valid Years**: count of years with at least 10 countries in the dynamic panel.
 #' - **Static Country Coverage**: count of distinct countries in the static window.
@@ -325,7 +323,6 @@ compute_coverage_legacy <- function(data, country_id, year_id, ref_year, country
 #'   \item{Year Range}{Earliest and latest years with available data.}
 #'   \item{Percentage of Complete Records}{Proportion of complete cases overall.}
 #'   \item{Percentage of Complete Records in Last Five Years}{Proportion complete near `ref_year`.}
-#'   \item{Mean, Median, Standard Deviation, Minimum, Maximum}{Basic summary statistics.}
 #'   \item{Static Valid Years}{Number of years with at least 10 countries in the static window.}
 #'   \item{Dynamic Valid Years}{Number of years with at least 10 countries in the dynamic panel.}
 #'   \item{Static Country Coverage}{Number of distinct countries in the static window.}
@@ -392,11 +389,6 @@ compute_coverage <- function(data,
           year_range                    = ~ calculate_time_range(.x, {{ year_id }}),
           percent_complete_records      = ~ percent_str(prop_complete_vec(.x)),
           percent_complete_records_last_five = ~ percent_str(prop_complete_vec(.x[{{ year_id }} >= ref_year])),
-          mean                          = ~ round(mean(.x, na.rm = TRUE), 2),
-          median                        = ~ stats::median(.x, na.rm = TRUE),
-          standard_deviation            = ~ round(stats::sd(.x, na.rm = TRUE), 2),
-          min                           = ~ suppressWarnings(min(.x, na.rm = TRUE)),
-          max                           = ~ suppressWarnings(max(.x, na.rm = TRUE)),
           # new: years with >= 10 countries in the static 5-year window
           static_valid_years            = ~ count_valid_years_in_window(.x, {{ year_id }}, static_window),
           # new: even years with >= 10 countries in the dynamic panel
@@ -425,33 +417,11 @@ compute_coverage <- function(data,
       `Year Range`                                     = year_range,
       `Percentage of Complete Records`                 = percent_complete_records,
       `Percentage of Complete Records in Last Five Years` = percent_complete_records_last_five,
-      `Mean`                                           = mean,
-      `Median`                                         = median,
-      `Standard Deviation`                             = standard_deviation,
-      `Minimum`                                        = min,
-      `Maximum`                                        = max,
       `Static Valid Years`                             = static_valid_years,
       `Dynamic Valid Years`                            = dynamic_valid_years,
       `Static Country Coverage`                        = static_countries,
       `Dynamic Country Coverage`                       = dynamic_countries
-    ) #    |>
-    # # ---- eligibility classification ----
-    # dplyr::mutate(
-    #   # All benchmarked CTF indicators are static-eligible by definition;
-    #   # this is an explicit column so the dashboard can filter on it.
-    #   `Static Eligible`    = TRUE,
-
-    #   # Dynamic eligibility: FALSE for datasets excluded from dynamic benchmarking.
-    #   # NA when dataset_name was not supplied (defensive fallback).
-    #   `Dynamic Eligible`   = if (is.null(dataset_name)) NA
-    #                          else !(dataset_name %in% dynamic_excluded),
-
-    #   # Exception flag: TRUE for datasets with a documented methodology exception
-    #   # (PEFA and OECD PMR), meaning red flags on coverage are expected and
-    #   # should not be interpreted as data quality failures.
-    #   `Exception Granted`  = if (is.null(dataset_name)) NA
-    #                          else (dataset_name %in% exception_datasets)
-    # )
+    )
 
   return(data_coverage)
 }
