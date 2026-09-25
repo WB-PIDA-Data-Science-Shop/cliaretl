@@ -7,9 +7,10 @@ export(calculate_time_range)
 export(collect_metadata)
 export(compare_pipeline_indicators)
 export(compute_coverage)
-export(compute_coverage2)
+export(compute_coverage_legacy)
 export(compute_ctf)
 export(compute_family_average)
+export(compute_family_coverage)
 export(compute_family_variance)
 export(cv)
 export(extract_data_from_api)
@@ -20,7 +21,9 @@ export(flag_minimum_coverage)
 export(flag_mismatched_indicators)
 export(flag_missing_indicators)
 export(flip_indicator)
+export(generate_data_report)
 export(get_data360_api)
+export(get_family_variables)
 export(get_variable_lists)
 export(pivot_data360)
 export(qualitycheck_plvalue)
@@ -33,39 +36,51 @@ import(httr)
 import(pointblank)
 import(rlang)
 import(tidyr)
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,any_of)
-importFrom(dplyr,arrange)
-importFrom(dplyr,bind_rows)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,group_by)
-importFrom(dplyr,if_else)
-importFrom(dplyr,left_join)
-importFrom(dplyr,mutate)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,select)
-importFrom(dplyr,summarise)
-importFrom(dplyr,transmute)
+importFrom(dplyr,
+  across,
+  all_of,
+  any_of,
+  arrange,
+  bind_rows,
+  everything,
+  filter,
+  group_by,
+  if_else,
+  left_join,
+  mutate,
+  pull,
+  relocate,
+  select,
+  summarise,
+  transmute
+)
 importFrom(glue,glue)
 importFrom(janitor,clean_names)
 importFrom(jsonlite,fromJSON)
-importFrom(purrr,keep)
-importFrom(purrr,map)
-importFrom(purrr,map_dfr)
-importFrom(purrr,walk)
+importFrom(purrr,
+  keep,
+  map,
+  map_dfr,
+  walk
+)
 importFrom(rlang,"%||%")
 importFrom(rmarkdown,render)
-importFrom(stats,median)
-importFrom(stats,na.omit)
-importFrom(stats,sd)
-importFrom(stringr,fixed)
-importFrom(stringr,regex)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_locate)
-importFrom(tibble,as_tibble)
-importFrom(tibble,tibble)
-importFrom(tidyr,pivot_longer)
-importFrom(tidyr,pivot_wider)
+importFrom(stats,
+  median,
+  na.omit,
+  sd
+)
+importFrom(stringr,
+  fixed,
+  regex,
+  str_detect,
+  str_locate
+)
+importFrom(tibble,
+  as_tibble,
+  tibble
+)
+importFrom(tidyr,
+  pivot_longer,
+  pivot_wider
+)

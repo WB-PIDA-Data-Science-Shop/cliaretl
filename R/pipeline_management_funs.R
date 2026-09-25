@@ -601,9 +601,3 @@ generate_pipeline_comparison_report <- function() {
   return(tmp_file)
 }
 
-
-
-
-
-
-
