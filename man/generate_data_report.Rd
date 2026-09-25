@@ -6,8 +6,7 @@
 \usage{
 generate_data_report(
   data = readRDS(system.file("extdata", "compiled_indicators.rds", package = "cliaretl")),
-  families = dplyr::arrange(cliaretl::family_order,
-    dplyr::desc(.data$family_order))$family_name,
+  families = list_family_names(),
   country_id = country_code,
   year_id = year,
   ref_year = attr(metadata, "ref_year"),
