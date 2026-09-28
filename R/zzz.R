@@ -8,5 +8,6 @@ utils::globalVariables(c("country_code", "year", "type_equal",
 utils::globalVariables(c("avg", "var"))
 utils::globalVariables(c(
   "static_valid_years", "dynamic_valid_years",
-  "static_countries", "dynamic_countries"
+  "static_countries", "dynamic_countries", "country_year_coverage", "flags",
+  "static_dynamic_countries", "static_dynamic_valid_years"
 ))

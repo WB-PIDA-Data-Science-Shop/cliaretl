@@ -78,7 +78,7 @@ pefa_vars <- intersect(colnames(pefaclean_tbl), dbvar_dt$variable)
 pefaclean_tbl <-
   pefaclean_tbl |>
   rename(country_name = "country") |>
-  dplyr::filter(country_name %in% country_list)) |>
+  dplyr::filter(country_name %in% country_list) |>
   # Convert country_name to country_code (ISO 3-letter codes by default)
   dplyr::mutate(country_code = countrycode(country_name, origin = "country.name", destination = "iso3c")) |>
   dplyr::select(country_code, year, all_of(pefa_vars))
