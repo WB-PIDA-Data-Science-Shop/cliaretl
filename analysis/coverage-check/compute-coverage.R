@@ -20,7 +20,21 @@ newpipeline_list <- list(aspire = aspire,
                          vdem_data = vdem_data,
                          wdi_indicators = wdi_indicators,
                          labor_income = labor_income[, c("country_code", "year", "labor_income")],
-                         scorecard = scorecard)
+                         scorecard = scorecard,
+                         freedom_house = freedom_house,
+                         gsod = gsod,
+                         obs = obs,
+                         press_freedom = press_freedom,
+                         sgi = sgi,
+                         spi = spi,
+                         wb_enterprise = wb_enterprise,
+                         bready = bready,
+                         budget_execution = budget_execution,
+                         credit_rating = credit_rating,
+                         heritage = heritage,
+                         wdi_indicators = wdi_indicators,
+                         wbl_data = wbl_data,
+                         wjp = wjp)
 
 ## get the list of benchmarked variables
 benchmark_list <- db_variables_final |>
@@ -43,12 +57,12 @@ coverage_dt <-
                 x <- x |>
                   dplyr::select(country_code, year, dplyr::all_of(keep_cols))
 
-                y <- compute_coverage2(data = x,
-                                       country_id = country_code,
-                                       year_id = year,
-                                       dataset_name = name,
-                                       ref_year = 2025,
-                                       country_region_list = wb_income_and_region)
+                y <- compute_coverage(data = x,
+                                      country_id = country_code,
+                                      year_id = year,
+                                      dataset_name = name,
+                                      ref_year = 2025,
+                                      country_region_list = wb_income_and_region)
 
                 return(y)
 

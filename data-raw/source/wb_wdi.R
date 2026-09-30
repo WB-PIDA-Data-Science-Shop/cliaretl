@@ -9,11 +9,6 @@ library(stringr)
 library(janitor)
 library(countrycode)
 
-
-devtools::load_all()
-
-
-
 # data-load --------------------------------------------------------------
 
 url <- "https://datacatalogfiles.worldbank.org/ddh-published/0037712/DR0095335/WDI_CSV_2026_07_15.zip"

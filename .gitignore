@@ -7,3 +7,5 @@
 .Rproj
 *.geojson
 data-raw/input
+spielplatz/
+_targets/

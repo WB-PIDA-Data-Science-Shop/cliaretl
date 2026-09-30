@@ -100,8 +100,8 @@ vdem_data <-
   as_tibble()
 
 
-vdem_data |>
-  add_plmetadata(source = vdemdata::vdem,
+vdem_data <- vdem_data |>
+  add_plmetadata(source = "https://github.com/vdeminstitute/vdemdata",
                  other_info = "Last 2026 extraction: 09/11/26. R package, Version 16")
 
 

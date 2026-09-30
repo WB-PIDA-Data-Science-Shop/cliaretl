@@ -20,9 +20,6 @@ library(purrr)
 library(stringr)
 library(janitor)
 
-# Load custom functions
-devtools::load_all()
-
 # read-in data ------------------------------------------------------------
 
 # Extracted indicators dfs

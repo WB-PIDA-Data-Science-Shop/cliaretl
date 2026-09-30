@@ -409,7 +409,7 @@ compute_coverage <- function(data,
           flag_minimum_coverage         = ~ flag_minimum_coverage(.x, {{ country_id }}, {{ year_id }}),
           year_range                    = ~ calculate_time_range(.x, {{ year_id }}),
           percent_complete_records      = ~ percent_str(prop_complete_vec(.x)),
-          percent_complete_records_last_five = ~ percent_str(prop_complete_vec(.x[{{ year_id }} >= ref_year])),
+          percent_complete_records_last_five = ~ percent_str(prop_complete_vec(.x[{{ year_id }} >= ref_year - 5])),
           # new: years with >= 10 countries in the static 5-year window
           static_valid_years            = ~ count_valid_years_in_window(.x, {{ year_id }}, static_window),
           # new: even years with >= 10 countries in the dynamic panel

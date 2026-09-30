@@ -7,12 +7,6 @@ library(janitor)
 library(haven)
 library(rsdmx)
 
-### read in the db variables data
-dbvar_dt <-
-  readxl::read_excel("data-raw/input/cliar/db_variables.xlsx") |>
-  filter(source == "OECD Product Market Regulation Database")
-
-
 pmr_df <-
   rsdmx::readSDMX(read.table("data-raw/input/pmr/url.txt")[[1]]) |>
   as_tibble()

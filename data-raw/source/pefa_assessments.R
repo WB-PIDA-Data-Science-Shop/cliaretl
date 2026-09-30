@@ -18,7 +18,7 @@ library(readxl)
 base_url <- "https://www.pefa.org/sites/pefa/files/bulk_downloads"
 
 pefa_tbl <-
-  read.csv(paste0(base_url, "/assessments_1785352713.csv")) |>
+  read.csv(paste0(base_url, "/assessments_1790602487.csv")) |>
   as_tibble() |>
   clean_names()
 
@@ -89,7 +89,7 @@ pefaclean_tbl <-
 
 pefa_assessments <- pefaclean_tbl |> 
   add_plmetadata(source = base_url,
-                 other_info = "2026 extraction date: 7/27/2026. 1 country dissapeared in 2023. 10 in2025 are added")
+                 other_info = "2026 extraction date: 9/28/2026")
 
 
 

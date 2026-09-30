@@ -48,8 +48,6 @@ library(stringr)
 library(tidyr)
 library(janitor)
 
-devtools::load_all()
-
 # read-in data ------------------------------------------------------------
 db_variables <- db_variables
 country_list <- wb_country_list

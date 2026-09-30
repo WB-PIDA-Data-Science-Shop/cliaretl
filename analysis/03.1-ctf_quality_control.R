@@ -28,9 +28,6 @@ library(ggplot2)
 library(scales)
 library(dlookr)
 
-devtools::load_all()
-
-
 ggsave <- partial(
   ggplot2::ggsave,
   bg = "white",
@@ -45,7 +42,7 @@ db_variables <- db_variables
 income_and_region_class <- wb_income_and_region
 
 compiled_indicators <- readRDS(
-  here("data-raw/output/compiled_indicators.rds")
+  here("inst", "extdata", "compiled_indicators.rds")
 )
 
 static_clean <- readRDS(

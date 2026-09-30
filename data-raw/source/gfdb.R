@@ -12,8 +12,6 @@ library(janitor)
 url <- "https://thedocs.worldbank.org/en/doc/5882f2b2117b882d58a78f9c64ea3613-0050062022/original/20220909-global-financial-development-database.xlsx"
 # tf <- tempfile(fileext = ".xlsx")
 
-dbvar_df <- read_excel("data-raw/input/cliar/db_variables.xlsx")
-
 ## pull the data
 gfdbraw_path <- "data-raw/input/gfdb/gfdb_raw.xlsx"
 
