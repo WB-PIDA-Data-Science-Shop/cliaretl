@@ -141,13 +141,12 @@ flag_minimum_coverage <- function(indicator, country_id, year_id) {
 #'
 #' @export
 calculate_time_range <- function(indicator, time_id) {
-  year_range <- paste0(
-    min({{time_id}}[!is.na(indicator)], na.rm = TRUE),
-    "-",
-    max({{time_id}}[!is.na(indicator)], na.rm = TRUE)
-  )
+  observed_years <- {{time_id}}[!is.na(indicator)]
 
-  return(year_range)
+  # an indicator with no observations has no range (min()/max() would give Inf)
+  if (length(observed_years) == 0) return(NA_character_)
+
+  paste0(min(observed_years), "-", max(observed_years))
 }
 
 #' Compute coverage and summary statistics for indicators
