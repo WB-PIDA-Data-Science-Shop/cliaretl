@@ -141,13 +141,12 @@ flag_minimum_coverage <- function(indicator, country_id, year_id) {
 #'
 #' @export
 calculate_time_range <- function(indicator, time_id) {
-  year_range <- paste0(
-    min({{time_id}}[!is.na(indicator)], na.rm = TRUE),
-    "-",
-    max({{time_id}}[!is.na(indicator)], na.rm = TRUE)
-  )
+  observed_years <- {{time_id}}[!is.na(indicator)]
 
-  return(year_range)
+  # an indicator with no observations has no range (min()/max() would give Inf)
+  if (length(observed_years) == 0) return(NA_character_)
+
+  paste0(min(observed_years), "-", max(observed_years))
 }
 
 #' Compute coverage and summary statistics for indicators
@@ -409,7 +408,7 @@ compute_coverage <- function(data,
           flag_minimum_coverage         = ~ flag_minimum_coverage(.x, {{ country_id }}, {{ year_id }}),
           year_range                    = ~ calculate_time_range(.x, {{ year_id }}),
           percent_complete_records      = ~ percent_str(prop_complete_vec(.x)),
-          percent_complete_records_last_five = ~ percent_str(prop_complete_vec(.x[{{ year_id }} >= ref_year])),
+          percent_complete_records_last_five = ~ percent_str(prop_complete_vec(.x[{{ year_id }} >= ref_year - 5])),
           # new: years with >= 10 countries in the static 5-year window
           static_valid_years            = ~ count_valid_years_in_window(.x, {{ year_id }}, static_window),
           # new: even years with >= 10 countries in the dynamic panel

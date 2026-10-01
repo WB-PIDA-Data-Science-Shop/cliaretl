@@ -3,6 +3,39 @@
 ################################################################################
 
 
+#' Source a Script Into a Scoped Environment
+#'
+#' Runs an R script with [source()], evaluating it in a fresh environment
+#' (child of the global environment) that is pre-populated with any objects
+#' passed via `...`. This is the mechanism the `targets` pipeline (`_targets.R`)
+#' uses to run the scripts in `data-raw/source/` and `analysis/` as targets:
+#' each script stays the single, actual implementation (nothing is duplicated
+#' into package functions), and `...` is how upstream target values the
+#' script reads as bare globals (e.g. `wb_country_list`) get supplied.
+#'
+#' Pair this with a `format = "file"` target on `script_path` itself, so
+#' `targets` detects edits to the script's content and reruns it -- a plain
+#' `source()` call inside a target's command is otherwise invisible to
+#' `targets`' static dependency analysis.
+#'
+#' @param script_path Path to the `.R` file to source (typically the value
+#'   of a `format = "file"` target).
+#' @param ... Named objects to make available to the script as bare globals
+#'   while it runs (e.g. `wb_country_list = wb_country_list`).
+#'
+#' @return The environment the script executed in, so callers can pluck
+#'   objects the script created out of it (e.g. `source_script_env(...)$obs`).
+#'
+#' @export
+source_script_env <- function(script_path, ...) {
+  env <- new.env(parent = globalenv())
+  extra <- list(...)
+  if (length(extra) > 0) list2env(extra, envir = env)
+  source(script_path, local = env)
+  env
+}
+
+
 #' Add Metadata Attributes to a Dataset
 #'
 #' Adds metadata to a `data.frame`, such as the source URL, download date, and any additional information.

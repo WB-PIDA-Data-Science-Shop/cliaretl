@@ -1,11 +1,6 @@
 library(dplyr)
 library(readxl)
 
-### get the db_variables data
-dbvar_df <-
-  readxl::read_excel("data-raw/input/cliar/db_variables.xlsx") |>
-  filter(source == "OECD")
-
 ### lets download the data via the API
 url <- readLines("data-raw/input/epl/epl")
 

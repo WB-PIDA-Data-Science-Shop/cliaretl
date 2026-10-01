@@ -1,1 +1,1 @@
-https://sdmx.oecd.org/public/rest/data/OECD.ECO.GCRD,DSD_PMR@DF_PMR,1.0/.PUBLIC_OWNER+GOVERNANCE+PRICE+INV_BUS_NET+INV_BUS_SER+FDI_INDEX+TARIFFS+COMMANDSIMPLIF_BURDEN+PMR.A?startPeriod=2018&endPeriod=2023&dimensionAtObservation=AllDimensions
+https://sdmx.oecd.org/public/rest/data/OECD.ECO.GCRD,DSD_PMR@DF_PMR,1.3/.PUBLIC_OWNER+GOVERNANCE+PRICE+INV_BUS_NET+INV_BUS_SER+FDI_INDEX+TARIFFS+COMMANDSIMPLIF_BURDEN+PMR.A?startPeriod=2018&endPeriod=2023&dimensionAtObservation=AllDimensions

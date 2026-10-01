@@ -12,3 +12,4 @@
 ^_targets$
 ^_targets.R$
 ^\.vscode$
+^\.claude$

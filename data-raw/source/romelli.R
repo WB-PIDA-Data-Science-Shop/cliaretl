@@ -31,8 +31,6 @@ romelli_tbl <-
             year = as.numeric(year),
             romelli_cbi_central_bank_independence = cbie_cwn_lvau)
 
-dbvar_dt <- read_excel("data-raw/input/cliar/db_variables.xlsx")
-
 romelli <- romelli_tbl
 
 usethis::use_data(romelli, overwrite = TRUE)

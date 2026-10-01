@@ -19,8 +19,6 @@ library(countrycode)
 library(readxl)
 library(stringr)
 
-devtools::load_all()
-
 # read-in -----------------------------------------------------------------
 
 fraser_df <- read_xlsx(

@@ -60,8 +60,6 @@ heritage_df <- merge(heritage_df,
                dplyr::select(-name_web) |>
                as_tibble()
 
-dbvar_dt <- readxl::read_excel("data-raw/input/cliar/db_variables.xlsx")
-
 #### change column names by just removing any spaces
 #### (note: the new site's CSV already uses "." instead of spaces in some
 #### column names once read by read_csv/read.csv's default name repair --
