@@ -89,6 +89,46 @@ db_variables_2025 |>
 filter(str_starts(variable, "wb_wbl_")) |>
   select(variable, benchmark_dynamic_indicator, benchmark_dynamic_family_aggregate, etl_source)
 
+# 1.2. B-Ready indicators: add pillars 1-3 as static benchmarked
+db_variables_2025 <- db_variables_2025 |>
+  addnew_db_variables(
+    new_rows = tibble::tibble(
+      api_id = NA,
+      variable = c(
+        "wb_bready_pillar_1",
+        "wb_bready_pillar_2",
+        "wb_bready_pillar_3"
+      ),
+      var_name = c(
+        "B-Ready Pillar 1: Regulatory Framework",
+        "B-Ready Pillar 2: Public Services",
+        "B-Ready Pillar 3: Operational Efficiency"
+      ),
+      var_level = c("indicator", "indicator", "indicator"),
+      family_var = rep("vars_mkt", 3),
+      family_name = rep("Business Environment", 3),
+      family_order = rep(9, 3),
+      processing = NA,
+      description = c(
+        "The B-Ready Pillar 1 focuses on the rules that shape business activity. This pillar examines the laws and regulations that businesses must follow, such as how to register a company, labor protections, and rules for resolving disputes. It also considers how governments set up these rules to promote transparency, fair competition, and property rights.",
+        "The B-Ready Pillar 2 measures the support governments provide to help businesses comply with regulations. This includes the availability of online systems for permits, digital tax platforms, and infrastructure at borders for trade",
+        "The B-Ready Pillar 3 captures how easy it is for businesses to comply with rules and use public services. This pillar looks at the real-world experience of firms, such as how long it takes to get utilities connected, how easy it is to participate in public procurement, and the reliability of digital payment systems. "
+      ),
+      description_short = c(
+        "The B-Ready Pillar measures rules and regulations that firms must follow as they open, operate, and close a business",
+        "The B-Ready Pillar 2 measures the facilities that support regulatory compliance and institutions and infrastructure to enable business activities",
+        "The B-Ready Pillar 3 measures the ease of regulatory compliance and effective use of public services directly relevant to firms"
+      ),
+      source = c("Business Ready", "Business Ready", "Business Ready"),
+      benchmarked_ctf = c("Yes", "Yes", "Yes"),
+      benchmark_static_family_aggregate_download = c("Yes", "Yes", "Yes"),
+      benchmark_dynamic_indicator = rep("No", 3),
+      benchmark_dynamic_family_aggregate = rep("No", 3),
+      rank_id = c(21, 22, 23),
+      etl_source = rep("bready", 3)
+    )
+  )
+
 # 2. Conflicting indicators analysis -------------------------------------------
 
 # a. Mismatching -------------------------------------------------------------
@@ -117,7 +157,8 @@ dataframes <- list(
   wbl_indicators = wbl_data,
   scorecard_indicators = scorecard,
   spi_indicators = spi,
-  wjp_indicators = wjp
+  wjp_indicators = wjp,
+  bready = bready
 )
 
 # Apply the `flag_mismatched_indicators` function across all and bind results

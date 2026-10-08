@@ -21,9 +21,11 @@ bready_input <- read.xlsx(
 bready <- bready_input |>
   clean_names() |>
   select(
-    economy,
+    country_name = economy,
     country_code = economy_code,
-    everything()
+    wb_bready_pillar_1 = pillar_1_regulatory_framework,
+    wb_bready_pillar_2 = pillar_2_public_services,
+    wb_bready_pillar_3 = pillar_3_operational_efficiency
   )
 
 bready <- bready |>
