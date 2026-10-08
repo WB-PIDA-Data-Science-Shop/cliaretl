@@ -1,17 +1,22 @@
 # Map indicators for Shiny App (cliarapp)
-# source: https://datacatalog.worldbank.org/int/search/dataset/0038272
-# Download instructions:
-# - Go to the website, under the title "World Bank Official Boundaries"
-#   make sure you select the Version 5(latest - Metadata last updated on - Jun 17, 2025)
-# - Click on the "World Bank Official Boundaries (GeoJSON)" button
-# - Open the list, and click on both the following files:
-#    a. World Bank Official Boundaries - Admin 0.geojson
-#    b. World Bank Official Boundaries - Admin 0_all_layers.geojson
+# source dataset: https://datacatalog.worldbank.org/search/dataset/0038272 (World Bank
+# Official Boundaries / WB_GAD). The official datacatalogfiles.worldbank.org download
+# links go stale whenever WB rotates the dataset version, and the current catalog page
+# is a JS-rendered SPA with no static download links to scrape.
 #
-# access date: 10/03/2025
+# As of 9/28/2026, worldmap_url.txt / disputedareas_url.txt instead point to the
+# source.coop mirror of the same dataset (data.source.coop/geographyis/wb-gad/), whose
+# listing description is copied verbatim from the official WB catalog entry and points
+# back to the same issue tracker (github.com/worldbank/WB_GAD/issues):
+#    a. WB_GAD_ADM0.geojson       -- base Admin 0 boundaries (world_map)
+#    b. WB_GAD_ADM0_NDLSA.geojson -- Non-Determined Legal Status Areas (disputed_areas)
+#
+# If these ever go stale too, check data.source.coop/geographyis/wb-gad/ (S3-style
+# bucket listing) for current filenames before falling back to the official catalog.
 library(dplyr)
 library(tidyr)
 library(stringr)
+library(httr)
 library(sf)
 library(here)
 library(readr)
@@ -20,26 +25,36 @@ library(sf)
 library(rmapshaper)
 library(geojsonio)
 
-devtools::load_all()
-
 # ---- data inputs ---------------------------------------------------------
 ctf <- closeness_to_frontier_static
 avg_columns <- names(ctf)[grep("_avg", names(ctf))]
 var_lists <- get_variable_lists(db_variables)
 
-raw_indicators <- readRDS(here("data-raw", "output", "compiled_indicators.rds"))
+raw_indicators <- readRDS(here("inst", "extdata", "compiled_indicators.rds"))
 
 options(timeout = 600)
 
+### read via httr + a local temp file, then sf::st_read() on the local path.
+### Two reasons: (1) going through geojsonio's sp round-trip
+### (geojson_read(what = "sp") |> st_as_sf(), which converts sf -> Spatial ->
+### sf internally) overflows R's protection stack on this larger source
+### file; (2) sf::st_read() on a remote URL uses GDAL's own HTTP client,
+### which on this machine fails Windows/schannel certificate-revocation
+### checks that httr::GET() (used throughout the rest of this pipeline)
+### does not hit.
+download_geojson <- function(url_file, dest) {
+  url <- readLines(url_file)[[1]]
+  httr::GET(url, httr::write_disk(dest, overwrite = TRUE), httr::progress())
+  st_read(dest, quiet = TRUE)
+}
+
 world_map <-
-  geojsonio::geojson_read(readLines("data-raw/input/wb/worldmap_url.txt")[[1]],
-                          what  = "sp") |>
-  st_as_sf()
+  download_geojson("data-raw/input/wb/worldmap_url.txt",
+                   here("data-raw", "input", "wb", "worldmap.geojson"))
 
 disputed_areas <-
-  geojsonio::geojson_read(readLines("data-raw/input/wb/disputedareas_url.txt")[[1]],
-                          what = "sp") |>
-  st_as_sf()
+  download_geojson("data-raw/input/wb/disputedareas_url.txt",
+                   here("data-raw", "input", "wb", "disputedareas.geojson"))
 
 # ---- merge base + disputed layers ----------------------------------------
 disputed_areas_renamed <- disputed_areas |>

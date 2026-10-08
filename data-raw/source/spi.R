@@ -23,7 +23,7 @@ stdmethods_tbl <-
   mutate(OBS_VALUE = as.numeric(OBS_VALUE),
          TIME_PERIOD = as.integer(as.numeric(TIME_PERIOD))) |>
   group_by(REF_AREA, TIME_PERIOD) |>
-  summarize(wb_spi_std_and_methods = mean(OBS_VALUE, na.rm = TRUE)) |>
+  summarize(wb_spi_std_and_methods = mean(OBS_VALUE, na.rm = TRUE), .groups = "drop") |>
   rename(country_code = "REF_AREA",
          year = "TIME_PERIOD")
 
@@ -36,7 +36,7 @@ census_and_survey_tbl <-
   mutate(OBS_VALUE = as.numeric(OBS_VALUE),
          TIME_PERIOD = as.integer(as.numeric(TIME_PERIOD))) |>
   group_by(REF_AREA, TIME_PERIOD) |>
-  summarize(wb_spi_census_and_survey_index = mean(OBS_VALUE, na.rm = TRUE)) |>
+  summarize(wb_spi_census_and_survey_index = mean(OBS_VALUE, na.rm = TRUE), .groups = "drop") |>
   rename(country_code = "REF_AREA",
          year = "TIME_PERIOD")
 

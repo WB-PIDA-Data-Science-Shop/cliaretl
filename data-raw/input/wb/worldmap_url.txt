@@ -1,2 +1,1 @@
-https://datacatalogfiles.worldbank.org/ddh-published/0038272/5/DR0095369/World Bank Official Boundaries (GeoJSON)/World Bank Official Boundaries - Admin 0.geojson
-
+https://data.source.coop/geographyis/wb-gad/WB_GAD_ADM0.geojson

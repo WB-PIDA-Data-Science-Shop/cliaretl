@@ -5,8 +5,6 @@ library(dplyr)
 library(readr)
 library(stringr)
 
-devtools::load_all()
-
 # read-in -----------------------------------------------------------------
 # read in world bank standard country codes and mutate them to be compatible
 # with the other files
@@ -127,7 +125,7 @@ wb_country_list |>
 
 # add metadata ------------------------------------------------------------
 
-wb_country_list |>
+wb_country_list <- wb_country_list |>
   add_plmetadata(source = "https://ddh-openapi.worldbank.org/resources/DR0095333/download",
                  other_info = "2026 CLASSIFICATION")
 

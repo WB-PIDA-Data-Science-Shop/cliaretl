@@ -11,8 +11,6 @@ library(dplyr)
 library(httr)
 library(tidyr)
 
-devtools::load_all()
-
 url <- "https://worldjusticeproject.org/rule-of-law-index/downloads/2025_wjp_rule_of_law_index_HISTORICAL_DATA_FILE.xlsx"
 
 dest_dir <- here("data-raw", "input", "wjp")

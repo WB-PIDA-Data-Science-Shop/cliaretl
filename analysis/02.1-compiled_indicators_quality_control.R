@@ -12,7 +12,7 @@ library(here)
 library(tidyr)
 
 compiled_indicators <- read_rds(#Generated in 02-compiled_indicators.R
-  here("data-raw", "output", "compiled_indicators.rds")
+  here("inst", "extdata", "compiled_indicators.rds")
 )
 
 compiled_indicators_legacy <- read_rds( # Previous version of the compiled indicators
@@ -22,8 +22,6 @@ compiled_indicators_legacy <- read_rds( # Previous version of the compiled indic
 theme_set(
   theme_classic()
 )
-
-devtools::load_all()
 
 # statistical assessment --------------------------------------------------
 diagnostics <- compiled_indicators |>

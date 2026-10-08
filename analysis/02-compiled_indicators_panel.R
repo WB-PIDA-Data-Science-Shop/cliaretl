@@ -21,9 +21,6 @@ library(testthat)
 library(janitor)
 library(readr)
 
-# Load custom functions
-devtools::load_all()
-
 # Generate output data folder
 if(
   !dir.exists(here::here("data-raw", "output"))
@@ -45,13 +42,24 @@ gfdb_indicators <-  gfdb
 heritage_indicators <- heritage
 pmr_indicators <- pmr
 epl_indicators <- epl
-d30_indicators <- d360_efi_data
+d360_indicators <- d360_efi_data
 fraser_indicators <- fraser
 aspire_indicators <- aspire
 wbl_indicators <- wbl_data
 scorecard_indicators <- scorecard
 spi_indicators <- spi
 wjp_indicators <- wjp
+budget_execution_indicators <- budget_execution |> mutate(year = as.integer(year))
+credit_rating_indicators <- credit_rating |> mutate(year = as.integer(year))
+freedom_house_indicators <- freedom_house
+gsod_indicators <- gsod
+labor_indicators <- labor_income
+obs_indicators <- obs
+press_freedom_indicators <- press_freedom
+sgi_indicators <- sgi
+wb_enterprise_indicators <- wb_enterprise
+
+
 
 # NOTE: PMR OECD data indicators is from 2018 methodology to 2022 dropped/renamed indicators.
 # We drop these indicators to avoid confusion with the 2022 methodology indicators, 
@@ -76,7 +84,7 @@ compiled_indicators <- readRDS(
 
 # 1. Create Panel ----------------------------------------------------
 
-d30_indicators_clean <- d30_indicators |>
+d30_indicators_clean <- d360_indicators |>
   select(!starts_with("wb_pefa_"))
 
 excluded_country_code <- c(
@@ -123,7 +131,16 @@ cliar_indicators <- list(
   wdi_wb_indicators = wdi_indicators,
   scorecard_indicators = scorecard_indicators,
   spi_indicators = spi_indicators,
-  wjp_indicators = wjp_indicators
+  wjp_indicators = wjp_indicators,
+  budget_execution_indicators = budget_execution_indicators,
+  credit_rating_indicators = credit_rating_indicators,
+  freedom_house_indicators = freedom_house,
+  gsod_indicators = gsod,
+  labor_indicators = labor_income,
+  obs_indicators = obs,
+  press_freedom_indicators = press_freedom,
+  sgi_indicators = sgi,
+  wb_enterprise_indicators = wb_enterprise
 ) |>
   map(
     ~ mutate(

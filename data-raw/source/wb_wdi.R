@@ -9,11 +9,6 @@ library(stringr)
 library(janitor)
 library(countrycode)
 
-
-devtools::load_all()
-
-
-
 # data-load --------------------------------------------------------------
 
 url <- "https://datacatalogfiles.worldbank.org/ddh-published/0037712/DR0095335/WDI_CSV_2026_07_15.zip"
@@ -195,7 +190,10 @@ wdi_indicators_list <- c(
 
 wdi_selected_panel <- wdi_indicators_raw |>
   filter(indicator_code %in% wdi_indicators_list) |>
-  select(country_name, country_code, indicator_name, indicator_code, starts_with("x")) |>
+  # indicator_name is deliberately dropped: left in, it becomes an id column in
+  # pivot_wider() and keeps every indicator on its own row, so the later
+  # distinct(country_code, year) retains only one indicator per country-year
+  select(country_name, country_code, indicator_code, starts_with("x")) |>
   pivot_longer(
     cols = starts_with("x"),
     names_to = "year",
@@ -232,8 +230,7 @@ var_labels <- sapply(wdi_named, function(x) attr(x, "label"))  # Extract labels 
 var_names <- names(var_labels)  # Get the variable names
 
 # wdi_named is already lower-cased and prefixed; assign to wdi_clean for downstream consistency
-wdi_clean <- wdi_named |> 
-  select(-wdi_indicatorname) # Remove this 
+wdi_clean <- wdi_named
 
 
 columns_to_drop <- c(

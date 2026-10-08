@@ -1,6 +1,5 @@
 ## code to prepare `credit_rating` dataset goes here
 # last updated: 7/21/2026
-devtools::load_all()
 
 credit_rating_raw <- get_data360_api(
   "WEF_TTDI",
