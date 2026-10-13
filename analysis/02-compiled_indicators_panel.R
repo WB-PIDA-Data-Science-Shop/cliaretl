@@ -58,6 +58,7 @@ obs_indicators <- obs
 press_freedom_indicators <- press_freedom
 sgi_indicators <- sgi
 wb_enterprise_indicators <- wb_enterprise
+bready_indicators <- bready |> select(-country_name) # names come from wb_country_list below
 
 
 
@@ -140,7 +141,8 @@ cliar_indicators <- list(
   obs_indicators = obs,
   press_freedom_indicators = press_freedom,
   sgi_indicators = sgi,
-  wb_enterprise_indicators = wb_enterprise
+  wb_enterprise_indicators = wb_enterprise,
+  bready_indicators = bready_indicators
 ) |>
   map(
     ~ mutate(
@@ -373,9 +375,9 @@ extra_years <- cliar_indicators_completed |>
                values_to = "has_value") |>
   filter(has_value)
 
-# Drop Tuvalu (TUV) for 2025 as it has only PEFA data
+# Drop the (incomplete) reference year -- e.g. Tuvalu (TUV) has only PEFA data
 cliar_indicators_clean <- cliar_indicators_completed |>
-  filter(!(year == "2025"))
+  filter(year != ref_year)
 
 
 test_that(

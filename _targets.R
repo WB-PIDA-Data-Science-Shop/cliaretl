@@ -209,6 +209,7 @@ list(
     db_variables_2025_file
     debt_transparency; wdi_indicators; pefa_assessments; romelli; vdem_data
     gfdb; heritage; pmr; epl; d360_efi_data; fraser; aspire; wbl_data; scorecard
+    bready
     source_script_env(extraction_script)
   }),
   tar_target(db_variables, extraction_env$db_variables),
@@ -245,7 +246,8 @@ list(
         fraser = fraser, aspire = aspire, wbl_data = wbl_data, scorecard = scorecard,
         spi = spi, wjp = wjp, budget_execution = budget_execution, credit_rating = credit_rating,
         freedom_house = freedom_house, gsod = gsod, labor_income = labor_income, obs = obs,
-        press_freedom = press_freedom, sgi = sgi, wb_enterprise = wb_enterprise
+        press_freedom = press_freedom, sgi = sgi, wb_enterprise = wb_enterprise,
+        bready = bready
       )
       here::here("inst", "extdata", "compiled_indicators.rds")
     },

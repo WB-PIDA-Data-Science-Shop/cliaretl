@@ -1480,6 +1480,7 @@
 #' \describe{
 #'   \item{country_name}{Country name (character)}
 #'   \item{country_code}{ISO country code (character)}
+#'   \item{year}{Year (character)}
 #'   \item{wb_bready_pillar_1}{Score for regulatory framework (numeric)}
 #'   \item{wb_bready_pillar_2}{Score for public services (numeric)}
 #'   \item{wb_bready_pillar_3}{Score for operational efficiency (numeric)}

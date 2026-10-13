@@ -17,16 +17,21 @@ bready_input <- read.xlsx(
   rows = 1:102
 )
 
+
+
 # clean data
 bready <- bready_input |>
+  mutate(year = 2025) |>
   clean_names() |>
   select(
     country_name = economy,
     country_code = economy_code,
+    year,
     wb_bready_pillar_1 = pillar_1_regulatory_framework,
     wb_bready_pillar_2 = pillar_2_public_services,
     wb_bready_pillar_3 = pillar_3_operational_efficiency
-  )
+  ) |> 
+  as_tibble()
 
 bready <- bready |>
   add_plmetadata(

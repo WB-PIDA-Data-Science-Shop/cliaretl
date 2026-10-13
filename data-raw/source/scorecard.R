@@ -12,10 +12,11 @@ csc_tbl <-
          dataset_id = cscvars_tbl$wb_dataset_id,
          indicator_id = cscvars_tbl$wb_indicator_id,
          SIMPLIFY = FALSE) |>
-  Reduce(f = full_join) |> 
+  Reduce(f = full_join) |>
+  ### the API returns missing values as the string "null"
   mutate(across(
-    .cols = !c("country_code", "year"), 
-    .fns = as.numeric))
+    .cols = !c("country_code", "year"),
+    .fns = \(x) as.numeric(na_if(x, "null"))))
 
 ### the following code below should contain no duplicates
 lapply(X = colnames(csc_tbl)[!colnames(csc_tbl) %in% c("country_code", "year")],

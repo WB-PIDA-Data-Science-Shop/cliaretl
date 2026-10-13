@@ -145,8 +145,9 @@ wblb_rename <- wblb_df_filter |>
 wbl_laborb <- wblb_rename |> 
   mutate(
     wb_wbl_labor = rowMeans(
-      across(matches("^gr2_|^gr3_|^gr8_")
-    )), na.rm = TRUE
+      across(matches("^gr2_|^gr3_|^gr8_")),
+      na.rm = TRUE
+    )
   )
 
 
@@ -279,6 +280,8 @@ scale_check <- bind_rows(
   wbl2_data_to_merge |> mutate(v = "2.0")
 ) |>
   pivot_longer(starts_with("wb_wbl"), names_to = "construct", values_to = "value") |>
+  # 1.0 has no sg_law_indx; drop its all-NA group so min/max don't return Inf
+  filter(!is.na(value)) |>
   group_by(construct, v) |>
   summarise(
     n          = sum(!is.na(value)),
@@ -300,6 +303,7 @@ scale_check_all <- bind_rows(
   wbl2_data_to_merge |> mutate(v = "2.0")
 ) |>
   pivot_longer(starts_with("wb_wbl"), names_to = "construct", values_to = "value") |>
+  filter(!is.na(value)) |>
   group_by(construct, v) |>
   summarise(
     n          = sum(!is.na(value)),
@@ -473,10 +477,13 @@ combined_labor <- p_labor_1_2 + p_labor_1b_2 +
     theme = theme(plot.title = element_text(face = "bold", size = 14))
   )
 
-# Display plots
-print(combined_entrep)
-print(combined_social)
-print(combined_labor)
+# Display plots (interactive sessions only -- under tar_make()/Rscript there is
+# no screen, so printing would write them to Rplots.pdf instead)
+if (interactive()) {
+  print(combined_entrep)
+  print(combined_social)
+  print(combined_labor)
+}
 
 # All-in-one comparison
 all_plots <- (p_entrep_1_2 | p_entrep_1b_2) /
@@ -491,7 +498,7 @@ all_plots <- (p_entrep_1_2 | p_entrep_1b_2) /
     )
   )
 
-print(all_plots)
+if (interactive()) print(all_plots)
 
 # Identify countries with largest deviations
 deviations <- scatter_data |>

@@ -5,9 +5,17 @@ library(dplyr)
 library(readr)
 library(countrycode)
 
-labor_income_raw <- read_csv(
-  "https://rplumber.ilo.org/data/indicator/?id=SDG_1041_NOC_RT_A&lang=en&type=label&format=.csv&channel=ilostat&title=sdg-indicator-1041-labour-income-share-as-a-percent-of-gdp-annual"
+### the ILO API intermittently returns 502/524 errors, so retry before failing
+res <- httr::RETRY(
+  "GET",
+  "https://rplumber.ilo.org/data/indicator/?id=SDG_1041_NOC_RT_A&lang=en&type=label&format=.csv&channel=ilostat&title=sdg-indicator-1041-labour-income-share-as-a-percent-of-gdp-annual",
+  times = 5,
+  pause_base = 5,
+  pause_cap = 60
 )
+httr::stop_for_status(res)
+
+labor_income_raw <- read_csv(I(httr::content(res, "text", encoding = "UTF-8")))
 
 labor_income <- labor_income_raw |> 
   transmute(

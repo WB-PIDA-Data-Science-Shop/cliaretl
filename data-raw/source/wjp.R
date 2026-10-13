@@ -45,7 +45,7 @@ wjp_tbl |>
          year = "Year") |>
   rename_with(~ sub("^Factor (\\d+):.*", "wjp_rol_\\1", .x)) |>
   rename_with(~ sub("^(\\d+)\\.(\\d+)\\.?\\s.*", "wjp_rol_\\1_\\2", .x)) |> 
-  dplyr::select(country_code, year, wjp_var_list) |>
+  dplyr::select(country_code, year, all_of(wjp_var_list)) |>
   rename(wjp_rol_7_1 = "wjp_rol_7",
          wjp_rol_8_2 = "wjp_rol_8",
          wjp_rol_6_6 = "wjp_rol_6_5")

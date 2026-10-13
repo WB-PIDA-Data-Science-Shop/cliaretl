@@ -19,6 +19,7 @@ library(readxl)
 library(dplyr)
 
 dest_dir <- here::here("data-raw", "input", "obs")
+dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
 
 url <- "https://internationalbudget.org/sites/default/files/2026-06/OBS_Full_Timeseries_2006_2025.xlsx"
 tmp_file <- file.path(dest_dir, "obs_raw.xlsx")

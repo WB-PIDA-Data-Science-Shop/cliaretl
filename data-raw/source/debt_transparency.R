@@ -147,16 +147,11 @@ debt_transparency_cname <- debt_transparency_full |>
     )
   )
 
-# add iso3c country codes
-debt_transparency_ccode <- debt_transparency_cname |>
+# add iso3c country codes (Kosovo has no iso3c code, so map it to the WB code)
+debt_transparency_final <- debt_transparency_cname |>
   mutate(
-    country_code = countrycode(country, origin = "country.name", destination = "iso3c")
-  )
-
-# correct Kosovo country code
-debt_transparency_final <- debt_transparency_ccode |>
-  mutate(
-    country_code = ifelse(country == "Kosovo", "XKX", country_code)
+    country_code = countrycode(country, origin = "country.name", destination = "iso3c",
+                               custom_match = c("Kosovo" = "XKX"))
   ) |>
   select(country_code, year, everything())
 
