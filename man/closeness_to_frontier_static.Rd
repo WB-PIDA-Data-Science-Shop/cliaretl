@@ -5,7 +5,7 @@
 \alias{closeness_to_frontier_static}
 \title{Static CTF scores (5-year window, rescaled 0–1)}
 \format{
-A data frame with 234 rows and 154 variables:
+A data frame with 233 rows and 178 variables:
 \describe{
   \item{country_code}{ISO3 economy code or aggregate code.}
   \item{country_name}{Economy/aggregate name.}
@@ -93,6 +93,10 @@ A data frame with 234 rows and 154 variables:
 
   \item{wb_aspire_adequacy_benefits}{ASPIRE: adequacy of social assistance benefits, rescaled.}
   \item{wb_aspire_coverage}{ASPIRE: coverage of social assistance, rescaled.}
+
+  \item{wb_bready_pillar_1}{B-READY Pillar 1: regulatory framework, rescaled.}
+  \item{wb_bready_pillar_2}{B-READY Pillar 2: public services, rescaled.}
+  \item{wb_bready_pillar_3}{B-READY Pillar 3: operational efficiency, rescaled.}
 
   \item{wb_csc_eg_elc_accs_zs}{World Bank Country Scorecard: \% of population with access to electricity.}
   \item{wb_csc_en_clm_vuln}{World Bank Country Scorecard: climate vulnerability index.}

@@ -947,7 +947,7 @@
 #' - **Coverage:** Includes WB territories and regional aggregates
 #'   (e.g., `AFE`, `AFW`) where applicable.
 #'
-#' @format A data frame with 234 rows and 154 variables:
+#' @format A data frame with 233 rows and 178 variables:
 #' \describe{
 #'   \item{country_code}{ISO3 economy code or aggregate code.}
 #'   \item{country_name}{Economy/aggregate name.}
@@ -1035,6 +1035,10 @@
 #'
 #'   \item{wb_aspire_adequacy_benefits}{ASPIRE: adequacy of social assistance benefits, rescaled.}
 #'   \item{wb_aspire_coverage}{ASPIRE: coverage of social assistance, rescaled.}
+#'
+#'   \item{wb_bready_pillar_1}{B-READY Pillar 1: regulatory framework, rescaled.}
+#'   \item{wb_bready_pillar_2}{B-READY Pillar 2: public services, rescaled.}
+#'   \item{wb_bready_pillar_3}{B-READY Pillar 3: operational efficiency, rescaled.}
 #'
 #'   \item{wb_csc_eg_elc_accs_zs}{World Bank Country Scorecard: \% of population with access to electricity.}
 #'   \item{wb_csc_en_clm_vuln}{World Bank Country Scorecard: climate vulnerability index.}
@@ -1476,11 +1480,11 @@
 #'
 #' Scores for regulatory framework, public services, and operational efficiency by country.
 #'
-#' @format A data frame with 101 rows and 5 columns:
+#' @format A data frame with 101 rows and 6 columns:
 #' \describe{
 #'   \item{country_name}{Country name (character)}
 #'   \item{country_code}{ISO country code (character)}
-#'   \item{year}{Year (character)}
+#'   \item{year}{Edition year of the B-READY report (numeric)}
 #'   \item{wb_bready_pillar_1}{Score for regulatory framework (numeric)}
 #'   \item{wb_bready_pillar_2}{Score for public services (numeric)}
 #'   \item{wb_bready_pillar_3}{Score for operational efficiency (numeric)}
