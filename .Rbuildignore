@@ -13,3 +13,4 @@
 ^_targets.R$
 ^\.vscode$
 ^\.claude$
+^inst/qcheck/reports$

@@ -1,0 +1,159 @@
+---
+title: "CLIAR Vintage Comparison: Compiled Indicators"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  word_document:
+    reference_docx: reference_landscape.docx
+params:
+  comparison: NULL
+  share_threshold: 5
+  workbook: NULL
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+cmp    <- params$comparison
+labels <- cmp$settings$labels
+thr    <- params$share_threshold
+about  <- stats::setNames(cmp$about$value, cmp$about$item)
+
+fmt_n   <- function(x) format(x, big.mark = ",", trim = TRUE)
+fmt_pct <- function(x) ifelse(is.na(x), "", sprintf("%.1f%%", x))
+
+# landscape Letter leaves 9.5in between margins; widths must not exceed it
+ft <- function(df, widths) {
+  flextable::flextable(df) |>
+    flextable::width(width = widths) |>
+    flextable::fontsize(size = 9, part = "all") |>
+    flextable::valign(valign = "top", part = "body") |>
+    flextable::theme_vanilla()
+}
+
+n_status  <- function(s) cmp$summary$n[cmp$summary$status == s]
+published <- sum(cmp$summary$n[cmp$summary$status %in% c("Same", "Revised", "Dropped")])
+```
+
+This report compares the **`r labels[["latest"]]`** vintage of the compiled
+indicators (`r about[["Latest: years"]]`) with the **`r labels[["previous"]]`**
+vintage already published (`r about[["Previous: years"]]`), across
+`r about[["Variables compared"]]` variables present in both. Cell-level details
+are in the accompanying workbook, *`r params$workbook`*.
+
+# 1. Overview
+
+Of the `r fmt_n(published)` values already published,
+`r fmt_pct(100 * n_status("Same") / published)` are unchanged,
+`r fmt_pct(100 * n_status("Revised") / published)` were revised and
+`r fmt_pct(100 * n_status("Dropped") / published)` are missing from the latest
+vintage. The latest vintage also adds `r fmt_n(n_status("Added (new period)"))`
+values for years after `r cmp$settings$last_year` and
+`r fmt_n(n_status("Added (backfilled)"))` values for years already covered.
+
+```{r overview}
+cmp$summary |>
+  dplyr::transmute(
+    Status                 = as.character(.data$status),
+    Cells                  = fmt_n(.data$n),
+    `Share of published`   = fmt_pct(.data$pct_of_published)
+  ) |>
+  ft(c(3.0, 2.0, 2.0))
+```
+
+# 2. Structural changes
+
+```{r structure, results = "asis"}
+if (nrow(cmp$structure) == 0) {
+  cat("The two vintages have the same variables, countries and years.\n")
+} else {
+  cmp$structure |>
+    dplyr::summarise(Values = paste(.data$value, collapse = ", "), Count = dplyr::n(), .by = c("type", "change")) |>
+    dplyr::transmute(Type = .data$type, Change = .data$change, Count = .data$Count, Values = .data$Values) |>
+    ft(c(1.0, 1.8, 0.7, 6.0)) |>
+    flextable::flextable_to_rmd()
+}
+```
+
+# 3. Changes by source
+
+```{r by-source}
+cmp$by_source |>
+  dplyr::transmute(
+    Source        = dplyr::coalesce(.data$source, "(not in metadata)"),
+    Variables     = .data$variables,
+    Published     = fmt_n(.data$published),
+    `% same`      = fmt_pct(.data$pct_same),
+    `% revised`   = fmt_pct(.data$pct_revised),
+    `% dropped`   = fmt_pct(.data$pct_dropped),
+    Added         = fmt_n(.data$added)
+  ) |>
+  ft(c(3.0, 0.9, 1.1, 1.0, 1.0, 1.0, 1.1))
+```
+
+# 4. Variables with more than `r thr`% of published values dropped
+
+```{r dropped, results = "asis"}
+dropped <- cmp$variables |>
+  dplyr::filter(.data$pct_dropped > thr) |>
+  dplyr::arrange(dplyr::desc(.data$pct_dropped))
+if (nrow(dropped) == 0) {
+  cat("No variable lost more than ", thr, "% of its published values.\n", sep = "")
+} else {
+  dropped |>
+    dplyr::transmute(
+      Variable    = .data$variable,
+      Name        = .data$var_name,
+      Source      = .data$source,
+      Published   = fmt_n(.data$published),
+      Dropped     = fmt_n(.data$Dropped),
+      `% dropped` = fmt_pct(.data$pct_dropped)
+    ) |>
+    ft(c(1.9, 2.6, 2.0, 1.0, 1.0, 1.0)) |>
+    flextable::flextable_to_rmd()
+}
+```
+
+# 5. Variables with more than `r thr`% of published values revised
+
+```{r revised, results = "asis"}
+revised <- cmp$variables |>
+  dplyr::filter(.data$pct_revised > thr) |>
+  dplyr::arrange(dplyr::desc(.data$pct_revised))
+if (nrow(revised) == 0) {
+  cat("No variable had more than ", thr, "% of its published values revised.\n", sep = "")
+} else {
+  revised |>
+    dplyr::transmute(
+      Variable                 = .data$variable,
+      Name                     = .data$var_name,
+      Source                   = .data$source,
+      Published                = fmt_n(.data$published),
+      `% revised`              = fmt_pct(.data$pct_revised),
+      `Median % change`        = fmt_pct(.data$median_abs_pct_change)
+    ) |>
+    ft(c(1.9, 2.6, 2.0, 1.0, 1.0, 1.0)) |>
+    flextable::flextable_to_rmd()
+}
+```
+
+# 6. New observations by source
+
+```{r added}
+cmp$by_source |>
+  dplyr::filter(.data$added > 0) |>
+  dplyr::arrange(dplyr::desc(.data$added)) |>
+  dplyr::transmute(
+    Source                                              = dplyr::coalesce(.data$source, "(not in metadata)"),
+    !!paste0("New period (after ", cmp$settings$last_year, ")") := fmt_n(.data$`Added (new period)`),
+    Backfilled                                          = fmt_n(.data$`Added (backfilled)`),
+    Total                                               = fmt_n(.data$added)
+  ) |>
+  ft(c(4.0, 2.0, 1.75, 1.75))
+```
+
+# Appendix: status definitions
+
+- **Same**: published value unchanged, within the tolerance (`r about[["Tolerance"]]`).
+- **Revised**: published value changed by more than the tolerance.
+- **Dropped**: published value is missing from the latest vintage.
+- **Added (backfilled)**: new value for a year the previous vintage already covered.
+- **Added (new period)**: new value for a year after the previous vintage's last year (`r cmp$settings$last_year`).
