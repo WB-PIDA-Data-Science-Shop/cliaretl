@@ -27,12 +27,12 @@ heritage_headers <- add_headers(
 urldata <- "https://economicfreedom.heritage.org/assets/data/csv/ef-country-scores.csv"
 res_data <- GET(urldata, heritage_headers)
 stopifnot(status_code(res_data) == 200)
-heritage_df <- read_csv(content(res_data, "text", encoding = "UTF-8"))
+heritage_df <- read_csv(I(content(res_data, "text", encoding = "UTF-8")))
 
 urlcountry <- "https://economicfreedom.heritage.org/assets/data/csv/ef-country-names.csv"
 res_country <- GET(urlcountry, heritage_headers)
 stopifnot(status_code(res_country) == 200)
-country_df <- read_csv(content(res_country, "text", encoding = "UTF-8"))
+country_df <- read_csv(I(content(res_country, "text", encoding = "UTF-8")))
 
 #### quickly store raw data with its attributes
 heritage_df |>

@@ -36,6 +36,7 @@ Imports:
     jsonlite
 Suggests:
     flextable,
+    openxlsx,
     testthat (>= 3.0.0),
     usethis
 Config/testthat/edition: 3

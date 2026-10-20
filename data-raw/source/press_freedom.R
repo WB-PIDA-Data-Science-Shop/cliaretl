@@ -31,6 +31,7 @@ library(readr)
 library(stringr)
 
 dest_dir <- here::here("data-raw", "input", "press_freedom")
+dir.create(dest_dir, recursive = TRUE, showWarnings = FALSE)
 
 rsf_years <- c(2002:2010, 2012:2026)
 

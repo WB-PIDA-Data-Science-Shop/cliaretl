@@ -21,7 +21,7 @@ gsod_url <- paste0(
 
 res <- GET(gsod_url)
 stopifnot(status_code(res) == 200)
-gsod_raw <- read_csv(content(res, "text", encoding = "UTF-8"), show_col_types = FALSE)
+gsod_raw <- read_csv(I(content(res, "text", encoding = "UTF-8")), show_col_types = FALSE)
 
 ### keep only the gsod variables that are lazyloaded in db_variables, and map
 ### them back to their raw GSOD indicator codes (e.g. "idea_gsod_v_21_05" -> "v_21_05")

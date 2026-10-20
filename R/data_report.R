@@ -5,13 +5,17 @@
 #' List the variables of an institutional family
 #'
 #' Returns the variables belonging to a given institutional family, along with
-#' their names, definitions and sources, ordered by their rank within the family.
+#' their names, benchmarking status, definitions and sources, ordered by their
+#' rank within the family.
 #'
 #' @param family A character string with the institutional family name, as it
 #'   appears in `metadata$family_name` (e.g., `"Political Institutions"`).
 #' @param metadata A variable metadata table. Defaults to [db_variables].
 #'
-#' @return A tibble with columns `Variable`, `Name`, `Definition` and `Source`.
+#' @return A tibble with columns `Variable`, `Name`, `Benchmarked`, `Definition`
+#'   and `Source`. `Benchmarked` is `"Yes"` when the variable is flagged for
+#'   static (`benchmarked_ctf`) or dynamic (`benchmark_dynamic_indicator`) CTF
+#'   benchmarking, and `"No"` otherwise (including missing flags).
 #'
 #' @export
 get_family_variables <- function(family, metadata = cliaretl::db_variables) {
@@ -20,11 +24,19 @@ get_family_variables <- function(family, metadata = cliaretl::db_variables) {
   metadata |>
     dplyr::filter(.data$family_name == family, .data$var_level == "indicator") |>
     dplyr::arrange(.data$rank_id) |>
+    dplyr::mutate(
+      Benchmarked = dplyr::if_else(
+        .data$benchmarked_ctf %in% "Yes" | .data$benchmark_dynamic_indicator %in% "Yes",
+        "Yes",
+        "No"
+      )
+    ) |>
     dplyr::select(
-      Variable   = "variable",
-      Name       = "var_name",
-      Definition = "description",
-      Source     = "source"
+      Variable    = "variable",
+      Name        = "var_name",
+      "Benchmarked",
+      Definition  = "description",
+      Source      = "source"
     )
 }
 
@@ -37,8 +49,9 @@ get_family_variables <- function(family, metadata = cliaretl::db_variables) {
 #' @inheritParams compute_coverage
 #' @param data A country-year panel with one column per indicator.
 #'
-#' @return The [compute_coverage()] table for the family's indicators, with an
-#'   additional `Name` column, ordered as in [get_family_variables()].
+#' @return The [compute_coverage()] table for the family's indicators, with
+#'   additional `Name` and `Benchmarked` columns (see [get_family_variables()]),
+#'   ordered as in [get_family_variables()].
 #'
 #' @export
 compute_family_coverage <- function(data,
@@ -77,10 +90,10 @@ compute_family_coverage <- function(data,
       consolidate         = consolidate
     ) |>
     dplyr::left_join(
-      family_variables |> dplyr::select("Variable", "Name"),
+      family_variables |> dplyr::select("Variable", "Name", "Benchmarked"),
       by = c("Indicator" = "Variable")
     ) |>
-    dplyr::relocate("Name", .after = "Indicator") |>
+    dplyr::relocate("Name", "Benchmarked", .after = "Indicator") |>
     dplyr::arrange(match(.data$Indicator, family_variables$Variable))
 }
 

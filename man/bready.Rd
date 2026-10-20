@@ -5,13 +5,14 @@
 \alias{bready}
 \title{Business Ready (B-READY) Dataset}
 \format{
-A data frame with 101 rows and 5 columns:
+A data frame with 101 rows and 6 columns:
 \describe{
-  \item{economy}{Country name (character)}
+  \item{country_name}{Country name (character)}
   \item{country_code}{ISO country code (character)}
-  \item{pillar_1_regulatory_framework}{Score for regulatory framework (numeric)}
-  \item{pillar_2_public_services}{Score for public services (numeric)}
-  \item{pillar_3_operational_efficiency}{Score for operational efficiency (numeric)}
+  \item{year}{Edition year of the B-READY report (numeric)}
+  \item{wb_bready_pillar_1}{Score for regulatory framework (numeric)}
+  \item{wb_bready_pillar_2}{Score for public services (numeric)}
+  \item{wb_bready_pillar_3}{Score for operational efficiency (numeric)}
 }
 }
 \source{

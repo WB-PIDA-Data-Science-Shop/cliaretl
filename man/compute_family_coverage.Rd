@@ -40,8 +40,9 @@ are consolidated into a single `Flags` column and paired counts are
 combined into single character columns separated by `/`.}
 }
 \value{
-The [compute_coverage()] table for the family's indicators, with an
-  additional `Name` column, ordered as in [get_family_variables()].
+The [compute_coverage()] table for the family's indicators, with
+  additional `Name` and `Benchmarked` columns (see [get_family_variables()]),
+  ordered as in [get_family_variables()].
 }
 \description{
 Subsets an indicator panel to the variables of a given institutional family

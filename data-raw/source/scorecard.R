@@ -12,10 +12,11 @@ csc_tbl <-
          dataset_id = cscvars_tbl$wb_dataset_id,
          indicator_id = cscvars_tbl$wb_indicator_id,
          SIMPLIFY = FALSE) |>
-  Reduce(f = full_join) |> 
+  Reduce(f = full_join) |>
+  ### the API returns missing values as the string "null"
   mutate(across(
-    .cols = !c("country_code", "year"), 
-    .fns = as.numeric))
+    .cols = !c("country_code", "year"),
+    .fns = \(x) as.numeric(na_if(x, "null"))))
 
 ### the following code below should contain no duplicates
 lapply(X = colnames(csc_tbl)[!colnames(csc_tbl) %in% c("country_code", "year")],
@@ -31,14 +32,17 @@ scorecard <- csc_tbl |>
     year = as.numeric(year)
   )
 
-rm(csc_tbl)
-
 ## lets make sure to only keep the countries in the wb_country_list
 
 scorecard <- 
   scorecard |>
   dplyr::filter(country_code %in% unique(wb_country_list$country_code)) |>
-  dplyr::filter(!is.na(country_code))
+  dplyr::filter(!is.na(country_code)) |>
+  # we only retain the latest year, following the same convention
+  # for the log gdp per capita
+  dplyr::filter(
+    year == 2024
+  )
 
 
 scorecard <- 

@@ -13,9 +13,13 @@ appears in `metadata$family_name` (e.g., `"Political Institutions"`).}
 \item{metadata}{A variable metadata table. Defaults to [db_variables].}
 }
 \value{
-A tibble with columns `Variable`, `Name`, `Definition` and `Source`.
+A tibble with columns `Variable`, `Name`, `Benchmarked`, `Definition`
+  and `Source`. `Benchmarked` is `"Yes"` when the variable is flagged for
+  static (`benchmarked_ctf`) or dynamic (`benchmark_dynamic_indicator`) CTF
+  benchmarking, and `"No"` otherwise (including missing flags).
 }
 \description{
 Returns the variables belonging to a given institutional family, along with
-their names, definitions and sources, ordered by their rank within the family.
+their names, benchmarking status, definitions and sources, ordered by their
+rank within the family.
 }
