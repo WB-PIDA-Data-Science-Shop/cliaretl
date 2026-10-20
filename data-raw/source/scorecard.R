@@ -32,14 +32,17 @@ scorecard <- csc_tbl |>
     year = as.numeric(year)
   )
 
-rm(csc_tbl)
-
 ## lets make sure to only keep the countries in the wb_country_list
 
 scorecard <- 
   scorecard |>
   dplyr::filter(country_code %in% unique(wb_country_list$country_code)) |>
-  dplyr::filter(!is.na(country_code))
+  dplyr::filter(!is.na(country_code)) |>
+  # we only retain the latest year, following the same convention
+  # for the log gdp per capita
+  dplyr::filter(
+    year == 2024
+  )
 
 
 scorecard <- 
