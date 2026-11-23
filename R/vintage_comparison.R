@@ -12,6 +12,20 @@ vintage_statuses <- c(
   "Same", "Revised", "Dropped", "Added (backfilled)", "Added (new period)"
 )
 
+#' Statuses of published cells: the values the previous vintage put on the
+#' dashboard. Every share (`pct_same`, `pct_of_published`, ...) is computed
+#' over them.
+#'
+#' @noRd
+published_statuses <- c("Same", "Revised", "Dropped")
+
+#' Key columns that identify a row of the compiled indicators panel
+#'
+#' Cells are matched across vintages on these two columns plus the variable.
+#'
+#' @noRd
+vintage_keys <- c("country_code", "year")
+
 #' Compare two vintages of the compiled indicators panel
 #'
 #' @description
@@ -37,10 +51,11 @@ vintage_statuses <- c(
 #'
 #' @details
 #' **What is compared.** Only numeric columns present in both vintages, other
-#' than the two key columns, are compared cell by cell. Text columns (e.g.
-#' `country_name`, `region`) are ignored. Variables, countries and years present
-#' in only one vintage are listed in `structure` instead, so a renamed variable
-#' appears there as one variable removed and another added.
+#' than the key columns `country_code` and `year`, are compared cell by cell.
+#' Text columns (e.g. `country_name`, `region`) are ignored. Variables,
+#' countries and years present in only one vintage are listed in `structure`
+#' instead, so a renamed variable appears there as one variable removed and
+#' another added.
 #'
 #' **Tolerance rule.** A published cell counts as `"Same"` when
 #' `abs(latest - previous) <= tolerance * max(abs(previous), 1)`. For values of
@@ -60,15 +75,19 @@ vintage_statuses <- c(
 #' previous vintage's last year counts as `"Added (new period)"` even for a
 #' country that is new to the panel.
 #'
-#' **Errors.** Stops if either vintage lacks `country_col` or `year_col`, or has
+#' **Vintage names.** Every output names the two vintages. A vintage loaded
+#' with [load_vintage()] is named after its git reference, date and commit
+#' (e.g. `"main @ 2025-12-09 (9e2d4a2)"`); any other is named
+#' `"Previous"` / `"Latest"`.
+#'
+#' **Errors.** Stops if either vintage lacks `country_code` or `year`, or has
 #' more than one row for the same country-year pair.
 #'
-#' @param previous A data frame with one row per country-year: the vintage that
-#'   is already published, e.g. from [load_vintage()].
-#' @param latest A data frame with one row per country-year: the vintage about
-#'   to be published, e.g. `readRDS("inst/extdata/compiled_indicators.rds")`.
-#' @param country_col,year_col Character, the names of the country and year key
-#'   columns. Default `"country_code"` and `"year"`, as in the compiled panel.
+#' @param previous A data frame with one row per `country_code`-`year`: the
+#'   vintage that is already published, e.g. from [load_vintage()].
+#' @param latest A data frame with one row per `country_code`-`year`: the
+#'   vintage about to be published, e.g.
+#'   `readRDS("inst/extdata/compiled_indicators.rds")`.
 #' @param tolerance Non-negative number, default `0.001`. How much a published
 #'   value may move and still count as `"Same"`; see Details. Raise it to ignore
 #'   small revisions, set it to 0 to flag every difference.
@@ -77,11 +96,6 @@ vintage_statuses <- c(
 #'   [db_variables]. It only labels variables (it does not filter them):
 #'   family-average columns (`<family_var>_avg`) are labelled with their family,
 #'   and variables not found in it get `NA` labels.
-#' @param labels Named character vector with elements `previous` and `latest`,
-#'   the names shown for the two vintages in every output. By default, a vintage
-#'   loaded with [load_vintage()] is named after its git reference, date and
-#'   commit (e.g. `"origin/main @ 2025-12-09 (9e2d4a2)"`), and any other is
-#'   named `"Previous"` / `"Latest"`.
 #' @param x A `vintage_comparison` object (for `print()`).
 #' @param ... Unused; for compatibility with the `print()` generic.
 #'
@@ -108,7 +122,8 @@ vintage_statuses <- c(
 #'       `family_name`, with `variables` (number of variables) and the same
 #'       count and share columns as `variables`.}
 #'     \item{cells}{Tibble, one row per cell whose status is not `"Same"`:
-#'       the key columns, `country_name` (if either vintage has it), `variable`,
+#'       `country_code`, `country_name` (if either vintage has it), `year`,
+#'       `variable`,
 #'       `var_name`, `status`, `previous` and `latest` values, `change`
 #'       (`latest - previous`) and `pct_change` (in %). Sorted by status, then
 #'       changes from a published 0 first, then by absolute percentage change,
@@ -149,170 +164,47 @@ vintage_statuses <- c(
 #' @export
 compare_vintages <- function(previous,
                              latest,
-                             country_col = "country_code",
-                             year_col    = "year",
-                             tolerance   = 0.001,
-                             metadata    = cliaretl::db_variables,
-                             labels      = c(previous = vintage_label(previous, "Previous"),
-                                             latest   = vintage_label(latest, "Latest"))) {
-  # Check both vintages have the key columns and one row per country-year
-  key_cols <- c(country_col, year_col)
-  check_vintage(previous, key_cols, "previous")
-  check_vintage(latest, key_cols, "latest")
+                             tolerance = 0.001,
+                             metadata  = cliaretl::db_variables) {
+  # 1. Check both vintages have country_code and year, one row per pair
+  check_vintage(previous, "previous")
+  check_vintage(latest, "latest")
 
-  # Variables to compare: numeric columns present in both vintages. The last
-  # year of the previous vintage separates backfilled from new-period additions
-  numeric_vars <- function(df) {
-    setdiff(names(df)[vapply(df, is.numeric, logical(1))], key_cols)
-  }
+  # 2. Decide what to compare: numeric columns present in both vintages. The
+  #    previous vintage's last year separates backfilled from new-period values
   previous_vars <- numeric_vars(previous)
   latest_vars   <- numeric_vars(latest)
   common_vars   <- intersect(previous_vars, latest_vars)
-  last_year     <- max(previous[[year_col]], na.rm = TRUE)
+  last_year     <- max(previous$year, na.rm = TRUE)
 
-  # Reshape a vintage to one row per country-year-variable cell, keeping only
-  # cells that have a value
-  to_long <- function(df, values_to) {
-    df |>
-      dplyr::select(dplyr::all_of(c(key_cols, common_vars))) |>
-      tidyr::pivot_longer(
-        -dplyr::all_of(key_cols),
-        names_to = "variable", values_to = values_to, values_drop_na = TRUE
-      )
-  }
+  # Names shown for the two vintages in every output: the label recorded by
+  # load_vintage() if there is one, otherwise "Previous" / "Latest"
+  labels <- c(
+    previous = vintage_label(previous, "Previous"),
+    latest   = vintage_label(latest, "Latest")
+  )
 
-  # Line up every cell valued in either vintage and give it a status. Rules are
-  # checked top to bottom and the first match wins. (`.data$x` refers to column
-  # x of the table being worked on.)
-  cells <- dplyr::full_join(
-    to_long(previous, "previous"),
-    to_long(latest, "latest"),
-    by = c(key_cols, "variable")
-  ) |>
-    dplyr::mutate(
-      change     = .data$latest - .data$previous,
-      pct_change = dplyr::if_else(.data$previous != 0, 100 * .data$change / abs(.data$previous), NA_real_),
-      status     = dplyr::case_when(
-        is.na(.data$latest) ~ "Dropped",
-        is.na(.data$previous) & .data[[year_col]] > last_year ~ "Added (new period)",
-        is.na(.data$previous) ~ "Added (backfilled)",
-        abs(.data$change) <= tolerance * pmax(abs(.data$previous), 1) ~ "Same",
-        TRUE ~ "Revised"
-      ),
-      status = factor(.data$status, levels = vintage_statuses)
-    )
-
-  # Name, family and source of each compared variable
+  # 3. Give every country-year-variable cell a status, then label variables
+  cells      <- classify_cells(previous, latest, common_vars, last_year, tolerance)
   var_labels <- vintage_variable_labels(common_vars, metadata)
+  variables  <- summarise_variables(cells, var_labels)
 
-  # Per-variable table: cell counts by status, size of revisions, and shares
-  # of published cells
-  variables <- cells |>
-    dplyr::count(.data$variable, .data$status, .drop = FALSE) |>
-    tidyr::pivot_wider(names_from = "status", values_from = "n", values_fill = 0) |>
-    dplyr::left_join(
-      cells |>
-        dplyr::filter(.data$status == "Revised") |>
-        dplyr::summarise(
-          median_abs_pct_change = stats::median(abs(.data$pct_change), na.rm = TRUE),
-          max_abs_change        = max(abs(.data$change)),
-          .by = "variable"
-        ),
-      by = "variable"
-    ) |>
-    dplyr::right_join(var_labels, by = "variable") |>
-    # variables with no values in either vintage have no cells to count
-    # (`\(x)` is shorthand for `function(x)`)
-    dplyr::mutate(dplyr::across(dplyr::all_of(vintage_statuses), \(x) dplyr::coalesce(x, 0L))) |>
-    add_vintage_shares() |>
-    dplyr::relocate("variable", "var_name", "family_name", "source") |>
-    dplyr::arrange(dplyr::desc(.data$Dropped), dplyr::desc(.data$Revised))
-
-  # Total the per-variable counts by a grouping column (source or family)
-  roll_up <- function(group) {
-    variables |>
-      dplyr::summarise(
-        variables = dplyr::n(),
-        dplyr::across(dplyr::all_of(vintage_statuses), sum),
-        .by = dplyr::all_of(group)
-      ) |>
-      add_vintage_shares() |>
-      dplyr::arrange(dplyr::desc(.data$Dropped), dplyr::desc(.data$Revised))
-  }
-
-  # Overall counts by status; shares only for the published statuses
-  summary <- cells |>
-    dplyr::count(.data$status, .drop = FALSE) |>
-    dplyr::mutate(
-      pct_of_published = dplyr::if_else(
-        .data$status %in% c("Same", "Revised", "Dropped"),
-        100 * .data$n / sum(.data$n[.data$status %in% c("Same", "Revised", "Dropped")]),
-        NA_real_
-      )
-    )
-
-  # Variables, countries and years found in only one vintage
-  structure_tbl <- dplyr::bind_rows(
-    vintage_diff("Variable", previous_vars, latest_vars, labels),
-    vintage_diff("Country", previous[[country_col]], latest[[country_col]], labels),
-    vintage_diff("Year", previous[[year_col]], latest[[year_col]], labels)
-  )
-
-  # Country names for the cell list, preferring the latest vintage's spelling
-  country_names <- dplyr::bind_rows(
-    latest |> dplyr::select(dplyr::any_of(c(country_col, "country_name"))),
-    previous |> dplyr::select(dplyr::any_of(c(country_col, "country_name")))
-  ) |>
-    dplyr::distinct(.data[[country_col]], .keep_all = TRUE)
-
-  # Cell list: everything that is not "Same", labelled and ordered for review
-  cells_out <- cells |>
-    dplyr::filter(.data$status != "Same") |>
-    dplyr::left_join(country_names, by = country_col) |>
-    dplyr::left_join(var_labels |> dplyr::select("variable", "var_name"), by = "variable") |>
-    dplyr::select(
-      dplyr::any_of(c(country_col, "country_name")), dplyr::all_of(year_col),
-      "variable", "var_name", "status", "previous", "latest", "change", "pct_change"
-    ) |>
-    # largest relative changes first; changes from a published 0 have no
-    # percentage (infinite) so they lead, ordered by absolute change
-    dplyr::arrange(
-      .data$status,
-      dplyr::desc(is.na(.data$pct_change) & !is.na(.data$change) & .data$change != 0),
-      dplyr::desc(abs(.data$pct_change)),
-      dplyr::desc(abs(.data$change))
-    )
-
-  # Record of what was compared and how
-  about <- tibble::tibble(
-    item = c(
-      "Run date", "Previous vintage", "Latest vintage",
-      "Previous: rows x columns", "Latest: rows x columns",
-      "Previous: years", "Latest: years",
-      "Variables compared", "Tolerance"
-    ),
-    value = c(
-      format(Sys.Date()), labels[["previous"]], labels[["latest"]],
-      paste(nrow(previous), "x", ncol(previous)), paste(nrow(latest), "x", ncol(latest)),
-      paste(range(previous[[year_col]]), collapse = "-"),
-      paste(range(latest[[year_col]]), collapse = "-"),
-      as.character(length(common_vars)),
-      paste0("|latest - previous| <= ", tolerance, " x max(|previous|, 1)")
-    )
-  )
-
-  # Bundle everything as a "vintage_comparison" object (the class lets
-  # print() show a summary instead of the raw list)
+  # 4. Bundle the tables as a "vintage_comparison" object (the class lets
+  #    print() show a summary instead of the raw list)
   structure(
     list(
-      about      = about,
-      summary    = summary,
-      structure  = structure_tbl,
-      variables  = variables,
-      by_source  = roll_up("source"),
-      by_family  = roll_up("family_name"),
-      cells      = cells_out,
-      settings   = list(tolerance = tolerance, last_year = last_year, labels = labels)
+      about     = describe_comparison(previous, latest, labels, length(common_vars), tolerance),
+      summary   = summarise_statuses(cells),
+      structure = dplyr::bind_rows(
+        vintage_diff("Variable", previous_vars, latest_vars, labels),
+        vintage_diff("Country", previous$country_code, latest$country_code, labels),
+        vintage_diff("Year", previous$year, latest$year, labels)
+      ),
+      variables = variables,
+      by_source = roll_up_variables(variables, "source"),
+      by_family = roll_up_variables(variables, "family_name"),
+      cells     = list_changed_cells(cells, previous, latest, var_labels),
+      settings  = list(tolerance = tolerance, last_year = last_year, labels = labels)
     ),
     class = "vintage_comparison"
   )
@@ -518,23 +410,22 @@ write_vintage_workbook <- function(comparison, path) {
 #' Check that a vintage can be compared
 #'
 #' @param df The vintage (data frame).
-#' @param key_cols Character, the country and year column names.
 #' @param arg Character, the argument name to cite in errors (`"previous"` or
 #'   `"latest"`).
-#' @return `df`, invisibly. Stops if a key column is missing or a country-year
-#'   pair appears more than once (the comparison matches cells on those keys,
-#'   so duplicates would make the match ambiguous).
+#' @return `df`, invisibly. Stops if `country_code` or `year` is missing or a
+#'   country-year pair appears more than once (the comparison matches cells on
+#'   those keys, so duplicates would make the match ambiguous).
 #' @noRd
-check_vintage <- function(df, key_cols, arg) {
+check_vintage <- function(df, arg) {
   # Both key columns must be present
-  missing_cols <- setdiff(key_cols, names(df))
+  missing_cols <- setdiff(vintage_keys, names(df))
   if (length(missing_cols) > 0) {
     stop("`", arg, "` is missing key column(s): ", paste(missing_cols, collapse = ", "), call. = FALSE)
   }
 
   # Each country-year pair must appear only once
-  if (anyDuplicated(df[key_cols]) > 0) {
-    stop("`", arg, "` has duplicated ", paste(key_cols, collapse = "-"), " pairs.", call. = FALSE)
+  if (anyDuplicated(df[vintage_keys]) > 0) {
+    stop("`", arg, "` has duplicated ", paste(vintage_keys, collapse = "-"), " pairs.", call. = FALSE)
   }
   invisible(df)
 }
@@ -577,6 +468,192 @@ vintage_variable_labels <- function(variables, metadata) {
     )
 }
 
+#' Numeric columns of a vintage, other than `country_code` and `year`
+#'
+#' @param df A vintage (data frame).
+#' @return Character vector of column names, in the order they appear in `df`.
+#' @noRd
+numeric_vars <- function(df) {
+  setdiff(names(df)[vapply(df, is.numeric, logical(1))], vintage_keys)
+}
+
+#' Line up the two vintages cell by cell and give each cell a status
+#'
+#' @param previous,latest The two vintages (data frames).
+#' @param variables Character, the variables to compare.
+#' @param last_year Number, the previous vintage's last year.
+#' @param tolerance Number, the tolerance for `"Same"`.
+#' @return Tibble, one row per cell valued in either vintage: `country_code`,
+#'   `year`, `variable`, `previous`, `latest`, `change`, `pct_change` and
+#'   `status` (factor with levels `vintage_statuses`).
+#' @noRd
+classify_cells <- function(previous, latest, variables, last_year, tolerance) {
+  # Wide to long: one row per country_code-year-variable cell, with the value
+  # in a column named after the vintage. Empty cells are dropped, so a missing
+  # row after the join below means "no value in that vintage"
+  to_long <- function(df, values_to) {
+    df |>
+      dplyr::select(dplyr::all_of(c(vintage_keys, variables))) |>
+      tidyr::pivot_longer(
+        dplyr::all_of(variables),
+        names_to = "variable", values_to = values_to, values_drop_na = TRUE
+      )
+  }
+
+  # A full join keeps cells valued in only one vintage (dropped or added).
+  # Status rules are checked top to bottom and the first match wins
+  dplyr::full_join(
+    to_long(previous, "previous"),
+    to_long(latest, "latest"),
+    by = c(vintage_keys, "variable")
+  ) |>
+    dplyr::mutate(
+      change     = .data$latest - .data$previous,
+      pct_change = dplyr::if_else(.data$previous != 0, 100 * .data$change / abs(.data$previous), NA_real_),
+      status     = dplyr::case_when(
+        is.na(.data$latest) ~ "Dropped",
+        is.na(.data$previous) & .data$year > last_year ~ "Added (new period)",
+        is.na(.data$previous) ~ "Added (backfilled)",
+        abs(.data$change) <= tolerance * pmax(abs(.data$previous), 1) ~ "Same",
+        TRUE ~ "Revised"
+      ),
+      status = factor(.data$status, levels = vintage_statuses)
+    )
+}
+
+#' Per-variable table: cell counts by status, size of revisions and shares
+#'
+#' @param cells Output of `classify_cells()`.
+#' @param var_labels Output of `vintage_variable_labels()`.
+#' @return Tibble, one row per compared variable; see the `variables` element
+#'   in `compare_vintages()`.
+#' @noRd
+summarise_variables <- function(cells, var_labels) {
+  # Number of cells per variable and status, one column per status
+  status_counts <- cells |>
+    dplyr::count(.data$variable, .data$status, .drop = FALSE) |>
+    tidyr::pivot_wider(names_from = "status", values_from = "n", values_fill = 0)
+
+  # How large the revisions were, over revised cells only
+  revision_size <- cells |>
+    dplyr::filter(.data$status == "Revised") |>
+    dplyr::summarise(
+      median_abs_pct_change = stats::median(abs(.data$pct_change), na.rm = TRUE),
+      max_abs_change        = max(abs(.data$change)),
+      .by = "variable"
+    )
+
+  # right_join keeps every compared variable, even one with no values in
+  # either vintage (no cells to count): its counts are set to 0
+  status_counts |>
+    dplyr::left_join(revision_size, by = "variable") |>
+    dplyr::right_join(var_labels, by = "variable") |>
+    dplyr::mutate(dplyr::across(dplyr::all_of(vintage_statuses), \(x) dplyr::coalesce(x, 0L))) |>
+    add_vintage_shares() |>
+    dplyr::relocate("variable", "var_name", "family_name", "source") |>
+    dplyr::arrange(dplyr::desc(.data$Dropped), dplyr::desc(.data$Revised))
+}
+
+#' Total the per-variable table by a grouping column
+#'
+#' @param variables Output of `summarise_variables()`.
+#' @param group Character, the column to group by (`"source"` or
+#'   `"family_name"`).
+#' @return Tibble, one row per group: `variables` (number of variables), the
+#'   status counts and the shares from `add_vintage_shares()`.
+#' @noRd
+roll_up_variables <- function(variables, group) {
+  variables |>
+    dplyr::summarise(
+      variables = dplyr::n(),
+      dplyr::across(dplyr::all_of(vintage_statuses), sum),
+      .by = dplyr::all_of(group)
+    ) |>
+    add_vintage_shares() |>
+    dplyr::arrange(dplyr::desc(.data$Dropped), dplyr::desc(.data$Revised))
+}
+
+#' Overall cell counts by status
+#'
+#' @param cells Output of `classify_cells()`.
+#' @return Tibble, one row per status: `status`, `n` and `pct_of_published`
+#'   (`NA` for the two added statuses).
+#' @noRd
+summarise_statuses <- function(cells) {
+  cells |>
+    dplyr::count(.data$status, .drop = FALSE) |>
+    dplyr::mutate(
+      pct_of_published = dplyr::if_else(
+        .data$status %in% published_statuses,
+        100 * .data$n / sum(.data$n[.data$status %in% published_statuses]),
+        NA_real_
+      )
+    )
+}
+
+#' List every cell that is not "Same", labelled and ordered for review
+#'
+#' @param cells Output of `classify_cells()`.
+#' @param previous,latest The two vintages, used for country names.
+#' @param var_labels Output of `vintage_variable_labels()`.
+#' @return Tibble; see the `cells` element in `compare_vintages()`.
+#' @noRd
+list_changed_cells <- function(cells, previous, latest, var_labels) {
+  # Country names, preferring the latest vintage's spelling (distinct() keeps
+  # the first row per country, and the latest vintage comes first)
+  name_cols <- c("country_code", "country_name")
+  country_names <- dplyr::bind_rows(
+    latest |> dplyr::select(dplyr::any_of(name_cols)),
+    previous |> dplyr::select(dplyr::any_of(name_cols))
+  ) |>
+    dplyr::distinct(.data$country_code, .keep_all = TRUE)
+
+  cells |>
+    dplyr::filter(.data$status != "Same") |>
+    dplyr::left_join(country_names, by = "country_code") |>
+    dplyr::left_join(var_labels |> dplyr::select("variable", "var_name"), by = "variable") |>
+    # A change from a published 0 has no percentage (it would be infinite).
+    # Flag those rows so they lead each status, ahead of the largest
+    # percentage changes
+    dplyr::mutate(from_zero = is.na(.data$pct_change) & !is.na(.data$change) & .data$change != 0) |>
+    dplyr::arrange(
+      .data$status,
+      dplyr::desc(.data$from_zero),
+      dplyr::desc(abs(.data$pct_change)),
+      dplyr::desc(abs(.data$change))
+    ) |>
+    dplyr::select(
+      dplyr::any_of(name_cols), "year",
+      "variable", "var_name", "status", "previous", "latest", "change", "pct_change"
+    )
+}
+
+#' Record of what was compared and how
+#'
+#' @param previous,latest The two vintages.
+#' @param labels Named character vector with `previous` and `latest` labels.
+#' @param n_compared Integer, the number of variables compared.
+#' @param tolerance Number, the tolerance for `"Same"`.
+#' @return Tibble with character columns `item` and `value`.
+#' @noRd
+describe_comparison <- function(previous, latest, labels, n_compared, tolerance) {
+  dims  <- function(df) paste(nrow(df), "x", ncol(df))
+  years <- function(df) paste(range(df$year), collapse = "-")
+
+  tibble::tribble(
+    ~item,                      ~value,
+    "Run date",                 format(Sys.Date()),
+    "Previous vintage",         labels[["previous"]],
+    "Latest vintage",           labels[["latest"]],
+    "Previous: rows x columns", dims(previous),
+    "Latest: rows x columns",   dims(latest),
+    "Previous: years",          years(previous),
+    "Latest: years",            years(latest),
+    "Variables compared",       as.character(n_compared),
+    "Tolerance",                paste0("|latest - previous| <= ", tolerance, " x max(|previous|, 1)")
+  )
+}
+
 #' Add published-cell totals and shares to a table of status counts
 #'
 #' @param df Data frame with one integer column per status (named as in
@@ -586,17 +663,17 @@ vintage_variable_labels <- function(variables, metadata) {
 #'   `published` is 0) and `added` (both added statuses).
 #' @noRd
 add_vintage_shares <- function(df) {
-  # Published cells, the base for every share, and total additions
+  # Share of published cells, in %; NA when nothing was published
+  share <- function(n, published) dplyr::if_else(published > 0, 100 * n / published, NA_real_)
+
   df |>
     dplyr::mutate(
-      published     = .data$Same + .data$Revised + .data$Dropped,
-      pct_same      = 100 * .data$Same / .data$published,
-      pct_revised   = 100 * .data$Revised / .data$published,
-      pct_dropped   = 100 * .data$Dropped / .data$published,
-      added         = .data$`Added (backfilled)` + .data$`Added (new period)`
-    ) |>
-    # a variable with no published cells gives 0/0 (NaN): report it as NA
-    dplyr::mutate(dplyr::across(dplyr::starts_with("pct_"), \(x) dplyr::if_else(is.nan(x), NA_real_, x)))
+      published   = .data$Same + .data$Revised + .data$Dropped,
+      pct_same    = share(.data$Same, .data$published),
+      pct_revised = share(.data$Revised, .data$published),
+      pct_dropped = share(.data$Dropped, .data$published),
+      added       = .data$`Added (backfilled)` + .data$`Added (new period)`
+    )
 }
 
 #' List values found in only one of two vintages

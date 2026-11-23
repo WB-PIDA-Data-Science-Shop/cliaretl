@@ -22,21 +22,11 @@ library(janitor)
 
 # read-in data ------------------------------------------------------------
 
-# Extracted indicators dfs
-debt_transparency_indicators <- cliaretl::debt_transparency
-wdi_wb_indicators <- cliaretl::wdi_indicators
-pefa_assessments_indicators <- cliaretl::pefa_assessments
-romelli_indicators <- cliaretl::romelli
-vdem_data_indicators <- cliaretl::vdem_data
-gfdb_indicators <- cliaretl::gfdb
-heritage_indicators <- cliaretl::heritage
-pmr_indicators <- cliaretl::pmr
-epl_indicators <- cliaretl::epl
-d30_indicators <- cliaretl::d360_efi_data
-fraser_indicators <- cliaretl::fraser
-aspire_indicators <- cliaretl::aspire
-wbl_indicators <- cliaretl::wbl_data
-scorecard_indicators <- cliaretl::scorecard
+# Every lazyloaded source dataset in data/, named by file (e.g.
+# `wdi_indicators`). Pipeline outputs and reference tables are left out (see
+# lazyload_exclusions() in R/etl_source_funs.R). A new source is picked up
+# automatically once its .rda is saved to data/.
+lazyloads <- read_lazyloads(here("data"))
 
 # Dictionary df
 db_variables_2025 <- readr::read_rds(
@@ -75,19 +65,14 @@ db_variables_2025 <- db_variables_2025 |>
       is_wbl,
       "No",
       benchmark_dynamic_family_aggregate
-    ),
-    etl_source = if_else(
-      is_wbl,
-      "wb_wbl",
-      etl_source
     )
   ) |>
   select(-is_wbl)
 
 # print out the changes made
-db_variables_2025 |> 
+db_variables_2025 |>
 filter(str_starts(variable, "wb_wbl_")) |>
-  select(variable, benchmark_dynamic_indicator, benchmark_dynamic_family_aggregate, etl_source)
+  select(variable, benchmark_dynamic_indicator, benchmark_dynamic_family_aggregate)
 
 # 1.2. B-Ready indicators: add pillars 1-3 as static benchmarked
 db_variables_2025 <- db_variables_2025 |>
@@ -125,7 +110,7 @@ db_variables_2025 <- db_variables_2025 |>
       benchmark_dynamic_indicator = rep("No", 3),
       benchmark_dynamic_family_aggregate = rep("No", 3),
       rank_id = c(21, 22, 23),
-      etl_source = rep("bready", 3)
+      etl_source = NA_character_ # assigned by map_lazyload_data() in section 3
     )
   )
 
@@ -141,167 +126,15 @@ db_variables_2025 <- db_variables_2025 |>
 # b. Is the indicator irrelevant to the current indicator framework?
 #    If yes, consider removing it from the database to maintain consistency with `db_variables`.
 
-dataframes <- list(
-  debt_transparency_indicators = debt_transparency,
-  wdi_wb_indicators = wdi_indicators,
-  pefa_assessments_indicators = pefa_assessments,
-  romelli_indicators = romelli,
-  vdem_data_indicators = vdem_data,
-  gfdb_indicators = gfdb,
-  heritage_indicators = heritage,
-  pmr_indicators = pmr,
-  epl_indicators = epl,
-  d30_indicators = d360_efi_data,
-  fraser_indicators = fraser,
-  aspire_indicators = aspire,
-  wbl_indicators = wbl_data,
-  scorecard_indicators = scorecard,
-  spi_indicators = spi,
-  wjp_indicators = wjp,
-  bready = bready
-)
+# Flag dataset columns that are not in the dictionary, for every lazyloaded
+# source. `source` records the dataset name (e.g. "wdi_indicators").
+all_mismatched_vars <- imap(
+  lazyloads,
+  \(df, name) flag_mismatched_indicators(df, db_variables_2025)[[1]] |>
+    mutate(source = name)
+) |>
+  list_rbind()
 
-# Apply the `flag_mismatched_indicators` function across all and bind results
-all_mismatched_vars <- map_dfr(
-  #From list to data frame
-  names(dataframes),
-  function(name) {
-    mismatched_df <- flag_mismatched_indicators(
-      dataframes[[name]],
-      db_variables_2025
-    )[[1]]
-    mismatched_df |> mutate(source = name)
-  }
-)
-
-# b. Missing Indicators ---------------------------------------------------
-
-# Here we are interested in flagging those variables expected but not present.
-
-# First, anchor the data frame to the source to subset db_variables to the indicators of
-# interest with the following object:
-
-# ... by source -----------------------------------------------------------
-
-dictionary_identifiers <- db_variables_2025 |>
-  mutate(
-    variable = case_when(
-      str_starts(variable, "wdi_") ~ "wdi_",
-      ### To be updated in the extraction
-      TRUE ~ str_extract(variable, "^([^_]+_[^_]+)")
-    )
-  ) |>
-  distinct(variable, source)
-
-# Then call the function to each of the data frames
-wdi_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  wdi_indicators,
-  source_type = ("WDI")
-)
-
-# Important WDI note: indicators come also from d360 API pull
-d360_cols <- colnames(d360_efi_data)
-
-wdi_missing_df <- wdi_missing_df |>
-  mutate(is_present = variable %in% d360_cols)
-# This should be empty:
-wdi_missing_df |> filter(!is_present)
-
-vdem_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  vdem_data_indicators,
-  source_type = "V-Dem, Variety of Democracy database"
-)
-
-pefa_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  pefa_assessments_indicators,
-  source_type = "Public Expenditure Financial Accountability"
-)
-
-pmr_oecd_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  pmr_indicators,
-  source_type = "OECD Product Market Regulation Database"
-)
-
-epl_oecd_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  epl_indicators,
-  source_type = "OECD"
-)
-
-gfdb_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  gfdb_indicators,
-  source_type = "wb_gfdb"
-)
-
-heritage_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  heritage_indicators,
-  source_type = "Heritage Index of Economic Freedom"
-)
-
-fraser_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  fraser_indicators,
-  source_type = "Fraser Institute"
-)
-
-aspire_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  aspire_indicators,
-  source_type = "ASPIRE"
-)
-
-wbl_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  wbl_indicators,
-  source_type = "CLIAR"
-)
-
-# Add new data sets
-
-sc_missing_df <- flag_missing_indicators(
-  db_variables_2025,
-  scorecard_indicators,
-  source_type = "World Bank Corporate Scorecard"
-)
-
-# spi_missing_df <- flag_missing_indicators(
-#   db_variables_2025,
-#   spi_indicators,
-#   source_type = "SPI"
-# )
-
-# wjp_missing_df <- flag_missing_indicators(
-#   db_variables_2025,
-#   wjp_indicators,
-#   source_type = "WJP"
-# )
-
-scorecard_indicators <- scorecard
-spi_indicators <- spi
-wjp_indicators <- wjp
-
-# Combine them into a single dataframe
-all_missing_vars <- bind_rows(
-  vdem_missing_df,
-  # Ommiting WDI
-  pefa_missing_df,
-  pmr_oecd_missing_df,
-  epl_oecd_missing_df,
-  gfdb_missing_df,
-  heritage_missing_df,
-  fraser_missing_df,
-  aspire_missing_df,
-  wbl_missing_df,
-  sc_missing_df 
-)
-
-# flag mismatched indicators
 if (nrow(all_mismatched_vars) > 0) {
   message(
     "⚠️ Issue detected:
@@ -312,15 +145,13 @@ There are mismatched indicators between extracted data and the dictionary."
   message("✅ All extracted indicators match the dictionary definitions.")
 }
 
-if (nrow(all_missing_vars) > 0) {
-  message(
-    "⚠️ Issue detected:
-There are missing indicators not found in the extracted data."
-  )
-  print(all_missing_vars)
-} else {
-  message("✅ All expected indicators are present in the extracted data.")
-}
+# b. Missing Indicators ---------------------------------------------------
+
+# Dictionary variables that are in no lazyloaded dataset are reported by
+# map_lazyload_data() in section 3, as a warning listing each one. Because
+# etl_source is now derived from the data, a variable is "missing" only if no
+# dataset provides it at all (e.g. WDI variables pulled via d360_efi_data are
+# found there and are not missing).
 
 
 # 3. Add important attributes to db_variables ---------------------------------------------------
@@ -402,6 +233,12 @@ db_variables_2026 <- db_variables_2026 |>
   group_by(family_var) |>
   mutate(rank_id = row_number()) |>
   ungroup()
+
+# Assign etl_source from the lazyloaded dataset that holds each variable.
+# Variables in no dataset (e.g. provisional RISE indicators) stay NA and are
+# listed in a warning.
+db_variables_2026 <- db_variables_2026 |>
+  map_lazyload_data(lazyloads = lazyloads)
 
 # Create a family_var column to link family-level vars
 family_level_vars <- db_variables_2026 |>

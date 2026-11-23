@@ -2,22 +2,22 @@
 % Please edit documentation in R/vintage_history.R
 \name{list_vintages}
 \alias{list_vintages}
-\title{List the past vintages of the compiled indicators in git}
+\title{List the past vintages of the compiled indicators on GitHub}
 \usage{
-list_vintages(ref = "origin/main", paths = vintage_paths, repo = ".")
+list_vintages(ref = "main", paths = vintage_paths, repo = vintage_repo())
 }
 \arguments{
 \item{ref}{Character, the branch (or other git reference) whose history to
-read. Default \code{"origin/main"}: your clone's copy of the published branch.
-Use e.g. \code{"main"} or a feature branch name to read another history.}
+read. Default \code{"main"}: GitHub's published branch. Any branch on GitHub
+can be named the same way.}
 
 \item{paths}{Character vector of repository paths at which the panel has
 been stored. The default covers every location the panel has used; extend
 it only if the panel moves again.}
 
-\item{repo}{Character, path to a local clone of the cliaretl repository.
-Default \code{"."}, the working directory (the package root when working on
-cliaretl in RStudio).}
+\item{repo}{Character, path to the git repository to read. Default
+\code{\link[=vintage_repo]{vintage_repo()}}: an up-to-date copy of the cliaretl repository on GitHub.
+Use \code{"."} to read the local clone in your working directory.}
 }
 \value{
 A tibble with one row per change to the panel, newest first:
@@ -28,8 +28,8 @@ panel never appears in that history.
 }
 \description{
 Answers \emph{"which versions of the compiled indicators can I go back to?"} by
-listing every change to the panel in the history of \code{ref} (by default the
-published \code{main} branch), wherever the panel was stored at the time.
+listing every change to the panel in the history of \code{ref} (by default
+GitHub's \code{main} branch), wherever the panel was stored at the time.
 
 Each row is one commit on \code{ref} that added or changed the panel. Its \code{date}
 is the day that change reached \code{ref} (for a pull request, the day it was
@@ -44,20 +44,22 @@ version back.
 \code{inst/extdata/compiled_indicators.rds} (February 2026 onwards). All are
 searched by default.
 
-\strong{History, not GitHub.} Only commits on the branch itself are listed (git's
+\strong{Read from GitHub.} By default the history is read from GitHub as it is
+when the function runs (see \code{\link[=vintage_repo]{vintage_repo()}}), not from your computer. Pass
+\code{repo = "."} to read your local clone instead, e.g. for a branch you have
+not pushed.
+
+\strong{Merges only.} Only commits on the branch itself are listed (git's
 "first-parent" history), so each pull request appears once, as its merge
-commit; the commits inside it are not listed separately. The list is read
-from your local clone, so it only knows what your clone knows: run
-\verb{git fetch} first to include the latest merges on GitHub. Deletions are not
+commit; the commits inside it are not listed separately. Deletions are not
 listed, and nothing exists before the first version reached \code{main}
 (16 June 2025).
 
-\strong{Errors.} Stops if git cannot be found, \code{repo} is not a git repository, or
-\code{ref} does not exist.
+\strong{Errors.} Stops if git cannot be found, GitHub cannot be reached, \code{repo}
+is not a git repository, or \code{ref} does not exist.
 }
 \examples{
-\dontshow{if (nzchar(Sys.which("git")) && file.exists("inst/extdata/compiled_indicators.rds")) withAutoprint(\{ # examplesIf}
-# run from the root of a cliaretl clone
+\dontshow{if (nzchar(Sys.which("git")) && interactive()) withAutoprint(\{ # examplesIf}
 list_vintages()
 \dontshow{\}) # examplesIf}
 }
@@ -67,6 +69,7 @@ list_vintages()
 Other vintage comparison:
 \code{\link[=compare_vintages]{compare_vintages()}},
 \code{\link[=load_vintage]{load_vintage()}},
+\code{\link[=vintage_repo]{vintage_repo()}},
 \code{\link[=write_vintage_comparison]{write_vintage_comparison()}}
 }
 \concept{vintage comparison}

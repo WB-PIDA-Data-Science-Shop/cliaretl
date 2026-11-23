@@ -77,6 +77,7 @@ basename(paths)
 Other vintage comparison:
 \code{\link[=compare_vintages]{compare_vintages()}},
 \code{\link[=list_vintages]{list_vintages()}},
-\code{\link[=load_vintage]{load_vintage()}}
+\code{\link[=load_vintage]{load_vintage()}},
+\code{\link[=vintage_repo]{vintage_repo()}}
 }
 \concept{vintage comparison}

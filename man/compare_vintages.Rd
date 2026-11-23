@@ -8,25 +8,19 @@
 compare_vintages(
   previous,
   latest,
-  country_col = "country_code",
-  year_col = "year",
   tolerance = 0.001,
-  metadata = cliaretl::db_variables,
-  labels = c(previous = vintage_label(previous, "Previous"), latest =
-    vintage_label(latest, "Latest"))
+  metadata = cliaretl::db_variables
 )
 
 \method{print}{vintage_comparison}(x, ...)
 }
 \arguments{
-\item{previous}{A data frame with one row per country-year: the vintage that
-is already published, e.g. from \code{\link[=load_vintage]{load_vintage()}}.}
+\item{previous}{A data frame with one row per \code{country_code}-\code{year}: the
+vintage that is already published, e.g. from \code{\link[=load_vintage]{load_vintage()}}.}
 
-\item{latest}{A data frame with one row per country-year: the vintage about
-to be published, e.g. \code{readRDS("inst/extdata/compiled_indicators.rds")}.}
-
-\item{country_col, year_col}{Character, the names of the country and year key
-columns. Default \code{"country_code"} and \code{"year"}, as in the compiled panel.}
+\item{latest}{A data frame with one row per \code{country_code}-\code{year}: the
+vintage about to be published, e.g.
+\code{readRDS("inst/extdata/compiled_indicators.rds")}.}
 
 \item{tolerance}{Non-negative number, default \code{0.001}. How much a published
 value may move and still count as \code{"Same"}; see Details. Raise it to ignore
@@ -37,12 +31,6 @@ small revisions, set it to 0 to flag every difference.}
 \link{db_variables}. It only labels variables (it does not filter them):
 family-average columns (\verb{<family_var>_avg}) are labelled with their family,
 and variables not found in it get \code{NA} labels.}
-
-\item{labels}{Named character vector with elements \code{previous} and \code{latest},
-the names shown for the two vintages in every output. By default, a vintage
-loaded with \code{\link[=load_vintage]{load_vintage()}} is named after its git reference, date and
-commit (e.g. \code{"origin/main @ 2025-12-09 (9e2d4a2)"}), and any other is
-named \code{"Previous"} / \code{"Latest"}.}
 
 \item{x}{A \code{vintage_comparison} object (for \code{print()}).}
 
@@ -72,7 +60,8 @@ largest first.}
 \code{family_name}, with \code{variables} (number of variables) and the same
 count and share columns as \code{variables}.}
 \item{cells}{Tibble, one row per cell whose status is not \code{"Same"}:
-the key columns, \code{country_name} (if either vintage has it), \code{variable},
+\code{country_code}, \code{country_name} (if either vintage has it), \code{year},
+\code{variable},
 \code{var_name}, \code{status}, \code{previous} and \code{latest} values, \code{change}
 (\code{latest - previous}) and \code{pct_change} (in \%). Sorted by status, then
 changes from a published 0 first, then by absolute percentage change,
@@ -107,10 +96,11 @@ an Excel workbook and a Word summary with \code{\link[=write_vintage_comparison]
 }
 \details{
 \strong{What is compared.} Only numeric columns present in both vintages, other
-than the two key columns, are compared cell by cell. Text columns (e.g.
-\code{country_name}, \code{region}) are ignored. Variables, countries and years present
-in only one vintage are listed in \code{structure} instead, so a renamed variable
-appears there as one variable removed and another added.
+than the key columns \code{country_code} and \code{year}, are compared cell by cell.
+Text columns (e.g. \code{country_name}, \code{region}) are ignored. Variables,
+countries and years present in only one vintage are listed in \code{structure}
+instead, so a renamed variable appears there as one variable removed and
+another added.
 
 \strong{Tolerance rule.} A published cell counts as \code{"Same"} when
 \code{abs(latest - previous) <= tolerance * max(abs(previous), 1)}. For values of
@@ -129,7 +119,12 @@ same). New period is decided by the year alone: a value for a year after the
 previous vintage's last year counts as \code{"Added (new period)"} even for a
 country that is new to the panel.
 
-\strong{Errors.} Stops if either vintage lacks \code{country_col} or \code{year_col}, or has
+\strong{Vintage names.} Every output names the two vintages. A vintage loaded
+with \code{\link[=load_vintage]{load_vintage()}} is named after its git reference, date and commit
+(e.g. \code{"main @ 2025-12-09 (9e2d4a2)"}); any other is named
+\code{"Previous"} / \code{"Latest"}.
+
+\strong{Errors.} Stops if either vintage lacks \code{country_code} or \code{year}, or has
 more than one row for the same country-year pair.
 }
 \examples{
@@ -162,6 +157,7 @@ comparison$cells     # the three cells that are not "Same"
 Other vintage comparison:
 \code{\link[=list_vintages]{list_vintages()}},
 \code{\link[=load_vintage]{load_vintage()}},
+\code{\link[=vintage_repo]{vintage_repo()}},
 \code{\link[=write_vintage_comparison]{write_vintage_comparison()}}
 }
 \concept{vintage comparison}

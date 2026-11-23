@@ -2,14 +2,14 @@
 % Please edit documentation in R/vintage_history.R
 \name{load_vintage}
 \alias{load_vintage}
-\title{Load a past vintage of the compiled indicators from git}
+\title{Load a past vintage of the compiled indicators from GitHub}
 \usage{
 load_vintage(
   date = NULL,
   commit = NULL,
-  ref = "origin/main",
+  ref = "main",
   paths = vintage_paths,
-  repo = "."
+  repo = vintage_repo()
 )
 }
 \arguments{
@@ -22,16 +22,16 @@ short) or any other git revision to load the panel from. When given, \code{ref}
 is ignored. Supply exactly one of \code{date} and \code{commit}.}
 
 \item{ref}{Character, the branch (or other git reference) whose history to
-read. Default \code{"origin/main"}: your clone's copy of the published branch.
-Use e.g. \code{"main"} or a feature branch name to read another history.}
+read. Default \code{"main"}: GitHub's published branch. Any branch on GitHub
+can be named the same way.}
 
 \item{paths}{Character vector of repository paths at which the panel has
 been stored. The default covers every location the panel has used; extend
 it only if the panel moves again.}
 
-\item{repo}{Character, path to a local clone of the cliaretl repository.
-Default \code{"."}, the working directory (the package root when working on
-cliaretl in RStudio).}
+\item{repo}{Character, path to the git repository to read. Default
+\code{\link[=vintage_repo]{vintage_repo()}}: an up-to-date copy of the cliaretl repository on GitHub.
+Use \code{"."} to read the local clone in your working directory.}
 }
 \value{
 A tibble: the panel, one row per country-year, exactly as stored at
@@ -43,9 +43,9 @@ brought that file onto the branch) and \code{label} (character, used by
 }
 \description{
 Answers \emph{"what did the compiled indicators look like on a given date?"} by
-reading the panel as it was on \code{ref} (by default the published \code{main}
-branch) at the end of \code{date}, or at a given \code{commit}, straight from git
-history. Pass the result to \code{\link[=compare_vintages]{compare_vintages()}} as \code{previous}.
+reading the panel as it was on \code{ref} (by default GitHub's \code{main} branch) at
+the end of \code{date}, or at a given \code{commit}, straight from git history. Pass
+the result to \code{\link[=compare_vintages]{compare_vintages()}} as \code{previous}.
 
 How the version is found:
 \enumerate{
@@ -56,21 +56,19 @@ day it was merged, not the day its commits were written.
 at that commit are candidates; if more than one does (e.g. in early 2026
 an outdated copy remained in \verb{data-raw/output/} next to the current one in
 \verb{inst/extdata/}), the one changed most recently is used.
-\item \strong{Read without touching your files.} The file is extracted from git to a
-temporary file and read (\code{.rds}, or the old \code{.csv.gz}); your working copy
-and current branch are left as they are.
+\item \strong{Read without touching your files.} The file is downloaded from git
+history to a temporary file and read (\code{.rds}, or the old \code{.csv.gz}); your
+working copy and current branch are left as they are.
 }
 
 A message reports which file and commit were used. The result carries a
 \code{"vintage"} attribute recording where it came from, which
-\code{\link[=compare_vintages]{compare_vintages()}} uses to label it, e.g.
-\code{"origin/main @ 2025-12-09 (9e2d4a2)"}.
+\code{\link[=compare_vintages]{compare_vintages()}} uses to label it, e.g. \code{"main @ 2025-12-09 (9e2d4a2)"}.
 }
 \details{
-\strong{Local clone.} Versions are read from your local clone, so it only knows
-what your clone knows: run \verb{git fetch} first to include the latest merges on
-GitHub. Nothing exists before the first version reached \code{main}
-(16 June 2025).
+\strong{Read from GitHub.} By default versions are read from GitHub as it is when
+the function runs (see \code{\link[=vintage_repo]{vintage_repo()}}), not from your computer. Nothing
+exists before the first version reached \code{main} (16 June 2025).
 
 \strong{Column types.} Versions stored as \code{.csv.gz} (August-September 2025) are
 read back from text, so column types are re-guessed (e.g. a column of whole
@@ -82,13 +80,12 @@ numbers comes back as integer); values are unaffected.
 \item \code{ref} has no commits on or before \code{date};
 \item none of \code{paths} exists at the resolved commit (e.g. a date before June
 2025);
-\item git cannot be found, \code{repo} is not a git repository, or \code{ref}/\code{commit}
-does not exist.
+\item git cannot be found, GitHub cannot be reached, \code{repo} is not a git
+repository, or \code{ref}/\code{commit} does not exist.
 }
 }
 \examples{
-\dontshow{if (nzchar(Sys.which("git")) && file.exists("inst/extdata/compiled_indicators.rds")) withAutoprint(\{ # examplesIf}
-# run from the root of a cliaretl clone
+\dontshow{if (nzchar(Sys.which("git")) && interactive()) withAutoprint(\{ # examplesIf}
 previous <- load_vintage("2025-12-31")
 attr(previous, "vintage")$label
 
@@ -102,6 +99,7 @@ compare_vintages(previous, readRDS("inst/extdata/compiled_indicators.rds"))
 Other vintage comparison:
 \code{\link[=compare_vintages]{compare_vintages()}},
 \code{\link[=list_vintages]{list_vintages()}},
+\code{\link[=vintage_repo]{vintage_repo()}},
 \code{\link[=write_vintage_comparison]{write_vintage_comparison()}}
 }
 \concept{vintage comparison}

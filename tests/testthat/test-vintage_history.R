@@ -5,7 +5,9 @@
 #   2026-02-01  inst/extdata/compiled_indicators.rds           (v4)
 #   2026-03-01  unrelated commit
 local_vintage_repo <- function() {
-  skip_if(!nzchar(getOption("cliaretl.git", Sys.which("git"))), "git not available")
+  # git_binary() also finds Git for Windows outside the PATH; it errors if
+  # git is nowhere to be found
+  skip_if(inherits(try(git_binary(), silent = TRUE), "try-error"), "git not available")
 
   repo <- tempfile("vintage repo ") # space in the path on purpose
   dir.create(repo)
@@ -88,4 +90,37 @@ test_that("load_vintage() validates its inputs", {
   expect_error(load_vintage(repo = repo), "exactly one")
   expect_error(load_vintage("2025-01-01", commit = "abc", repo = repo), "exactly one")
   expect_error(suppressMessages(load_vintage("2024-01-01", ref = "main", repo = repo)), "no commits")
+})
+
+test_that("vintage_repo() copies a remote and picks up its new commits on the next call", {
+  # The throwaway repo plays the part of GitHub. Copies made with
+  # --filter=blob:none over file:// need the source to allow filtering
+  remote <- local_vintage_repo()
+  run_git(remote, c("config", "uploadpack.allowFilter", "true"))
+  url  <- paste0("file:///", sub("^/", "", normalizePath(remote, winslash = "/")))
+  copy <- file.path(withr::local_tempdir(), "copy.git")
+
+  # First call: the copy has the remote's full history
+  vintage_repo(url, copy)
+  expect_equal(list_vintages(repo = copy), list_vintages(ref = "main", repo = remote))
+
+  # A new version reaches the remote's main after the copy was made...
+  saveRDS(tibble::tibble(country_code = "AAA", year = 2020, x = 5),
+          file.path(remote, "inst/extdata/compiled_indicators.rds"))
+  run_git(remote, c("-c", "user.name=Test", "-c", "user.email=t@example.com",
+                    "commit", "-q", "-am", "v5 after copy"))
+
+  # ...and the next call brings it in, and it can be loaded
+  vintage_repo(url, copy)
+  expect_equal(list_vintages(repo = copy)$message[1], "v5 after copy")
+  expect_equal(suppressMessages(load_vintage(commit = "main", repo = copy))$x, 5)
+})
+
+test_that("by default, vintages are read from GitHub", {
+  skip_on_cran()
+  skip_if_offline("github.com")
+  skip_if(inherits(try(git_binary(), silent = TRUE), "try-error"), "git not available")
+
+  # 684139d merged PR #74 (May 2026), which changed the panel on main
+  expect_true("684139d" %in% list_vintages()$commit)
 })

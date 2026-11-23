@@ -1,5 +1,5 @@
 ################################################################################
-############## LOAD PAST VINTAGES OF THE COMPILED INDICATORS FROM GIT ##########
+############## LOAD PAST VINTAGES OF THE COMPILED INDICATORS FROM GITHUB #######
 ################################################################################
 
 #' Repository paths at which the compiled indicators panel has been stored
@@ -16,12 +16,70 @@ vintage_paths <- c(
   "data-raw/input/cliar/compiled_indicators.rds" # Jun - Jul 2025 (published 2025)
 )
 
-#' List the past vintages of the compiled indicators in git
+#' An up-to-date copy of the cliaretl repository's history from GitHub
+#'
+#' @description
+#' Gives [list_vintages()] and [load_vintage()] a git repository that matches
+#' GitHub at the moment they run, without needing a clone of cliaretl on your
+#' computer or remembering to `git fetch`.
+#'
+#' The first call in an R session downloads the repository's history from
+#' `url` into a temporary folder: commits and folder listings only (about
+#' 300 KB), not the contents of any file. Every later call asks GitHub for
+#' anything new (`git fetch`), so merges made a minute ago are included. The
+#' contents of a file are downloaded only when [load_vintage()] reads it. The
+#' folder is deleted when the R session ends.
+#'
+#' @details
+#' **What it holds.** Every branch on GitHub, under its own name: `main` here is
+#' GitHub's `main`, not your local `main` or your `origin/main`. Branches
+#' deleted on GitHub are removed.
+#'
+#' **Errors.** Stops with git's message if git cannot be found or GitHub cannot
+#' be reached (e.g. no internet connection).
+#'
+#' @param url Character, the address of the repository on GitHub. Defaults to
+#'   the cliaretl repository.
+#' @param dir Character, the folder to keep the copy in. Defaults to a folder
+#'   inside this R session's temporary directory.
+#'
+#' @return Character, `dir`, for use as the `repo` argument of
+#'   [list_vintages()] and [load_vintage()].
+#'
+#' @md
+#' @family vintage comparison
+#'
+#' @examplesIf nzchar(Sys.which("git")) && interactive()
+#' repo <- vintage_repo()
+#' list_vintages(repo = repo)
+#'
+#' @export
+vintage_repo <- function(url = "https://github.com/WB-PIDA-Data-Science-Shop/cliaretl",
+                         dir = file.path(tempdir(), "cliaretl-github.git")) {
+  # First call this session: download the history from GitHub.
+  # --bare: no working files, only git's own records (a checkout is never
+  #   needed, since files are read straight from history).
+  # --filter=blob:none: skip file contents ("blobs"). git downloads a file's
+  #   contents from GitHub only when it is read, e.g. by `git show`.
+  if (!dir.exists(dir)) {
+    run_git(".", c("clone", "--quiet", "--bare", "--filter=blob:none", url, dir))
+  }
+
+  # Every call: copy GitHub's current branches over the copy's branches
+  # ("+refs/heads/*:refs/heads/*"; "+" allows force-pushed branches), and
+  # --prune removes branches that were deleted on GitHub. Only commits that
+  # are new since the last call are downloaded.
+  run_git(dir, c("fetch", "--quiet", "--prune", "--filter=blob:none",
+                 "origin", "+refs/heads/*:refs/heads/*"))
+  dir
+}
+
+#' List the past vintages of the compiled indicators on GitHub
 #'
 #' @description
 #' Answers *"which versions of the compiled indicators can I go back to?"* by
-#' listing every change to the panel in the history of `ref` (by default the
-#' published `main` branch), wherever the panel was stored at the time.
+#' listing every change to the panel in the history of `ref` (by default
+#' GitHub's `main` branch), wherever the panel was stored at the time.
 #'
 #' Each row is one commit on `ref` that added or changed the panel. Its `date`
 #' is the day that change reached `ref` (for a pull request, the day it was
@@ -36,26 +94,29 @@ vintage_paths <- c(
 #' `inst/extdata/compiled_indicators.rds` (February 2026 onwards). All are
 #' searched by default.
 #'
-#' **History, not GitHub.** Only commits on the branch itself are listed (git's
+#' **Read from GitHub.** By default the history is read from GitHub as it is
+#' when the function runs (see [vintage_repo()]), not from your computer. Pass
+#' `repo = "."` to read your local clone instead, e.g. for a branch you have
+#' not pushed.
+#'
+#' **Merges only.** Only commits on the branch itself are listed (git's
 #' "first-parent" history), so each pull request appears once, as its merge
-#' commit; the commits inside it are not listed separately. The list is read
-#' from your local clone, so it only knows what your clone knows: run
-#' `git fetch` first to include the latest merges on GitHub. Deletions are not
+#' commit; the commits inside it are not listed separately. Deletions are not
 #' listed, and nothing exists before the first version reached `main`
 #' (16 June 2025).
 #'
-#' **Errors.** Stops if git cannot be found, `repo` is not a git repository, or
-#' `ref` does not exist.
+#' **Errors.** Stops if git cannot be found, GitHub cannot be reached, `repo`
+#' is not a git repository, or `ref` does not exist.
 #'
 #' @param ref Character, the branch (or other git reference) whose history to
-#'   read. Default `"origin/main"`: your clone's copy of the published branch.
-#'   Use e.g. `"main"` or a feature branch name to read another history.
+#'   read. Default `"main"`: GitHub's published branch. Any branch on GitHub
+#'   can be named the same way.
 #' @param paths Character vector of repository paths at which the panel has
 #'   been stored. The default covers every location the panel has used; extend
 #'   it only if the panel moves again.
-#' @param repo Character, path to a local clone of the cliaretl repository.
-#'   Default `"."`, the working directory (the package root when working on
-#'   cliaretl in RStudio).
+#' @param repo Character, path to the git repository to read. Default
+#'   [vintage_repo()]: an up-to-date copy of the cliaretl repository on GitHub.
+#'   Use `"."` to read the local clone in your working directory.
 #'
 #' @return A tibble with one row per change to the panel, newest first:
 #'   `date` (Date, when the change reached `ref`), `commit` (character, short
@@ -67,12 +128,11 @@ vintage_paths <- c(
 #' @family vintage comparison
 #' @seealso [load_vintage()] to load one of the listed versions.
 #'
-#' @examplesIf nzchar(Sys.which("git")) && file.exists("inst/extdata/compiled_indicators.rds")
-#' # run from the root of a cliaretl clone
+#' @examplesIf nzchar(Sys.which("git")) && interactive()
 #' list_vintages()
 #'
 #' @export
-list_vintages <- function(ref = "origin/main", paths = vintage_paths, repo = ".") {
+list_vintages <- function(ref = "main", paths = vintage_paths, repo = vintage_repo()) {
   # For each stored location, the commits on `ref` that added or modified it.
   # Each log line is "date <tab> hash <tab> author <tab> subject"
   out <- purrr::map(paths, function(path) {
@@ -105,13 +165,13 @@ list_vintages <- function(ref = "origin/main", paths = vintage_paths, repo = "."
   dplyr::arrange(out, dplyr::desc(.data$date))
 }
 
-#' Load a past vintage of the compiled indicators from git
+#' Load a past vintage of the compiled indicators from GitHub
 #'
 #' @description
 #' Answers *"what did the compiled indicators look like on a given date?"* by
-#' reading the panel as it was on `ref` (by default the published `main`
-#' branch) at the end of `date`, or at a given `commit`, straight from git
-#' history. Pass the result to [compare_vintages()] as `previous`.
+#' reading the panel as it was on `ref` (by default GitHub's `main` branch) at
+#' the end of `date`, or at a given `commit`, straight from git history. Pass
+#' the result to [compare_vintages()] as `previous`.
 #'
 #' How the version is found:
 #'
@@ -122,20 +182,18 @@ list_vintages <- function(ref = "origin/main", paths = vintage_paths, repo = "."
 #'    at that commit are candidates; if more than one does (e.g. in early 2026
 #'    an outdated copy remained in `data-raw/output/` next to the current one in
 #'    `inst/extdata/`), the one changed most recently is used.
-#' 3. **Read without touching your files.** The file is extracted from git to a
-#'    temporary file and read (`.rds`, or the old `.csv.gz`); your working copy
-#'    and current branch are left as they are.
+#' 3. **Read without touching your files.** The file is downloaded from git
+#'    history to a temporary file and read (`.rds`, or the old `.csv.gz`); your
+#'    working copy and current branch are left as they are.
 #'
 #' A message reports which file and commit were used. The result carries a
 #' `"vintage"` attribute recording where it came from, which
-#' [compare_vintages()] uses to label it, e.g.
-#' `"origin/main @ 2025-12-09 (9e2d4a2)"`.
+#' [compare_vintages()] uses to label it, e.g. `"main @ 2025-12-09 (9e2d4a2)"`.
 #'
 #' @details
-#' **Local clone.** Versions are read from your local clone, so it only knows
-#' what your clone knows: run `git fetch` first to include the latest merges on
-#' GitHub. Nothing exists before the first version reached `main`
-#' (16 June 2025).
+#' **Read from GitHub.** By default versions are read from GitHub as it is when
+#' the function runs (see [vintage_repo()]), not from your computer. Nothing
+#' exists before the first version reached `main` (16 June 2025).
 #'
 #' **Column types.** Versions stored as `.csv.gz` (August-September 2025) are
 #' read back from text, so column types are re-guessed (e.g. a column of whole
@@ -146,8 +204,8 @@ list_vintages <- function(ref = "origin/main", paths = vintage_paths, repo = "."
 #' - `ref` has no commits on or before `date`;
 #' - none of `paths` exists at the resolved commit (e.g. a date before June
 #'   2025);
-#' - git cannot be found, `repo` is not a git repository, or `ref`/`commit`
-#'   does not exist.
+#' - git cannot be found, GitHub cannot be reached, `repo` is not a git
+#'   repository, or `ref`/`commit` does not exist.
 #'
 #' @inheritParams list_vintages
 #' @param date A `Date`, or a character string `"YYYY-MM-DD"`: load the panel as
@@ -169,17 +227,17 @@ list_vintages <- function(ref = "origin/main", paths = vintage_paths, repo = "."
 #' @seealso [list_vintages()] to see which versions exist;
 #'   [compare_vintages()] to compare a loaded version with the latest panel.
 #'
-#' @examplesIf nzchar(Sys.which("git")) && file.exists("inst/extdata/compiled_indicators.rds")
-#' # run from the root of a cliaretl clone
+#' @examplesIf nzchar(Sys.which("git")) && interactive()
 #' previous <- load_vintage("2025-12-31")
 #' attr(previous, "vintage")$label
 #'
 #' compare_vintages(previous, readRDS("inst/extdata/compiled_indicators.rds"))
 #'
 #' @export
-load_vintage <- function(date = NULL, commit = NULL, ref = "origin/main",
-                         paths = vintage_paths, repo = ".") {
-  # Exactly one way of choosing the version
+load_vintage <- function(date = NULL, commit = NULL, ref = "main",
+                         paths = vintage_paths, repo = vintage_repo()) {
+  # Exactly one way of choosing the version. Checked before `repo` is first
+  # used, so a wrong call stops without contacting GitHub
   if (is.null(date) == is.null(commit)) {
     stop("Supply exactly one of `date` and `commit`.", call. = FALSE)
   }
@@ -205,11 +263,14 @@ load_vintage <- function(date = NULL, commit = NULL, ref = "origin/main",
   # Drop the "ok" marker run_git() attaches, leaving the plain hash
   target <- as.vector(target)
 
-  # Every stored copy present at the target commit, with the change that last
-  # brought it onto the branch (first-parent, matching list_vintages())
-  candidates <- purrr::map(paths, function(path) {
-    exists <- run_git(repo, c("cat-file", "-e", paste0(target, ":", path)), allow_error = TRUE)
-    if (!isTRUE(attr(exists, "ok"))) return(NULL)
+  # Which of the stored locations exist at the target commit. `ls-tree` reads
+  # only the commit's folder listing, so no file is downloaded just to check
+  # that it exists
+  present <- as.vector(run_git(repo, c("ls-tree", "--name-only", target, "--", paths)))
+
+  # For each copy present, the change that last brought it onto the branch
+  # (first-parent, matching list_vintages())
+  candidates <- purrr::map(intersect(paths, present), function(path) {
     last <- strsplit(run_git(repo, c("log", "-1", "--first-parent", "--format=%ct%x09%cs%x09%h%x09%s", target, "--", path)), "\t")[[1]]
     tibble::tibble(path = path, time = as.numeric(last[1]), file_date = last[2],
                    file_commit = last[3], file_message = last[4])
@@ -226,7 +287,9 @@ load_vintage <- function(date = NULL, commit = NULL, ref = "origin/main",
   pick <- candidates[which.max(candidates$time), ]
 
   # Extract that file from git into a temporary file, deleted when the
-  # function exits (`on.exit()` runs its code however the function ends)
+  # function exits (`on.exit()` runs its code however the function ends).
+  # With the default `repo`, this is when the file's contents are downloaded
+  # from GitHub
   tmp <- tempfile(fileext = if (grepl("[.]csv[.]gz$", pick$path)) ".csv.gz" else ".rds")
   on.exit(unlink(tmp), add = TRUE)
   git_show_to_file(repo, paste0(target, ":", pick$path), tmp)
@@ -250,12 +313,10 @@ load_vintage <- function(date = NULL, commit = NULL, ref = "origin/main",
     label       = sprintf("%s @ %s (%s)", ref_label, pick$file_date, pick$file_commit)
   )
 
-  # Tell the user which version was loaded, and remind them to fetch when
-  # reading a remote branch
+  # Tell the user which version was loaded
   message(
     "Loaded ", pick$path, " as of ", resolved_from, ": last changed ", pick$file_date,
-    " in ", pick$file_commit, " \"", pick$file_message, "\".",
-    if (startsWith(ref_label, "origin/")) "\nBased on your local copy of the remote; run `git fetch` to include the latest pushes."
+    " in ", pick$file_commit, " \"", pick$file_message, "\"."
   )
   panel
 }
@@ -268,7 +329,7 @@ load_vintage <- function(date = NULL, commit = NULL, ref = "origin/main",
 #' @param default Character, the label to use when `df` has no `"vintage"`
 #'   attribute.
 #' @return Character: the `label` recorded by `load_vintage()` if present,
-#'   otherwise `default`. Used for the default `labels` in `compare_vintages()`.
+#'   otherwise `default`. Used for the default labels in `compare_vintages()`.
 #' @noRd
 vintage_label <- function(df, default) {
   # Prefer the label load_vintage() recorded; otherwise use the fallback
@@ -279,12 +340,24 @@ vintage_label <- function(df, default) {
 #' Locate the git executable
 #'
 #' @return Character, the path to git: `getOption("cliaretl.git")` if set,
-#'   otherwise git found on the system `PATH`. Stops with instructions if
-#'   neither is available.
+#'   otherwise git found on the system `PATH`, otherwise (on Windows) git in
+#'   the standard Git for Windows install folders. Stops with instructions if
+#'   none is available.
 #' @noRd
 git_binary <- function() {
   # A user-set option wins; otherwise search the PATH
   git <- getOption("cliaretl.git", Sys.which("git"))
+
+  # Git for Windows is often installed without being added to the PATH R
+  # sees. Look in its two standard install folders: for all users
+  # (Program Files) and for the current user only (AppData\Local\Programs)
+  if (!nzchar(git) && .Platform$OS.type == "windows") {
+    roots <- c(Sys.getenv("ProgramFiles"), file.path(Sys.getenv("LOCALAPPDATA"), "Programs"))
+    found <- file.path(roots, "Git", "cmd", "git.exe")
+    found <- found[file.exists(found)]
+    if (length(found) > 0) git <- found[[1]]
+  }
+
   if (!nzchar(git)) {
     stop("Could not find git. Install Git, add it to your PATH, ",
          "or set options(cliaretl.git = \"path/to/git\").", call. = FALSE)
