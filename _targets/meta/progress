@@ -90,5 +90,4 @@ ctf_dynamic|stem|ctf_dynamic|0|skipped
 ctf_qc_env|stem|ctf_qc_env|0|skipped
 closeness_to_frontier_static|stem|closeness_to_frontier_static|0|skipped
 closeness_to_frontier_dynamic|stem|closeness_to_frontier_dynamic|0|skipped
-indicators_map|stem|indicators_map|0|dispatched
-indicators_map|stem|indicators_map|0|completed
+indicators_map|stem|indicators_map|0|skipped
